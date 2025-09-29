@@ -1,0 +1,4 @@
+﻿RecipeID,RecipeName,RecipeDescription,Workload,WorkType,InputCards,OutputCards
+1,制作木棍,将木材制作成木棍,1.5,Craft,R:ResourcePoint:1,R:ResourcePoint:1:1
+2,烹饪肉汤,使用肉和水制作营养汤,3,Craft,"R:ResourcePoint:1,R:ResourceCard:1",R:ResourcePoint:1:1
+3,驯服动物,用食物驯服一只野生动物,5,Craft,"R:ResourceCard:2,C:Any:1",R:ResourcePoint:1:1
