@@ -18,13 +18,11 @@ public class BattleWorldObjManager : MonoBehaviour
 
     #region Create Obj Api
     [Header("Create Obj Api Options")]
-    public LineUp targetLineUp;
-    public int targetPriority;
     public GameObject creaturePrefab;
     public GameObject canvas;
 
     [ContextMenu("Instantiate Obj")]
-    public void InstantiateObj()
+    public void InstantiateObj(LineUp targetLineUp = LineUp.Player, int targetPriority = 0)
     {
         if (creaturePrefab != null)
         {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Category;
 using UnityEngine;
 
@@ -124,7 +125,7 @@ public class CardSlot : MonoBehaviour
         cards.RemoveAll(card => removeCards.Contains(card));
         foreach (var card in removeCards)
         {
-            Destroy(card.gameObject);
+            card.DeleteCard();
         }
 
         // If cardSlot is empty, destroy itself
@@ -141,7 +142,6 @@ public class CardSlot : MonoBehaviour
             cards.Last().canBePlaced = true;
     }
 
-    [ContextMenu("Begin Production")]
     public bool BeginProduction()
     {
         // // TEST: Get the workload efficiency
@@ -151,7 +151,7 @@ public class CardSlot : MonoBehaviour
         // First check whether has a valid recipe
         if (!isMovingCardSlot)
         {
-            var result = CraftTableDB.Instance.GetRecipe(cards);
+            var result = CardManager.Instance.GetRecipe(cards);
             if (result.HasValue)
             {
                 Debug.Log($"Found matching recipe: {result.Value.Item2.recipeName}");
@@ -162,14 +162,13 @@ public class CardSlot : MonoBehaviour
             }
             else
             {
-                Debug.Log("No matching recipe found.");
+                // Debug.Log("No matching recipe found.");
             }
         }
 
         return false;
     }
 
-    [ContextMenu("End Production")]
     public void EndProduction()
     {
         currentCraftingCards.Clear();
@@ -179,12 +178,18 @@ public class CardSlot : MonoBehaviour
     public void OnBeginProduct()
     {
         Card currentWorkingCreatureCard = currentCraftingCards.Find(card => card.cardType.cardType == Category.CardType.Creatures);
-        float workloadEfficiency = CardAttributeDB.Instance.GetWorkEfficiencyValue(currentWorkingCreatureCard.cardType.creatureCardType);
+
+        // BUG： If no creature card is found, the production cannot start
+        float workloadEfficiency = currentWorkingCreatureCard != null ?
+                                    CardManager.Instance.GetWorkEfficiencyValue(currentWorkingCreatureCard.cardType.creatureCardType) :
+                                    CardManager.Instance.GetWorkEfficiencyValue(WorkEfficiencyType.Normal);
+
         StartProgressBar(currentRecipe.workload / workloadEfficiency, OnEndProduct);
     }
 
     public void OnProduct()
-    {        
+    {
+        
     }
 
     public void OnEndProduct()
@@ -192,8 +197,8 @@ public class CardSlot : MonoBehaviour
         List<Card> removeCards = new List<Card>();
         foreach (var card in currentCraftingCards)
         {
-            if (card.cardType.cardType == CardType.Resource &&
-                !CardAttributeDB.Instance.IsResourcePoint(card.cardType.resourceCardType))
+            if (card.cardType.cardType == CardType.Resources &&
+                !CardManager.Instance.IsResourcePoint(card.cardType.resourceCardType))
             {
                 removeCards.Add(card);
             }
@@ -227,7 +232,7 @@ public class CardSlot : MonoBehaviour
                         Vector2 dropPosition = transform.position + new Vector3(UnityEngine.Random.Range(-10f, 10f), UnityEngine.Random.Range(-10f, 10f), 0);
 
                         // 创建选中的卡牌
-                        Card newCard = CardManager.Instance.CreateCard(craftingCard.cardDescription, dropPosition);
+                        CardManager.Instance.CreateCard(craftingCard.cardDescription, dropPosition);
                         break;
                     }
                 }
@@ -235,6 +240,11 @@ public class CardSlot : MonoBehaviour
         }
 
         Debug.Log($"Production completed, working on {currentRecipe.recipeName} recipe");
+        Debug.Log($"Produced {currentRecipe.outputCards.Count} cards, which are:");
+        foreach (var craftingCard in currentRecipe.outputCards)
+        {
+            Debug.Log($"- {craftingCard.GetType()}");
+        }
         if (!BeginProduction())
             EndProduction();
     }
@@ -249,5 +259,11 @@ public class CardSlot : MonoBehaviour
 
         progressBar.gameObject.SetActive(true);
         progressBar.StartProgressBar(totalTime, onComplete);
+    }
+
+    public bool TryGetEventCard(out Card eventCard)
+    {
+        eventCard = cards.Find(card => card.cardType.cardType == CardType.Events);
+        return eventCard != null;
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
-public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     [Serializable]
     public struct CardDescription
@@ -22,6 +22,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     [HideInInspector] public CardSlot movingCardSlot;
     [HideInInspector] public GameObject canvas;
     public GameObject cardSlotPrefab;
+    public event Action<Card> OnCardDeleted;
 
     [Header("拖拽与对齐设置")]
     [Range(5f, 10f)][Tooltip("卡牌跟随速度")] public float followSpeed;
@@ -47,8 +48,15 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     protected bool isMoving;
 
     public void SetCardID(long id) => cardID = id;
-
     public void SetCardType(CardDescription description) => cardType = description;
+
+    public string GetCardType() => cardType.cardType switch
+    {
+        CardType.Creatures => "Creatures: " + cardType.creatureCardType.ToString(),
+        CardType.Resources => "Resources: " + cardType.resourceCardType.ToString(),
+        CardType.Events => "Events: " + cardType.eventCardType.ToString(),
+        _ => "Unknown"
+    };
 
     protected void Awake()
     {
@@ -73,6 +81,13 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         cardImage.material = null;
         outlineMaterialInstance = new Material(outlineMaterial);
         outlineOffset = outlineMaterialInstance.GetFloat("_DashOffset");
+
+        // TEST: Set the word on the card
+        var textComponent = GetComponentInChildren<Text>();
+        if (textComponent != null)
+        {
+            textComponent.text = GetCardType();
+        }
     }
 
     protected void FollowPosition()
@@ -125,7 +140,9 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
     public void OnDrag(PointerEventData eventData)
     {
-        transform.position = Input.mousePosition;
+        // Follow the mouse position
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(canvas.GetComponent<RectTransform>(), eventData.position, eventData.pressEventCamera, out Vector3 mousePos);
+        transform.position = mousePos;
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -138,6 +155,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
             if (hitObject.CompareTag("Card"))
             {
+                // Debug.Log($"Hit card: {hitObject.name}");
                 Card card = hitObject.GetComponent<Card>();
                 // Can't place on the card at the end position
                 if ((card.canBePlaced == false && card.cardID != cardID) || canPlaceOnCard == false)
@@ -194,20 +212,23 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
             UpdateCardSlot(card.cardSlot);
             cardSlot.UpdateIdentityID(this, card.cardID);
             card.canBePlaced = false;
-            Debug.Log($"Placed after card: {card.name}, pos is {card.transform.position}, own pos is {transform.position}");
+            // Debug.Log($"Placed after card: {card.name}, pos is {card.transform.position}, own pos is {transform.position}");
         }
     }
 
     public void ChangeMovingState(bool state)
     {
+        var setShadow = new Action(() => GetComponent<Shadow>().enabled = state);
         if (state == true)
         {
             isMoving = true;
             cardImage.raycastTarget = false;
+            setShadow();
             InvokeRepeating(nameof(FollowPosition), 0f, 0.01f);
         }
         else
         {
+            setShadow();
             cardImage.raycastTarget = true;
             isMoving = false;
         }
@@ -273,7 +294,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
             // Show outline
             cardImage.material = outlineMaterialInstance;
 
-            if (canBePlaced && CardManager.Instance.draggingCard.canPlaceOnCard == true)
+            if (CanBePlacedOn(CardManager.Instance.draggingCard))
                 outlineMaterialInstance.SetColor("_OutlineColor", successOutlineColor);
             else
                 outlineMaterialInstance.SetColor("_OutlineColor", failureOutlineColor);
@@ -300,11 +321,28 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     public bool CanBePlacedOn(Card card)
     {
         // Check if the card can be placed on the target card
-        if (card.canBePlaced == true && card.cardID != cardID && card.canPlaceOnCard == true)
-        {
-            return true;
-        }
+        bool basicCheck = card.canBePlaced == true && card.cardID != cardID && card.canPlaceOnCard == true;
 
-        return false;
+        // Event card can't put on another event card
+        // bool eventCardCheck = !(cardSlot.TryGetEventCard(out _) && card.cardSlot.TryGetEventCard(out _));
+        bool eventCardCheck = true;
+
+        return basicCheck && eventCardCheck;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        // if (cardSlot.TryGetEventCard(out Card eventCard))
+        // {
+        //     CardManager.Instance.PopUpEventUI(eventCard);
+        // }
+        if (cardType.cardType == CardType.Events)
+            CardManager.Instance.PopUpEventUI(this);
+    }
+
+    public void DeleteCard()
+    {
+        OnCardDeleted?.Invoke(this);
+        Destroy(gameObject);
     }
 }

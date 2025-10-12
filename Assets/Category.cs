@@ -9,7 +9,7 @@ namespace Category
     public enum CardType
     {
         None,
-        Resource,
+        Resources,
         Creatures,
         Events,
     }
@@ -83,7 +83,8 @@ namespace Category
     public enum EventCardType
     {
         None,
-        [Tooltip("某种事件")] Event,
+        [Tooltip("某种事件")] Event1,
+        [Tooltip("某种事件")] Event2,
     }
     #endregion
 
@@ -120,5 +121,12 @@ namespace Category
     {
         Player,
         Enemy
+    }
+
+    public enum GameTimeState
+    {
+        ProduceState,
+        SettlementState,
+        BattleState,
     }
 }

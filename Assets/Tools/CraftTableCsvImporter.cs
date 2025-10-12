@@ -244,7 +244,7 @@ public class CraftTableCsvImporter : EditorWindow
                     switch (typePrefix)
                     {
                         case 'R': // 资源卡
-                            cardDesc.cardDescription.cardType = CardType.Resource;
+                            cardDesc.cardDescription.cardType = CardType.Resources;
                             if (Enum.TryParse<ResourceCardType>(cardTypeStr, out ResourceCardType resourceType))
                                 cardDesc.cardDescription.resourceCardType = resourceType;
                             else
@@ -301,7 +301,7 @@ public class CraftTableCsvImporter : EditorWindow
                     switch (typePrefix)
                     {
                         case 'R': // 资源卡
-                            cardDesc.cardType = CardType.Resource;
+                            cardDesc.cardType = CardType.Resources;
                             if (Enum.TryParse<ResourceCardType>(cardTypeStr, out ResourceCardType resourceType))
                                 cardDesc.resourceCardType = resourceType;
                             else

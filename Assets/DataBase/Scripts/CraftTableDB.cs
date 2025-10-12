@@ -7,27 +7,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "CraftTable", menuName = "ScriptableObjects/CraftTable", order = 1)]
 public class CraftTableDB : ScriptableObject
 {
-    #region 单例
-    private static readonly string _resourcePath = "ScriptableObjects/E_CraftTable";
-    private static CraftTableDB _instance;
-    public static CraftTableDB Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = Resources.Load<CraftTableDB>(_resourcePath);
-                if (_instance == null)
-                {
-                    Debug.LogWarning($"未能从{_resourcePath}找到CraftTable资源，创建了一个新实例。请确保在Resources文件夹中有配置好的CraftTable资源。");
-                    _instance = CreateInstance<CraftTableDB>();
-                }
-            }
-            return _instance;
-        }
-    }
-    #endregion
-
     [Serializable]
     public struct CraftingCard
     {
@@ -79,7 +58,6 @@ public class CraftTableDB : ScriptableObject
 
     public (List<Card>, Recipe)? GetRecipe(List<Card> inputCards)
     {
-        Debug.Log($"Has {recipeList.Count} recipes in total.");
         foreach (var recipe in recipeList)
         {
             var cardDescs = inputCards.Select(card => card.cardType).ToList();
@@ -119,7 +97,7 @@ public class CraftTableDB : ScriptableObject
         // {
         //     switch (type.Key.Item1)
         //     {
-        //         case CardType.Resource:
+        //         case CardType.Resources:
         //             Debug.Log($"需要资源卡 {((ResourceCardType)type.Key.Item2).ToString()} x {type.Value}");
         //             break;
         //         case CardType.Creatures:
@@ -153,7 +131,7 @@ public class CraftTableDB : ScriptableObject
                 remainingRequirements[key]--;
                 // Debug.Log($@"Use {availableCards[i].cardType}, {availableCards[i].cardType switch
                 // {
-                //     CardType.Resource => ((ResourceCardType)availableCards[i].resourceCardType).ToString(),
+                //     CardType.Resources => ((ResourceCardType)availableCards[i].resourceCardType).ToString(),
                 //     CardType.Creatures => ((CreatureCardType)availableCards[i].creatureCardType).ToString(),
                 //     CardType.Events => ((EventCardType)availableCards[i].eventCardType).ToString(),
                 //     _ => "未知类型"
@@ -198,7 +176,7 @@ public class CraftTableDB : ScriptableObject
     {
         return card.cardType switch
         {
-            CardType.Resource => (CardType.Resource, (int)card.resourceCardType),
+            CardType.Resources => (CardType.Resources, (int)card.resourceCardType),
             CardType.Creatures => (CardType.Creatures, (int)card.creatureCardType),
             CardType.Events => (CardType.Events, (int)card.eventCardType),
             _ => (CardType.None, 0),

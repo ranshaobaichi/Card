@@ -5,7 +5,7 @@ public class ResourceCard : Card
 {
     // public override void SetCardType()
     // {
-    //     cardType.cardType = CardType.Resource;
+    //     cardType.cardType = CardType.Resources;
 
     //     // TEST: Set resource card type
     //     cardType.resourceCardType = ResourceCardType.ResourcePoint;
