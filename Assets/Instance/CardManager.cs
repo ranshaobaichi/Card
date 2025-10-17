@@ -41,39 +41,11 @@ public class CardManager : MonoBehaviour
 
     public Card CreateCard(Card.CardDescription cardDescription, Vector2 position = default)
     {
-        // Check whether the cardDescription is valid
-        bool valid = false;
-        string errorMsg = "Invalid card description: ";
-        if (cardDescription.cardType != CardType.None)
+        if (!cardDescription.IsValid())
         {
-            switch (cardDescription.cardType)
-            {
-                case CardType.Creatures:
-                    valid = cardDescription.creatureCardType != CreatureCardType.None;
-                    if (!valid) errorMsg += "CreatureCardType is None; ";
-                    break;
-                case CardType.Resources:
-                    valid = cardDescription.resourceCardType != ResourceCardType.None;
-                    if (!valid) errorMsg += "ResourceCardType is None; ";
-                    break;
-                case CardType.Events:
-                    valid = cardDescription.eventCardType != EventCardType.None;
-                    if (!valid) errorMsg += "EventCardType is None; ";
-                    break;
-                default:
-                    valid = false;
-                    break;
-            }
-        }
-        else
-            errorMsg += "CardType is None; ";
-
-        if (!valid)
-        {
-            Debug.LogError(errorMsg);
+            Debug.LogError("CardManager: Invalid CardDescription");
             return null;
         }
-
         Card newCard = Instantiate(cardPrefab, position, Quaternion.identity).GetComponent<Card>();
         newCard.SetCardType(cardDescription);
         return newCard;
@@ -81,6 +53,7 @@ public class CardManager : MonoBehaviour
     #endregion
 
     #region 合成表管理
+    [Header("合成表管理")]
     public CraftTableDB craftTableDB;
     public CraftTableDB.Recipe? GetRecipe(int id) => craftTableDB.GetRecipe(id);
     public CraftTableDB.Recipe? GetRecipe(string name) => craftTableDB.GetRecipe(name);
@@ -88,6 +61,7 @@ public class CardManager : MonoBehaviour
     #endregion
 
     #region 卡牌属性管理
+    [Header("卡牌属性管理")]
     public CardAttributeDB cardAttributeDB;
 
     public WorkEfficiencyType GetWorkEfficiencyType(CreatureCardType creatureCardType)
@@ -111,9 +85,10 @@ public class CardManager : MonoBehaviour
     #region 事件卡UI管理
     [Header("事件卡UI管理")]
     public EventCardUIDB eventCardUIDB;
+    public Transform eventUIParent;
     public Vector2 eventUIoffset;
     public Vector2 UIthreshold;
-    private Dictionary<Card, GameObject> EventUIs = new Dictionary<Card, GameObject>();
+    private Dictionary<Card, EventUI> EventUIs = new Dictionary<Card, EventUI>();
 
     public bool TryGetEventCardUIPrefab(EventCardType eventCardType, out GameObject prefab)
         => eventCardUIDB.TryGetEventCardUIPrefab(eventCardType, out prefab);
@@ -121,7 +96,7 @@ public class CardManager : MonoBehaviour
     public void PopUpEventUI(Card card)
     {
         card.cardSlot.EndProduction();
-        GameObject eventUI = EventUIs.GetValueOrDefault(card, null);
+        EventUI eventUI = EventUIs.GetValueOrDefault(card, null);
 
         if (eventUI == null)
         {
@@ -130,16 +105,13 @@ public class CardManager : MonoBehaviour
                 Debug.LogError($"No EventUI prefab found for EventCardType: {card.cardType.eventCardType}");
                 return;
             }
-            eventUI = Instantiate(prefab, canvas.transform);
+            eventUI = Instantiate(prefab, eventUIParent).GetComponent<EventUI>();
             EventUIs[card] = eventUI;
-
             card.OnCardDeleted += StopTrackingUIEvent;
         }
-        else
-        {
-            eventUI.SetActive(true);
-        }
+        eventUI.eventCard = card;
 
+        /// 设置UI位置
         RectTransform cardRect = card.GetComponent<RectTransform>();
         RectTransform eventUIRect = eventUI.GetComponent<RectTransform>();
         RectTransform canvasRect = canvas.GetComponent<RectTransform>();
@@ -191,8 +163,7 @@ public class CardManager : MonoBehaviour
             UISize.x * (eventUIRect.pivot.x - 0.5f),
             UISize.y * (eventUIRect.pivot.y - 0.5f)
         );
-        eventUIRect.anchoredPosition = uiCenter + uiPivotOffset;
-
+        eventUI.OpenUI(uiCenter + uiPivotOffset);
         // Debug.Log($"CardCenter: {cardCenter}, Right: {right}, Up: {up}, UICenter: {uiCenter}, AnchoredPos: {eventUIRect.anchoredPosition}");
     }
     

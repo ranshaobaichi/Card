@@ -15,7 +15,28 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         [Tooltip("资源卡类型")] public ResourceCardType resourceCardType;
         [Tooltip("生物卡类型")] public CreatureCardType creatureCardType;
         [Tooltip("事件卡类型")] public EventCardType eventCardType;
+        public readonly bool IsValid()
+        {
+            return cardType switch
+            {
+                CardType.Creatures => creatureCardType != CreatureCardType.None,
+                CardType.Resources => resourceCardType != ResourceCardType.None,
+                CardType.Events => eventCardType != EventCardType.None,
+                _ => false,
+            };
+        }
+        public override string ToString()
+        {
+            return cardType switch
+            {
+                CardType.Creatures => creatureCardType.ToString(),
+                CardType.Resources => resourceCardType.ToString(),
+                CardType.Events => eventCardType.ToString(),
+                _ => "Unknown"
+            };
+        }
     }
+    protected Transform cardSlotSet;
     public Card preCard, laterCard;
     protected Image cardImage;
     [HideInInspector] public CardSlot cardSlot;
@@ -49,20 +70,14 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
     public void SetCardID(long id) => cardID = id;
     public void SetCardType(CardDescription description) => cardType = description;
-
-    public string GetCardType() => cardType.cardType switch
-    {
-        CardType.Creatures => "Creatures: " + cardType.creatureCardType.ToString(),
-        CardType.Resources => "Resources: " + cardType.resourceCardType.ToString(),
-        CardType.Events => "Events: " + cardType.eventCardType.ToString(),
-        _ => "Unknown"
-    };
+    public string GetCardTypeString() => cardType.ToString();
 
     protected void Awake()
     {
         cardImage = GetComponent<Image>();
         canvas = GameObject.FindGameObjectWithTag("Canvas");
         movingCardSlot = GameObject.FindGameObjectWithTag("MovingCardSlot").GetComponent<CardSlot>();
+        cardSlotSet = GameObject.FindGameObjectWithTag("CardSlotSet").transform;
     }
 
     protected void Start()
@@ -86,7 +101,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         var textComponent = GetComponentInChildren<Text>();
         if (textComponent != null)
         {
-            textComponent.text = GetCardType();
+            textComponent.text = GetCardTypeString();
         }
     }
 
@@ -98,7 +113,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
             return;
         }
         Vector3 targetPosition = preCard.transform.position - new Vector3(0, yAlignedDistance, 0);
-        var pos = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * followSpeed);
+        var pos = Vector3.Lerp(transform.position, targetPosition, Time.unscaledDeltaTime * followSpeed);
         transform.position = pos;
 
         if (isMoving == false && transform.position == targetPosition)
@@ -253,7 +268,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
     protected CardSlot CreateNewSlot()
     {
-        var cardSlotObject = Instantiate(cardSlotPrefab, transform.position, transform.rotation, canvas.transform);
+        var cardSlotObject = Instantiate(cardSlotPrefab, transform.position, transform.rotation, cardSlotSet);
         cardSlotObject.name = $"CardSlot_{cardID}";
         return cardSlotObject.GetComponent<CardSlot>();
     }
@@ -299,7 +314,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
             else
                 outlineMaterialInstance.SetColor("_OutlineColor", failureOutlineColor);
 
-            InvokeRepeating(nameof(DisplayOutline), 0f, Time.deltaTime * 15);
+            InvokeRepeating(nameof(DisplayOutline), 0f, 0.016f * 15);
         }
         else
         {

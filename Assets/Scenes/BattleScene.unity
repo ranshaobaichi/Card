@@ -668,8 +668,8 @@ RectTransform:
   m_GameObject: {fileID: 341342924}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.92, y: 1.92, z: 1.92}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1873305284}
   - {fileID: 358221843}
@@ -1539,8 +1539,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71fafaf23b7c3854e9230c25b040fe50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetLineUp: 0
-  targetPriority: 0
   creaturePrefab: {fileID: 1199791827373344116, guid: 05c4834bafe4b344d803997c251f6591, type: 3}
   canvas: {fileID: 526355944}
 --- !u!224 &848979785 stripped

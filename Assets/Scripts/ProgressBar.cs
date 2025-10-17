@@ -4,15 +4,17 @@ using System;
 
 public class ProgressBar : MonoBehaviour
 {
-    public Image backgroundImage;
     public Image fillImage;
     
     private float currentTime = 0f;
     private bool isRunning = false;
     private float duration = 1f;
-    
+
     public event Action OnProgressComplete;
     
+    public void PauseProgressBar() => isRunning = false;
+    public void ResumeProgressBar() => isRunning = true;
+
     public void Start()
     {
         fillImage.fillAmount = 0f; // Initialize the fill amount to 0

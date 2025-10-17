@@ -177,11 +177,12 @@ public class CardSlot : MonoBehaviour
 
     public void OnBeginProduct()
     {
-        Card currentWorkingCreatureCard = currentCraftingCards.Find(card => card.cardType.cardType == Category.CardType.Creatures);
+        List<Card> currentWorkingCreatureCards = currentCraftingCards.FindAll(card => card.cardType.cardType == CardType.Creatures);
 
         // BUG： If no creature card is found, the production cannot start
-        float workloadEfficiency = currentWorkingCreatureCard != null ?
-                                    CardManager.Instance.GetWorkEfficiencyValue(currentWorkingCreatureCard.cardType.creatureCardType) :
+        float workloadEfficiency = currentWorkingCreatureCards.Count > 0 ?
+                                    CardManager.Instance.GetWorkEfficiencyValue(currentWorkingCreatureCards
+                                        .Max(card => CardManager.Instance.GetWorkEfficiencyType(card.cardType.creatureCardType))) :
                                     CardManager.Instance.GetWorkEfficiencyValue(WorkEfficiencyType.Normal);
 
         StartProgressBar(currentRecipe.workload / workloadEfficiency, OnEndProduct);

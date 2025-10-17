@@ -63,7 +63,7 @@ public class CameraController : MonoBehaviour
         // 移动摄像机
         if (moveDirection != Vector3.zero)
         {
-            Vector3 newPosition = transform.position + moveDirection * moveSpeed * Time.deltaTime;
+            Vector3 newPosition = transform.position + moveDirection * moveSpeed * Time.unscaledDeltaTime;
             
             // 限制摄像机移动范围
             if (upRightBoundary != null && downLeftBoundary != null)

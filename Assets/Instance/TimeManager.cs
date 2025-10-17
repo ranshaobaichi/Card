@@ -1,18 +1,14 @@
 using UnityEngine;
 using Category;
-using System.Collections.Generic;
-using UnityEngine.UI;
-using Unity.VisualScripting;
 
 public class TimeManager : MonoBehaviour
 {
     public static TimeManager Instance;
-    public Text stateTimerText;
-    public Text stateText;
-    public float timeScale;
-    public float[] gameTimeStateDuration = new float[3]; // Example durations for each state
+    public float productionStateDuration = 60f;
     private GameTimeState gameTimeState;
-    private float gameTimer;
+    public ProgressBar timeProgressBar;
+
+    public GameTimeState GetCurrentState() => gameTimeState;
 
     private void Awake()
     {
@@ -30,37 +26,12 @@ public class TimeManager : MonoBehaviour
     void Start()
     {
         gameTimeState = GameTimeState.ProduceState;
-        timeScale = 1.0f;
-        gameTimer = 0f;
-        RefreshUIReferences();
-
-        SceneManager.SceneChanged += RefreshUIReferences;
-    }
-
-    void Update()
-    {
-        gameTimer += Time.deltaTime * timeScale;
-
-        if (gameTimer >= gameTimeStateDuration[(int)gameTimeState])
-        {
-            ChangeState();
-        }
-
-        if (stateTimerText != null)
-            stateTimerText.text = $"Time: {gameTimer:F1}s / {gameTimeStateDuration[(int)gameTimeState]}s";
-        if (stateText != null)
-            stateText.text = $"State: {gameTimeState}";
-    }
-
-    void RefreshUIReferences()
-    {
-        stateTimerText = stateTimerText != null ? stateTimerText : GameObject.Find("StateTimerText").GetComponent<Text>();
-        stateText = stateText != null ? stateText : GameObject.Find("StateText").GetComponent<Text>();
-        Debug.Log("UI references refreshed.");
+        timeProgressBar.StartProgressBar(productionStateDuration, ChangeState);
     }
 
     public void ChangeState()
     {
+        timeProgressBar?.StopProgressBar();
         GameTimeState nextState = gameTimeState switch
         {
             GameTimeState.ProduceState => GameTimeState.SettlementState,
@@ -71,22 +42,50 @@ public class TimeManager : MonoBehaviour
 
         Debug.Log($"State changed from {gameTimeState} to {nextState}");
         gameTimeState = nextState;
-        gameTimer = 0f;
 
         switch (nextState)
         {
             case GameTimeState.ProduceState:
                 SceneManager.LoadScene(SceneManager.ProductionScene);
+                timeProgressBar?.StartProgressBar(productionStateDuration, ChangeState);
                 break;
             case GameTimeState.SettlementState:
                 // Handle settlement logic here
-                Debug.Log("Entering Settlement State");
+                // Debug.Log("Entering Settlement State");
                 break;
             case GameTimeState.BattleState:
                 SceneManager.LoadScene(SceneManager.BattleScene);
                 break;
             default:
                 break;
+        }
+    }
+
+    public void PauseGame()
+    {
+        switch (gameTimeState)
+        {
+            case GameTimeState.ProduceState:
+                timeProgressBar?.PauseProgressBar();
+                break;
+            case GameTimeState.SettlementState:                
+            case GameTimeState.BattleState:
+            default:
+                throw new System.NotImplementedException();
+        }
+    }
+
+    public void ResumeGame()
+    {
+        switch (gameTimeState)
+        {
+            case GameTimeState.ProduceState:
+                timeProgressBar?.ResumeProgressBar();
+                break;
+            case GameTimeState.SettlementState:                
+            case GameTimeState.BattleState:
+            default:
+                throw new System.NotImplementedException();
         }
     }
 }

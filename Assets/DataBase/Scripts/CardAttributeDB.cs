@@ -23,8 +23,8 @@ public class CardAttributeDB : ScriptableObject
         175f, 125f, 100f, 75f, 50f
     };
     public Dictionary<CreatureCardType, CreatureCardAttribute> creatureCardAttributes = new Dictionary<CreatureCardType, CreatureCardAttribute>();
-
     public Dictionary<WorkEfficiencyType, float> workEfficiencyValues = new Dictionary<WorkEfficiencyType, float>();
+
     private void InitializeWorkEfficiencyValues()
     {
         for (int i = 0; i < workEfficiencyValuesList.Count; i++)
@@ -41,5 +41,24 @@ public class CardAttributeDB : ScriptableObject
         [Tooltip("是否为资源点")] public bool isResourcePoint;
     }
     public Dictionary<ResourceCardType, ResourceCardAttribute> resourceCardAttributes = new Dictionary<ResourceCardType, ResourceCardAttribute>();
+    
+    
+    #endregion
+
+    #region 图标内容
+    public Dictionary<CardType, Dictionary<int, Sprite>> cardIcons = new Dictionary<CardType, Dictionary<int, Sprite>>();
+
+    public bool TryGetCardIcon(Card.CardDescription cardDescription, out Sprite icon)
+    {
+        icon = null;
+        return cardIcons.TryGetValue(cardDescription.cardType, out var typeDict) && typeDict.TryGetValue(
+            cardDescription.cardType switch
+            {
+                CardType.Creatures => (int)cardDescription.creatureCardType,
+                CardType.Resources => (int)cardDescription.resourceCardType,
+                CardType.Events => (int)cardDescription.eventCardType,
+                _ => -1,
+            }, out icon);
+    }
     #endregion
 }

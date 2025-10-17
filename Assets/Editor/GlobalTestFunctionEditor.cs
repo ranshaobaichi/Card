@@ -41,6 +41,18 @@ public class GlobalTestFunctionEditor : Editor
         {
             globalTestFunc.CreateProductionWorldObj();
         }
+        EditorGUILayout.Space();
+
+        ///
+        GUI.enabled = true;
+        EditorGUILayout.LabelField("游戏阶段切换", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("当前阶段为：" + (FindAnyObjectByType<TimeManager>()?.GetCurrentState().ToString() ?? "未知"));
+        GUI.enabled = EditorApplication.isPlaying;
+        if (GUILayout.Button("切换游戏阶段"))
+        {
+            globalTestFunc.ChangeGameState();
+        }
+        EditorGUILayout.Space();
 
         serializedObject.ApplyModifiedProperties();
     }

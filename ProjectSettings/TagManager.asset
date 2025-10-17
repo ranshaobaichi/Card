@@ -8,6 +8,8 @@ TagManager:
   - Canvas
   - MovingCardSlot
   - HexNode
+  - TimeProgressBar
+  - CardSlotSet
   layers:
   - Default
   - TransparentFX
@@ -15,8 +17,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - UI_Card
+  - UI_Production_Main
   - 
   - 
   - 

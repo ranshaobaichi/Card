@@ -25,4 +25,12 @@ public class GlobalTestFunction : MonoBehaviour
         Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f);
         FindAnyObjectByType<CardManager>().CreateCard(cardDescription, screenCenter);
     }
+
+    /// <summary>
+    /// 切换游戏阶段
+    /// </summary>
+    public void ChangeGameState()
+    {
+        FindAnyObjectByType<TimeManager>().ChangeState();
+    }
 }
