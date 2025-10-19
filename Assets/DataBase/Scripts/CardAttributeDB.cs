@@ -23,7 +23,7 @@ public class CardAttributeDB : ScriptableObject
         175f, 125f, 100f, 75f, 50f
     };
     public Dictionary<CreatureCardType, CreatureCardAttribute> creatureCardAttributes = new Dictionary<CreatureCardType, CreatureCardAttribute>();
-    public Dictionary<WorkEfficiencyType, float> workEfficiencyValues = new Dictionary<WorkEfficiencyType, float>();
+    public Dictionary<WorkEfficiencyType, float> workEfficiencyValues = null;
 
     private void InitializeWorkEfficiencyValues()
     {
@@ -38,10 +38,42 @@ public class CardAttributeDB : ScriptableObject
     public struct ResourceCardAttribute
     {
         [Header("资源卡设置")]
-        [Tooltip("是否为资源点")] public bool isResourcePoint;
+        [Tooltip("资源卡分类")] public ResourceCardClassification resourceClassification;
+        [Tooltip("资源卡耐久值")] public int durability;
     }
     public Dictionary<ResourceCardType, ResourceCardAttribute> resourceCardAttributes = new Dictionary<ResourceCardType, ResourceCardAttribute>();
-    
+    public ResourceCardClassification GetResourceCardClassification(ResourceCardType resourceCardType) 
+        => resourceCardAttributes.ContainsKey(resourceCardType) ? 
+            resourceCardAttributes[resourceCardType].resourceClassification : 
+            ResourceCardClassification.None;
+    public WorkEfficiencyType GetWorkEfficiencyType(CreatureCardType creatureCardType)
+        => creatureCardAttributes.ContainsKey(creatureCardType) ?
+            creatureCardAttributes[creatureCardType].craftWorkEfficiency :
+            WorkEfficiencyType.None;
+
+    public float GetWorkEfficiencyValue(WorkEfficiencyType workEfficiencyType)
+    {
+        if (workEfficiencyValues == null)
+        {
+            workEfficiencyValues = new Dictionary<WorkEfficiencyType, float>();
+            InitializeWorkEfficiencyValues();
+        }
+        return workEfficiencyValues.ContainsKey(workEfficiencyType) ?
+            workEfficiencyValues[workEfficiencyType] :
+            0.0f;
+    }
+
+    public float GetWorkEfficiencyValue(CreatureCardType creatureCardType)
+        => GetWorkEfficiencyValue(GetWorkEfficiencyType(creatureCardType));
+
+    public bool IsResourcePoint(ResourceCardType resourceCardType)
+        => resourceCardAttributes.ContainsKey(resourceCardType) &&
+        resourceCardAttributes[resourceCardType].resourceClassification == ResourceCardClassification.ResourcePoint;
+
+    public int GetDurability(ResourceCardType cardType) => 
+        resourceCardAttributes.ContainsKey(cardType) ?
+        resourceCardAttributes[cardType].durability : 1;
+
     
     #endregion
 

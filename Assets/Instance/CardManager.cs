@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Category;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class CardManager : MonoBehaviour
 {
@@ -22,20 +21,25 @@ public class CardManager : MonoBehaviour
     }
 
     #region 卡牌逻辑内容管理
-    private long cardIdentityID;
+    private long cardIdentityID = 1;
     [HideInInspector] public bool isDragging;
     [HideInInspector] public Card draggingCard;
+    public Dictionary<CardType, Card> allCards = new Dictionary<CardType, Card>();
 
     public void Start()
     {
-        cardIdentityID = 1;
         isDragging = false;
         draggingCard = null;
+        foreach (var card in FindObjectsByType<Card>(sortMode: FindObjectsSortMode.None))
+        {
+            allCards[card.cardDescription.cardType] = card;
+        }
     }
 
     public long GetCardIdentityID()
     {
         long newID = cardIdentityID++;
+        Debug.Log($"Generated new card ID: {newID}");
         return newID % long.MaxValue;
     }
 
@@ -48,6 +52,7 @@ public class CardManager : MonoBehaviour
         }
         Card newCard = Instantiate(cardPrefab, position, Quaternion.identity).GetComponent<Card>();
         newCard.SetCardType(cardDescription);
+        allCards[newCard.cardDescription.cardType] = newCard;
         return newCard;
     }
     #endregion
@@ -63,22 +68,18 @@ public class CardManager : MonoBehaviour
     #region 卡牌属性管理
     [Header("卡牌属性管理")]
     public CardAttributeDB cardAttributeDB;
-
+    public ResourceCardClassification GetResourceCardClassification(ResourceCardType resourceCardType) 
+        => cardAttributeDB.GetResourceCardClassification(resourceCardType);
     public WorkEfficiencyType GetWorkEfficiencyType(CreatureCardType creatureCardType)
-        => cardAttributeDB.creatureCardAttributes.ContainsKey(creatureCardType) ?
-            cardAttributeDB.creatureCardAttributes[creatureCardType].craftWorkEfficiency :
-            WorkEfficiencyType.None;
-
+        => cardAttributeDB.GetWorkEfficiencyType(creatureCardType);
     public float GetWorkEfficiencyValue(WorkEfficiencyType workEfficiencyType)
-        => cardAttributeDB.workEfficiencyValues.ContainsKey(workEfficiencyType) ?
-            cardAttributeDB.workEfficiencyValues[workEfficiencyType] :
-            0.0f;
-
+        => cardAttributeDB.GetWorkEfficiencyValue(workEfficiencyType);
     public float GetWorkEfficiencyValue(CreatureCardType creatureCardType)
-        => GetWorkEfficiencyValue(GetWorkEfficiencyType(creatureCardType));
-
+        => cardAttributeDB.GetWorkEfficiencyValue(creatureCardType);
     public bool IsResourcePoint(ResourceCardType resourceCardType)
-        => cardAttributeDB.resourceCardAttributes.ContainsKey(resourceCardType) && cardAttributeDB.resourceCardAttributes[resourceCardType].isResourcePoint;
+        => cardAttributeDB.IsResourcePoint(resourceCardType);
+    public int GetDurability(ResourceCardType cardType) 
+        => cardAttributeDB.GetDurability(cardType);
 
     #endregion
 
@@ -100,9 +101,9 @@ public class CardManager : MonoBehaviour
 
         if (eventUI == null)
         {
-            if (!TryGetEventCardUIPrefab(card.cardType.eventCardType, out GameObject prefab))
+            if (!TryGetEventCardUIPrefab(card.cardDescription.eventCardType, out GameObject prefab))
             {
-                Debug.LogError($"No EventUI prefab found for EventCardType: {card.cardType.eventCardType}");
+                Debug.LogError($"No EventUI prefab found for EventCardType: {card.cardDescription.eventCardType}");
                 return;
             }
             eventUI = Instantiate(prefab, eventUIParent).GetComponent<EventUI>();

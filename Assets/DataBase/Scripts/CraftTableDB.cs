@@ -60,7 +60,7 @@ public class CraftTableDB : ScriptableObject
     {
         foreach (var recipe in recipeList)
         {
-            var cardDescs = inputCards.Select(card => card.cardType).ToList();
+            var cardDescs = inputCards.Select(card => card.cardDescription).ToList();
             var usedCardIndices = CanCraftRecipeWithIndices(recipe, cardDescs);
 
             if (usedCardIndices != null)
@@ -172,13 +172,13 @@ public class CraftTableDB : ScriptableObject
     }
 
     // 获取卡牌类型的唯一键值
-    private (CardType, int) GetCardTypeKey(Card.CardDescription card)
+    private (CardType, int) GetCardTypeKey(Card.CardDescription cardDescription)
     {
-        return card.cardType switch
+        return cardDescription.cardType switch
         {
-            CardType.Resources => (CardType.Resources, (int)card.resourceCardType),
-            CardType.Creatures => (CardType.Creatures, (int)card.creatureCardType),
-            CardType.Events => (CardType.Events, (int)card.eventCardType),
+            CardType.Resources => (CardType.Resources, (int)cardDescription.resourceCardType),
+            CardType.Creatures => (CardType.Creatures, (int)cardDescription.creatureCardType),
+            CardType.Events => (CardType.Events, (int)cardDescription.eventCardType),
             _ => (CardType.None, 0),
         };
     }

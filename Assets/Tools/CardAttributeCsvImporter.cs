@@ -81,9 +81,10 @@ public class CardAttributeDBCsvImporter : EditorWindow
             "1. 生物卡CSV格式:\n   CreatureType,CraftEfficiency,ExploreEfficiency,InteractEfficiency\n\n" +
             "   - CreatureType: 生物类型枚举值\n" +
             "   - 效率类型可用值: None, Frenzy, Fast, Normal, Slow, VerySlow\n\n" +
-            "2. 资源卡CSV格式:\n   ResourceType,IsResourcePoint\n\n" +
+            "2. 资源卡CSV格式:\n   ResourceType,ResourceCardClassification,Durability\n\n" +
             "   - ResourceType: 资源类型枚举值\n" +
-            "   - IsResourcePoint: true或false",
+            "   - ResourceCardClassification: None, Food, Equipment, ResourcePoint, Others\n" +
+            "   - Durability: 资源卡耐久值",
             MessageType.Info);
     }
 
@@ -236,14 +237,21 @@ public class CardAttributeDBCsvImporter : EditorWindow
             // 解析标题行以获取列索引
             string[] headers = ParseCsvLine(lines[0]);
             int typeIndex = Array.IndexOf(headers, "ResourceType");
-            int isResourcePointIndex = Array.IndexOf(headers, "IsResourcePoint");
+            int classificationIndex = Array.IndexOf(headers, "ResourceCardClassification");
+            int durabilityIndex = Array.IndexOf(headers, "Durability");
 
-            // 验证所有必要的列都存在
-            if (typeIndex < 0 || isResourcePointIndex < 0)
+            // 验证类型列存在
+            if (typeIndex < 0)
             {
-                EditorUtility.DisplayDialog("错误", "CSV文件缺少必要的列！请检查标题行。", "确定");
+                EditorUtility.DisplayDialog("错误", "CSV文件缺少 ResourceType 列！请检查标题行。", "确定");
                 return;
             }
+
+            // 如果分类或耐久列缺失，允许继续但会使用默认值
+            if (classificationIndex < 0)
+                Debug.LogWarning("CSV 未包含 ResourceCardClassification 列，所有分类将使用 None。");
+            if (durabilityIndex < 0)
+                Debug.LogWarning("CSV 未包含 Durability 列，所有耐久度将使用默认值 1。");
 
             // 开始记录操作以支持撤销
             Undo.RecordObject(cardAttributeDB, "Import Resource Card Data from CSV");
@@ -262,9 +270,9 @@ public class CardAttributeDBCsvImporter : EditorWindow
 
                     string[] values = ParseCsvLine(lines[i]);
 
-                    if (values.Length <= Math.Max(typeIndex, isResourcePointIndex))
+                    if (values.Length <= typeIndex)
                     {
-                        Debug.LogWarning($"第{i + 1}行数据列不足，已跳过");
+                        Debug.LogWarning($"第{i + 1}行数据列不足（缺少 ResourceType），已跳过");
                         continue;
                     }
 
@@ -277,16 +285,31 @@ public class CardAttributeDBCsvImporter : EditorWindow
                     {
                         CardAttributeDB.ResourceCardAttribute attribute = new CardAttributeDB.ResourceCardAttribute();
 
-                        // 解析是否为资源点
-                        if (bool.TryParse(values[isResourcePointIndex], out bool isResourcePoint))
-                            attribute.isResourcePoint = isResourcePoint;
-                        else
-                            errorList.Add($"第{i + 1}行: 无效的布尔值 '{values[isResourcePointIndex]}'");
+                        // 解析资源卡分类，默认 None
+                        ResourceCardClassification classification = ResourceCardClassification.None;
+                        if (classificationIndex >= 0 && values.Length > classificationIndex && !string.IsNullOrWhiteSpace(values[classificationIndex]))
+                        {
+                            if (!Enum.TryParse<ResourceCardClassification>(values[classificationIndex], out classification))
+                                errorList.Add($"第{i + 1}行: 无效的资源卡分类 '{values[classificationIndex]}'，已使用 None");
+                        }
+                        attribute.resourceClassification = classification;
+
+                        // 解析耐久度，默认 1（当 CSV 为空时）
+                        int durability = 1;
+                        if (durabilityIndex >= 0 && values.Length > durabilityIndex && !string.IsNullOrWhiteSpace(values[durabilityIndex]))
+                        {
+                            if (!int.TryParse(values[durabilityIndex], out durability))
+                            {
+                                errorList.Add($"第{i + 1}行: 无效的耐久度值 '{values[durabilityIndex]}'，已使用默认值 1");
+                                durability = 1;
+                            }
+                        }
+                        attribute.durability = durability;
 
                         // 添加到字典
                         cardAttributeDB.resourceCardAttributes[resourceType] = attribute;
                         successCount++;
-                        Debug.Log($"成功导入资源卡属性: {resourceType}");
+                        Debug.Log($"成功导入资源卡属性: {resourceType} 分类: {attribute.resourceClassification} 耐久值: {attribute.durability}");
                     }
                     else
                     {

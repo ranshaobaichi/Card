@@ -16,7 +16,7 @@ MonoBehaviour:
   - recipeID: 0
     recipeName: Test
     recipeDescription: "\u6D4B\u8BD5"
-    workload: 0
+    workload: 150
     workType: 1
     inputCards:
     - cardType: 1

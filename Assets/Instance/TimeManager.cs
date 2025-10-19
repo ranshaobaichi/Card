@@ -52,6 +52,8 @@ public class TimeManager : MonoBehaviour
             case GameTimeState.SettlementState:
                 // Handle settlement logic here
                 // Debug.Log("Entering Settlement State");
+                PrepareProductionToSettlementData();
+                SceneManager.LoadScene(SceneManager.SettlementScene);
                 break;
             case GameTimeState.BattleState:
                 SceneManager.LoadScene(SceneManager.BattleScene);
@@ -82,10 +84,33 @@ public class TimeManager : MonoBehaviour
             case GameTimeState.ProduceState:
                 timeProgressBar?.ResumeProgressBar();
                 break;
-            case GameTimeState.SettlementState:                
+            case GameTimeState.SettlementState:
             case GameTimeState.BattleState:
             default:
                 throw new System.NotImplementedException();
         }
+    }
+    
+    private void PrepareProductionToSettlementData()
+    {
+        var productionToSettlementData = new DataStruct.ProductionToSettlementData();
+        productionToSettlementData.Initialize();
+        var allCards = CardManager.Instance.allCards;
+        foreach (var cardPair in allCards)
+        {
+            var cardType = cardPair.Key;
+            var card = cardPair.Value;
+            if (cardType == CardType.None || cardType == CardType.Events)
+            {
+                continue;
+            }
+            productionToSettlementData.cardDescriptions[cardType].Add(card.cardDescription.cardType switch
+            {
+                CardType.Creatures => (int)card.cardDescription.creatureCardType,
+                CardType.Resources => (int)card.cardDescription.resourceCardType,
+                _ => throw new System.NotImplementedException(),
+            });
+        }
+        SceneManager.Instance.productionToSettlementData = productionToSettlementData;
     }
 }

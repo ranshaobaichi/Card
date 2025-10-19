@@ -48,7 +48,7 @@ public class EventUI : MonoBehaviour
         var cards = eventCard.cardSlot.cards;
         foreach (var card in cards)
         {
-            if (card.cardType.cardType != Category.CardType.Events)
+            if (card.cardDescription.cardType != Category.CardType.Events)
             {
                 var cardGO = Instantiate(eventCardPrefab, cardDisplayPanel.transform);
                 SetText(cardGO, card.GetCardTypeString());

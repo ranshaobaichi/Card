@@ -48,6 +48,15 @@ namespace Category
         挖掘点,
     }
 
+    public enum ResourceCardClassification
+    {
+        None,
+        Food,
+        Equipment,
+        ResourcePoint,
+        Others,
+    }
+
     public enum CreatureCardType
     {
         None,

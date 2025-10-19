@@ -23,10 +23,8 @@ public class ProgressBar : MonoBehaviour
     public void StartProgressBar(float totalTime, Action onComplete)
     {
         // 设置总持续时间
+        ResetProgress(true);
         duration = totalTime > 0 ? totalTime : 1f;
-        currentTime = 0f;
-        isRunning = true;
-
         OnProgressComplete += onComplete;
     }
 
@@ -63,11 +61,11 @@ public class ProgressBar : MonoBehaviour
         fillImage.fillAmount = Mathf.Clamp01(value);
     }
     
-    // 重置进度条
-    public void Reset()
+    public void ResetProgress(bool state)
     {
-        isRunning = false;
+        isRunning = state;
         currentTime = 0f;
         fillImage.fillAmount = 0f;
+        OnProgressComplete = null;
     }
 }
