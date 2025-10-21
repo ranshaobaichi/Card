@@ -4,15 +4,17 @@ using System.Linq;
 using Category;
 using UnityEngine;
 
+[Serializable]
+public struct DropCard
+{
+    public Card.CardDescription cardDescription;
+    public int dropCount;
+    public int dropWeight;
+}
+
 [CreateAssetMenu(fileName = "CraftTable", menuName = "ScriptableObjects/CraftTable", order = 1)]
 public class CraftTableDB : ScriptableObject
 {
-    [Serializable]
-    public struct CraftingCard
-    {
-        public Card.CardDescription cardDescription;
-        public int dropWeight;
-    }
 
     [Serializable]
     public struct Recipe
@@ -22,13 +24,13 @@ public class CraftTableDB : ScriptableObject
         [Tooltip("配方名称")] public string recipeName;
         [Tooltip("配方描述")] public string recipeDescription;
         [Tooltip("配方工作量")] public float workload;
-        [Tooltip("配方工作类型")] public WorkType workType;
+        [Tooltip("配方工作类型")] public Category.Production.WorkType workType;
 
         [Header("合成所需卡牌")]
         public List<Card.CardDescription> inputCards;
 
         [Header("产出卡牌")]
-        public List<CraftingCard> outputCards;
+        public List<DropCard> outputCards;
 
         private Recipe(int id = -1, string name = null)
         {
@@ -38,27 +40,33 @@ public class CraftTableDB : ScriptableObject
             outputCards = null;
             recipeDescription = null;
             workload = 0f;
-            workType = WorkType.None;
+            workType = Category.Production.WorkType.None;
         }
     }
 
     [Header("配方列表")]
     public List<Recipe> recipeList = new List<Recipe>();
 
-    public Recipe? GetRecipe(int id)
+    public Recipe? GetRecipe(int id, List<Recipe> fromList = null)
     {
-        var recipe = recipeList.Find(recipe => recipe.recipeID == id);
+        if (fromList == null)
+            fromList = recipeList;
+        var recipe = fromList.Find(recipe => recipe.recipeID == id);
         return recipe.recipeID == id ? recipe : null;
     }
-    public Recipe? GetRecipe(string name)
+    public Recipe? GetRecipe(string name, List<Recipe> fromList = null)
     {
-        var recipe = recipeList.Find(recipe => recipe.recipeName == name);
+        if (fromList == null)
+            fromList = recipeList;
+        var recipe = fromList.Find(recipe => recipe.recipeName == name);
         return recipe.recipeName == name ? recipe : null;
     }
 
-    public (List<Card>, Recipe)? GetRecipe(List<Card> inputCards)
+    public (List<Card>, Recipe)? GetRecipe(List<Card> inputCards, List<Recipe> fromList = null)
     {
-        foreach (var recipe in recipeList)
+        if (fromList == null)
+            fromList = recipeList;
+        foreach (var recipe in fromList)
         {
             var cardDescs = inputCards.Select(card => card.cardDescription).ToList();
             var usedCardIndices = CanCraftRecipeWithIndices(recipe, cardDescs);

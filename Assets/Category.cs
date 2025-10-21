@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Category
 {
-
     #region 卡牌类型
     public enum CardType
     {
@@ -61,32 +60,10 @@ namespace Category
     {
         None,
         Any,
-        地精苦工,
-        劣等潜伏者,
-        鹰身女妖伏击者,
-        古兽人萨满,
-        凶残头目,
-        流浪兽人,
-        山居女妖,
-        返祖兽人,
-        游荡拾荒佬,
-        古代石像,
-        石像魔,
-        林中少女,
-        松柏巡林者,
-        长柳尊者,
-        白蜡穿刺者,
-        幼体巨蜘蛛,
-        巨蜘蛛,
-        巨蜘蛛首领,
-        长弓农奴,
-        自由民,
-        征召市民,
-        侍从,
-        武装侍从,
-        平原男爵,
-        森林男爵,
-        要塞伯爵,
+        小鬼,
+        地精,
+        兽人,
+        萨满,
     }
 
     public enum EventCardType
@@ -97,45 +74,59 @@ namespace Category
     }
     #endregion
 
-    [Tooltip("工作类型")]
-    public enum WorkType
-    {
-        None,
-        [Tooltip("合成")] Craft,
-        [Tooltip("探索")] Explore,
-        [Tooltip("互动")] Interact
-    }
-
-    public enum WorkEfficiencyType
-    {
-        None,
-        [Tooltip("狂热")] Frenzy,
-        [Tooltip("快速")] Fast,
-        [Tooltip("普通")] Normal,
-        [Tooltip("缓慢")] Slow,
-        [Tooltip("极慢")] VerySlow,
-    }
-
-    [Serializable]
-    public enum B_CreatureState
-    {
-        Idle,
-        FindingPath,
-        Attacking,
-        Dead,
-    }
-
-    [Serializable]
-    public enum LineUp
-    {
-        Player,
-        Enemy
-    }
-
     public enum GameTimeState
     {
         ProduceState,
         SettlementState,
         BattleState,
+    }
+
+    namespace Production
+    {
+        [Tooltip("工作类型")]
+        public enum WorkType
+        {
+            None,
+            [Tooltip("合成")] Craft,
+            [Tooltip("探索")] Explore,
+            [Tooltip("互动")] Interact
+        }
+
+        public enum WorkEfficiencyType
+        {
+            None,
+            [Tooltip("极慢")] VerySlow = 1,
+            [Tooltip("缓慢")] Slow = 2,
+            [Tooltip("普通")] Normal = 3,
+            [Tooltip("快速")] Fast = 4,
+            [Tooltip("狂热")] Frenzy = 5,
+        }
+    }
+
+    namespace Battle
+    {
+        [Serializable]
+        public enum B_CreatureState
+        {
+            Idle,
+            FindingPath,
+            Attacking,
+            Dead,
+        }
+
+        [Serializable]
+        public enum LineUp
+        {
+            Player,
+            Enemy
+        }
+
+        public enum DamageType
+
+        {
+            Physical,
+            Spell,
+            TrueDamage
+        }
     }
 }

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Category;
+using Category.Battle;
 using UnityEngine;
 
 public class BattleWorldObjManager : MonoBehaviour

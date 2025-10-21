@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Category;
+using Category.Production;
 using UnityEngine;
 
 public class CreatureCard : Card

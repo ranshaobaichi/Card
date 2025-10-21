@@ -4,6 +4,7 @@ using System.IO;
 using UnityEngine;
 using UnityEditor;
 using System.Text;
+using Category.Production;
 using Category;
 
 public class CraftTableCsvImporter : EditorWindow
@@ -214,9 +215,9 @@ public class CraftTableCsvImporter : EditorWindow
         return WorkType.None;
     }
 
-    private List<CraftTableDB.CraftingCard> ParseOutputCardsList(string cardsString)
+    private List<DropCard> ParseOutputCardsList(string cardsString)
     {
-        List<CraftTableDB.CraftingCard> cards = new List<CraftTableDB.CraftingCard>();
+        List<DropCard> cards = new List<DropCard>();
 
         if (string.IsNullOrEmpty(cardsString))
             return cards;
@@ -224,7 +225,7 @@ public class CraftTableCsvImporter : EditorWindow
         string[] cardEntries = cardsString.Split(',');
         foreach (string cardEntry in cardEntries)
         {
-            string[] parts = cardEntry.Trim().Split(':');
+            string[] parts = cardEntry.Trim().Split('-');
             if (parts.Length == 4)
             {
                 char typePrefix = parts[0].Trim()[0]; // R, C, E
@@ -234,9 +235,10 @@ public class CraftTableCsvImporter : EditorWindow
 
                 for (int i = 0; i < count; i++)
                 {
-                    CraftTableDB.CraftingCard cardDesc = new CraftTableDB.CraftingCard
+                    DropCard cardDesc = new DropCard
                     {
                         cardDescription = new Card.CardDescription(),
+                        dropCount = count,
                         dropWeight = dropWeight
                     };
 
@@ -286,45 +288,44 @@ public class CraftTableCsvImporter : EditorWindow
         string[] cardEntries = cardsString.Split(',');
         foreach (string cardEntry in cardEntries)
         {
-            string[] parts = cardEntry.Trim().Split(':');
+            string[] parts = cardEntry.Trim().Split('-');
             if (parts.Length == 3)
             {
                 char typePrefix = parts[0].Trim()[0]; // R, C, E
                 string cardTypeStr = parts[1].Trim();
                 int count = int.Parse(parts[2].Trim());
 
+                Card.CardDescription cardDesc = new Card.CardDescription();
+                // 设置卡牌类型
+                switch (typePrefix)
+                {
+                    case 'R': // 资源卡
+                        cardDesc.cardType = CardType.Resources;
+                        if (Enum.TryParse<ResourceCardType>(cardTypeStr, out ResourceCardType resourceType))
+                            cardDesc.resourceCardType = resourceType;
+                        else
+                            errorList.Add((cardsString, cardTypeStr)); // 记录错误
+                        break;
+
+                    case 'C': // 生物卡
+                        cardDesc.cardType = CardType.Creatures;
+                        if (Enum.TryParse<CreatureCardType>(cardTypeStr, out CreatureCardType creatureType))
+                            cardDesc.creatureCardType = creatureType;
+                        else
+                            errorList.Add((cardsString, cardTypeStr)); // 记录错误
+                        break;
+
+                    case 'E': // 事件卡
+                        cardDesc.cardType = CardType.Events;
+                        if (Enum.TryParse<EventCardType>(cardTypeStr, out EventCardType eventType))
+                            cardDesc.eventCardType = eventType;
+                        else
+                            errorList.Add((cardsString, cardTypeStr)); // 记录错误
+                        break;
+                }
+                    
                 for (int i = 0; i < count; i++)
                 {
-                    Card.CardDescription cardDesc = new Card.CardDescription();
-
-                    // 设置卡牌类型
-                    switch (typePrefix)
-                    {
-                        case 'R': // 资源卡
-                            cardDesc.cardType = CardType.Resources;
-                            if (Enum.TryParse<ResourceCardType>(cardTypeStr, out ResourceCardType resourceType))
-                                cardDesc.resourceCardType = resourceType;
-                            else
-                                errorList.Add((cardsString, cardTypeStr)); // 记录错误
-                            break;
-
-                        case 'C': // 生物卡
-                            cardDesc.cardType = CardType.Creatures;
-                            if (Enum.TryParse<CreatureCardType>(cardTypeStr, out CreatureCardType creatureType))
-                                cardDesc.creatureCardType = creatureType;
-                            else
-                                errorList.Add((cardsString, cardTypeStr)); // 记录错误
-                            break;
-
-                        case 'E': // 事件卡
-                            cardDesc.cardType = CardType.Events;
-                            if (Enum.TryParse<EventCardType>(cardTypeStr, out EventCardType eventType))
-                                cardDesc.eventCardType = eventType;
-                            else
-                                errorList.Add((cardsString, cardTypeStr)); // 记录错误
-                            break;
-                    }
-
                     cards.Add(cardDesc);
                 }
             }

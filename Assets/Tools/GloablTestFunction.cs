@@ -8,7 +8,7 @@ public class GlobalTestFunction : MonoBehaviour
     /// <summary>
     /// 创建一个战斗世界对象
     /// </summary>
-    [SerializeField] public LineUp lineUp;
+    [SerializeField] public Category.Battle.LineUp lineUp;
     [SerializeField] public int priority;
     public void CreateBattleWorldObj()
     {

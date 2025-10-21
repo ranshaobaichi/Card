@@ -258,13 +258,10 @@ public class CardSlot : MonoBehaviour
 
         // Update the cardSlot reference and transform parent
         cards.Remove(card);
+        card.cardSlot = null;
+        card.transform.SetParent(null);
         if (destroyCard)
             card.DeleteCard();
-        else
-        {
-            card.cardSlot = null;
-            card.transform.SetParent(null);
-        }
 
         // If cardSlot is empty, destroy itself
         if (cards.Count == 0 && cardSlot != movingCardSlot)
@@ -320,13 +317,10 @@ public class CardSlot : MonoBehaviour
         foreach (var card in removeCards)
         {
             cards.Remove(card);
+            card.cardSlot = null;
+            card.transform.SetParent(null);
             if (destroyCards)
                 card.DeleteCard();
-            else
-            {
-                card.cardSlot = null;
-                card.transform.SetParent(null);
-            }
         }
 
         // If cardSlot is empty, destroy itself
@@ -413,11 +407,10 @@ public class CardSlot : MonoBehaviour
     public void OnBeginProduct()
     {
         List<Card> currentWorkingCreatureCards = currentCraftingCards.FindAll(card => card.cardDescription.cardType == CardType.Creatures);
-        // BUG： If no creature card is found, the production cannot start
+        // TEST : if no creature cards, use normal efficiency
         float workloadEfficiency = currentWorkingCreatureCards.Count > 0 ?
-                                    CardManager.Instance.GetWorkEfficiencyValue(currentWorkingCreatureCards
-                                        .Max(card => CardManager.Instance.GetWorkEfficiencyType(card.cardDescription.creatureCardType))) :
-                                    CardManager.Instance.GetWorkEfficiencyValue(WorkEfficiencyType.Normal);
+                                    currentWorkingCreatureCards.Max(card => CardManager.Instance.GetWorkEfficiencyValue(card)) :
+                                    CardManager.Instance.GetWorkEfficiencyValue(Category.Production.WorkEfficiencyType.Normal);
 
         StartProgressBar(currentRecipe.workload / workloadEfficiency, OnEndProduct);
         Debug.Log($"Starting production for recipe: {currentRecipe.recipeName} with workload efficiency: {workloadEfficiency}, workload: {currentRecipe.workload}");

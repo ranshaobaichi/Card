@@ -13,7 +13,5 @@ public class SettlementManager : MonoBehaviour
     {
         // Implement settlement logic here
         Debug.Log("Dealing with settlement...");
-        var data = SceneManager.Instance.productionToSettlementData;
-        data.PrintData();
     }
 }

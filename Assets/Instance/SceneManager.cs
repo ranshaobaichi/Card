@@ -8,11 +8,6 @@ public class SceneManager : MonoBehaviour
     public string currentSceneName = "";
     public static SceneManager Instance;
 
-    /// <summary>
-    /// Datas
-    /// </summary>
-    public DataStruct.ProductionToSettlementData productionToSettlementData;
-
     public static event System.Action SceneChanged;
 
     private void Awake()

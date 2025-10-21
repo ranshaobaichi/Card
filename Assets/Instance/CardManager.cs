@@ -1,12 +1,15 @@
 using System.Collections.Generic;
+using Category.Production;
 using Category;
 using UnityEngine;
+using static CardAttributeDB;
 
 public class CardManager : MonoBehaviour
 {
     public static CardManager Instance;
     public GameObject cardPrefab;
     public Canvas canvas;
+    public Dictionary<CardType, List<Card>> allCards = new Dictionary<CardType, List<Card>>();
 
     private void Awake()
     {
@@ -20,26 +23,34 @@ public class CardManager : MonoBehaviour
         }
     }
 
-    #region 卡牌逻辑内容管理
+    #region 卡牌逻辑内容管理    
     private long cardIdentityID = 1;
     [HideInInspector] public bool isDragging;
     [HideInInspector] public Card draggingCard;
-    public Dictionary<CardType, Card> allCards = new Dictionary<CardType, Card>();
 
     public void Start()
     {
         isDragging = false;
         draggingCard = null;
+        foreach (CardType cardType in System.Enum.GetValues(typeof(CardType)))
+        {
+            if (cardType == CardType.None) continue;
+            allCards[cardType] = new List<Card>();
+        }
+
+        // TEST FUNCTION: 添加场上已有卡牌到管理器
         foreach (var card in FindObjectsByType<Card>(sortMode: FindObjectsSortMode.None))
         {
-            allCards[card.cardDescription.cardType] = card;
+            allCards[card.cardDescription.cardType].Add(card);
+            AddCardAttribute(card);
+            card.OnCardDeleted += OnCardDeleted;
         }
     }
 
     public long GetCardIdentityID()
     {
         long newID = cardIdentityID++;
-        Debug.Log($"Generated new card ID: {newID}");
+        // Debug.Log($"Generated new card ID: {newID}");
         return newID % long.MaxValue;
     }
 
@@ -52,47 +63,35 @@ public class CardManager : MonoBehaviour
         }
         Card newCard = Instantiate(cardPrefab, position, Quaternion.identity).GetComponent<Card>();
         newCard.SetCardType(cardDescription);
-        allCards[newCard.cardDescription.cardType] = newCard;
+        allCards[newCard.cardDescription.cardType].Add(newCard);
+        AddCardAttribute(newCard);
+        newCard.OnCardDeleted += OnCardDeleted;
         return newCard;
+    }
+
+    /// <summary>
+    /// 删除卡牌并移除其属性记录
+    /// </summary>
+    /// <param name="card"></param>
+    private void OnCardDeleted(Card card)
+    {
+        allCards[card.cardDescription.cardType].Remove(card);
+        RemoveCardAttribute(card);
     }
     #endregion
 
-    #region 合成表管理
-    [Header("合成表管理")]
-    public CraftTableDB craftTableDB;
-    public CraftTableDB.Recipe? GetRecipe(int id) => craftTableDB.GetRecipe(id);
-    public CraftTableDB.Recipe? GetRecipe(string name) => craftTableDB.GetRecipe(name);
-    public (List<Card>, CraftTableDB.Recipe)? GetRecipe(List<Card> inputCards) => craftTableDB.GetRecipe(inputCards);
-    #endregion
-
-    #region 卡牌属性管理
-    [Header("卡牌属性管理")]
-    public CardAttributeDB cardAttributeDB;
-    public ResourceCardClassification GetResourceCardClassification(ResourceCardType resourceCardType) 
-        => cardAttributeDB.GetResourceCardClassification(resourceCardType);
-    public WorkEfficiencyType GetWorkEfficiencyType(CreatureCardType creatureCardType)
-        => cardAttributeDB.GetWorkEfficiencyType(creatureCardType);
-    public float GetWorkEfficiencyValue(WorkEfficiencyType workEfficiencyType)
-        => cardAttributeDB.GetWorkEfficiencyValue(workEfficiencyType);
-    public float GetWorkEfficiencyValue(CreatureCardType creatureCardType)
-        => cardAttributeDB.GetWorkEfficiencyValue(creatureCardType);
-    public bool IsResourcePoint(ResourceCardType resourceCardType)
-        => cardAttributeDB.IsResourcePoint(resourceCardType);
-    public int GetDurability(ResourceCardType cardType) 
-        => cardAttributeDB.GetDurability(cardType);
-
-    #endregion
+    # region 卡牌合成表管理
+    List<CraftTableDB.Recipe> unlockedCraftableRecipes = new List<CraftTableDB.Recipe>();
+    public (List<Card>, CraftTableDB.Recipe)? GetRecipe(List<Card> inputCards)
+        => DataBaseManager.Instance.craftTableDB.GetRecipe(inputCards, unlockedCraftableRecipes);
+    # endregion
 
     #region 事件卡UI管理
     [Header("事件卡UI管理")]
-    public EventCardUIDB eventCardUIDB;
     public Transform eventUIParent;
     public Vector2 eventUIoffset;
     public Vector2 UIthreshold;
     private Dictionary<Card, EventUI> EventUIs = new Dictionary<Card, EventUI>();
-
-    public bool TryGetEventCardUIPrefab(EventCardType eventCardType, out GameObject prefab)
-        => eventCardUIDB.TryGetEventCardUIPrefab(eventCardType, out prefab);
 
     public void PopUpEventUI(Card card)
     {
@@ -101,7 +100,7 @@ public class CardManager : MonoBehaviour
 
         if (eventUI == null)
         {
-            if (!TryGetEventCardUIPrefab(card.cardDescription.eventCardType, out GameObject prefab))
+            if (!DataBaseManager.Instance.TryGetEventCardUIPrefab(card.cardDescription.eventCardType, out GameObject prefab))
             {
                 Debug.LogError($"No EventUI prefab found for EventCardType: {card.cardDescription.eventCardType}");
                 return;
@@ -167,7 +166,7 @@ public class CardManager : MonoBehaviour
         eventUI.OpenUI(uiCenter + uiPivotOffset);
         // Debug.Log($"CardCenter: {cardCenter}, Right: {right}, Up: {up}, UICenter: {uiCenter}, AnchoredPos: {eventUIRect.anchoredPosition}");
     }
-    
+
     private void StopTrackingUIEvent(Card card)
     {
         if (EventUIs.ContainsKey(card))
@@ -175,5 +174,69 @@ public class CardManager : MonoBehaviour
             EventUIs.Remove(card);
         }
     }
-    #endregion
+    # endregion
+
+    # region 卡牌属性管理
+    private void AddCardAttribute(Card card)
+    {
+        switch (card.cardDescription.cardType)
+        {
+            case CardType.Creatures:
+                creatureCardAttributes[card] = DataBaseManager.Instance.GetCardAttribute<CreatureCardAttribute>(card.cardDescription);
+                break;
+            case CardType.Resources:
+                resourceCardAttributes[card] = DataBaseManager.Instance.GetCardAttribute<ResourceCardAttribute>(card.cardDescription);
+                break;
+            case CardType.Events:
+                // No attributes for event cards currently
+                Debug.Log("Event Card has no attributes to add.");
+                break;
+            default:
+                Debug.LogWarning($"CardManager: No attribute added for {card.name} CardType {card.GetCardTypeString()}");
+                break;
+        }
+    }
+
+    private void RemoveCardAttribute(Card card)
+    {
+        switch (card.cardDescription.cardType)
+        {
+            case CardType.Creatures:
+                creatureCardAttributes.Remove(card);
+                break;
+            case CardType.Resources:
+                resourceCardAttributes.Remove(card);
+                break;
+            default:
+                Debug.LogWarning($"CardManager: No attribute removed for {card.name} CardType {card.GetCardTypeString()}");
+                break;
+        }
+    }
+
+    # region 资源卡
+    Dictionary<Card, ResourceCardAttribute> resourceCardAttributes = new Dictionary<Card, ResourceCardAttribute>();
+    # endregion
+
+    # region 生物卡
+    Dictionary<Card, CreatureCardAttribute> creatureCardAttributes = new Dictionary<Card, CreatureCardAttribute>();
+    public float GetWorkEfficiencyValue(Card creatureCard)
+    {
+        if (creatureCardAttributes.ContainsKey(creatureCard))
+        {
+            var workEfficiencyType = creatureCardAttributes[creatureCard].basicAttributes.workEfficiencyAttributes.craftWorkEfficiency;
+            return DataBaseManager.Instance.GetWorkEfficiencyValue(workEfficiencyType);
+        }
+        Debug.LogWarning($"CardManager: No CreatureCardAttribute found for {creatureCard.name}");
+        return 0.0f;
+    }
+    public float GetWorkEfficiencyValue(WorkEfficiencyType workEfficiencyType)
+        => DataBaseManager.Instance.GetWorkEfficiencyValue(workEfficiencyType);
+    
+
+    # endregion
+
+    # region 事件卡
+    # endregion
+
+    # endregion
 }
