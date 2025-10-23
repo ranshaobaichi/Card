@@ -50,11 +50,11 @@ public static class Pathfinding {
         }
 
         // 若允许终点被占用但仍作为目标，可在此放宽 target.walkable 条件
-        if (!startNode.walkable)
-        {
-            Debug.LogWarning("起点不可行走");
-            return null;
-        }
+        // if (!startNode.walkable)
+        // {
+        //     Debug.LogWarning("起点不可行走");
+        //     return null;
+        // }
 
         ResetNodes();
 

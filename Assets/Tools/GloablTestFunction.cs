@@ -5,14 +5,14 @@ using UnityEngine;
 public class GlobalTestFunction : MonoBehaviour
 {
     private void Start() => DontDestroyOnLoad(gameObject);
-    /// <summary>
-    /// 创建一个战斗世界对象
-    /// </summary>
+    // /// <summary>
+    // /// 创建一个战斗世界对象
+    // /// </summary>
     [SerializeField] public Category.Battle.LineUp lineUp;
     [SerializeField] public int priority;
     public void CreateBattleWorldObj()
     {
-        FindAnyObjectByType<BattleWorldObjManager>().InstantiateObj(lineUp, priority);
+        // FindAnyObjectByType<BattleWorldObjManager>().InstantiateObj(lineUp, priority);
     }
 
     /// <summary>

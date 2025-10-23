@@ -8,7 +8,9 @@ public class SceneManager : MonoBehaviour
     public string currentSceneName = "";
     public static SceneManager Instance;
 
-    public static event System.Action SceneChanged;
+    public static event System.Action BeforeSceneChanged;
+    public static event System.Action AfterSceneChanged;
+
 
     private void Awake()
     {
@@ -16,6 +18,7 @@ public class SceneManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else if (Instance != this)
         {
@@ -24,14 +27,28 @@ public class SceneManager : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+    }
+
     void Start()
     {
         currentSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
     }
 
+    private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+    {
+        currentSceneName = scene.name;
+        AfterSceneChanged?.Invoke();
+    }
+
     public static void LoadScene(string sceneName)
     {
+        BeforeSceneChanged?.Invoke();
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
-        SceneChanged?.Invoke();
     }
 }

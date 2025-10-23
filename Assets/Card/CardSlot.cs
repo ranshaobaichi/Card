@@ -13,18 +13,9 @@ public class CardSlot : MonoBehaviour
     public static CardSlot movingCardSlot;
     private CraftTableDB.Recipe currentRecipe;
     private List<Card> currentCraftingCards = new List<Card>();
+    public long cardSlotID;
 
 # region 静态接口
-    public static void UpdateIdentityID(Card card, long defaultID = -1) => UpdateIdentityID(new List<Card> { card }, defaultID);
-    public static void UpdateIdentityID(List<Card> cards, long defaultID = -1)
-    {
-        long newID = defaultID == -1 ? CardManager.Instance.GetCardIdentityID() : defaultID;
-        foreach (var card in cards)
-        {
-            card.SetCardID(newID);
-        }
-    }
-
     /// <summary>
     /// Change a single card to a new slot
     /// </summary>
@@ -49,10 +40,7 @@ public class CardSlot : MonoBehaviour
             return;
         }
 
-        long newID = -1;
         List<Card> oldSlotCards = oldSlot == null ? null : oldSlot.cards, newSlotCards = newSlot.cards;
-        if (newSlot != movingCardSlot)
-            newID = newSlot.cards.Count > 0 ? newSlot.cards[0].GetCardID() : CardManager.Instance.GetCardIdentityID();
         if (afterCard == null) afterCard = newSlotCards.LastOrDefault();
         if (newSlotCards.Count > 0 && newSlotCards.Contains(afterCard) == false)
         {
@@ -81,10 +69,6 @@ public class CardSlot : MonoBehaviour
         // Update the cardSlot reference and transform parent
         changedCard.cardSlot = newSlot;
         changedCard.transform.SetParent(newSlot.transform);
-
-        // Update the identity ID
-        if (newSlot != movingCardSlot)
-            UpdateIdentityID(changedCard, newID);
 
         // Update the transform position
             // Old slot cards
@@ -152,10 +136,7 @@ public class CardSlot : MonoBehaviour
             return;
         }
 
-        long newID = -1;
         List<Card> oldSlotCards = oldSlot == null ? null : oldSlot.cards, newSlotCards = newSlot.cards;
-        if (newSlot != movingCardSlot)
-            newID = newSlot.cards.Count > 0 ? newSlot.cards[0].GetCardID() : CardManager.Instance.GetCardIdentityID();
         if (afterCard == null) afterCard = newSlotCards.LastOrDefault();
         if (newSlotCards.Count > 0 && newSlotCards.Contains(afterCard) == false)
         {
@@ -188,37 +169,33 @@ public class CardSlot : MonoBehaviour
             card.transform.SetParent(newSlot.transform);
         }
 
-        // Update the identity ID
-        if (newSlot != movingCardSlot)
-            UpdateIdentityID(changedCards, newID);
-
         // Update the transform position
-            // Old slot cards
-            if (oldSlotCards?.Count > 0)
+        // Old slot cards
+        if (oldSlotCards?.Count > 0)
+        {
+            Vector3 preCardPos = oldSlotPreCard != null ? oldSlotPreCard.transform.position : oldSlot.transform.position;
+            Card cardToPos = oldSlotLaterCard;
+            while (cardToPos != null)
             {
-                Vector3 preCardPos = oldSlotPreCard != null ? oldSlotPreCard.transform.position : oldSlot.transform.position;
-                Card cardToPos = oldSlotLaterCard;
-                while (cardToPos != null)
-                {
-                    Vector3 targetPos = preCardPos - new Vector3(0, cardToPos.yAlignedDistance, 0);
-                    cardToPos.transform.position = targetPos;
-                    preCardPos = cardToPos.transform.position;
-                    cardToPos = cardToPos.laterCard;
-                }
+                Vector3 targetPos = preCardPos - new Vector3(0, cardToPos.yAlignedDistance, 0);
+                cardToPos.transform.position = targetPos;
+                preCardPos = cardToPos.transform.position;
+                cardToPos = cardToPos.laterCard;
             }
-            // New slot cards
-            if (controlNewCardPos)
+        }
+        // New slot cards
+        if (controlNewCardPos)
+        {
+            Vector3 newSlotPreCardPos = afterCard != null ? afterCard.transform.position : newSlot.transform.position;
+            Card newSlotCardToPos = changedCards.First();
+            while (newSlotCardToPos != null)
             {
-                Vector3 newSlotPreCardPos = afterCard != null ? afterCard.transform.position : newSlot.transform.position;
-                Card newSlotCardToPos = changedCards.First();
-                while (newSlotCardToPos != null)
-                {
-                    Vector3 targetPos = newSlotPreCardPos - new Vector3(0, newSlotCardToPos.yAlignedDistance, 0);
-                    newSlotCardToPos.transform.position = targetPos;
-                    newSlotPreCardPos = newSlotCardToPos.transform.position;
-                    newSlotCardToPos = newSlotCardToPos.laterCard;
-                }
+                Vector3 targetPos = newSlotPreCardPos - new Vector3(0, newSlotCardToPos.yAlignedDistance, 0);
+                newSlotCardToPos.transform.position = targetPos;
+                newSlotPreCardPos = newSlotCardToPos.transform.position;
+                newSlotCardToPos = newSlotCardToPos.laterCard;
             }
+        }
 
         // Delete old slot if empty
         if (oldSlotCards?.Count == 0 && oldSlot != movingCardSlot)
@@ -372,6 +349,8 @@ public class CardSlot : MonoBehaviour
     void Start()
     {
         movingCardSlot = GameObject.FindGameObjectWithTag("MovingCardSlot").GetComponent<CardSlot>();
+        cardSlotID = CardManager.Instance.GetCardSlotIdentityID();  
+        this.name = $"CardSlot_{cardSlotID}";
     }
 
     public bool BeginProduction()
@@ -426,8 +405,9 @@ public class CardSlot : MonoBehaviour
         List<Card> removeCards = new List<Card>();
         foreach (var card in currentCraftingCards)
         {
-            card.durability -= 1;
-            if (card.durability <= 0)
+            card.durability--;
+            int durability = card.durability;
+            if (durability <= 0)
             {
                 removeCards.Add(card);
             }

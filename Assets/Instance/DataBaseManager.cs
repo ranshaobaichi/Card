@@ -16,6 +16,7 @@ public class DataBaseManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        cardAttributeDB.Initialize();
     }
 
     #region 合成表管理
@@ -44,7 +45,7 @@ public class DataBaseManager : MonoBehaviour
     // public int GetSatietyValue(ResourceCardType cardType)
     //     => cardAttributeDB.GetSatietyValue(cardType);
 
-    public T GetCardAttribute<T>(Card.CardDescription cardDescription) where T : struct
+    public T GetCardAttribute<T>(Card.CardDescription cardDescription) where T : class
         => cardAttributeDB.GetCardAttribute<T>(cardDescription);
 
     #endregion

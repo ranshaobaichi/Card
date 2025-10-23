@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2422585762878965649}
   - component: {fileID: 6805414475864892471}
   - component: {fileID: 7526775750438770042}
-  - component: {fileID: 5714017342216444541}
+  - component: {fileID: 4016379625845729246}
   m_Layer: 5
   m_Name: B_Obj_Test
   m_TagString: Untagged
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5714017342216444541
+--- !u!114 &4016379625845729246
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -85,12 +85,43 @@ MonoBehaviour:
   m_GameObject: {fileID: 1199791827373344116}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ac163e00e2c8d346b72ba7d86219af7, type: 3}
+  m_Script: {fileID: 11500000, guid: a67c18c5dba33dc47be79828cdb84840, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   hexNode: {fileID: 0}
-  priority: 1
-  currentState: 0
-  LineUp: 0
-  attackDistance: 0
-  attackDamage: 0
+  creatureAttribute:
+    workEfficiencyAttributes:
+      craftWorkEfficiency: 0
+      exploreWorkEfficiency: 0
+      interactWorkEfficiency: 0
+    satiety: 0
+    health: 0
+    experience: 0
+    attackPower: 0
+    spellPower: 0
+    normalAttackDamageType: 0
+    armor: 0
+    spellResistance: 0
+    moveSpeed: 0
+    dodgeRate: 0
+    attackSpeed: 0
+    attackRange: 0
+    dropItem: []
+  curAttribute:
+    workEfficiencyAttributes:
+      craftWorkEfficiency: 0
+      exploreWorkEfficiency: 0
+      interactWorkEfficiency: 0
+    satiety: 0
+    health: 0
+    experience: 0
+    attackPower: 0
+    spellPower: 0
+    normalAttackDamageType: 0
+    armor: 0
+    spellResistance: 0
+    moveSpeed: 0
+    dodgeRate: 0
+    attackSpeed: 0
+    attackRange: 0
+    dropItem: []

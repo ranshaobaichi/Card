@@ -22,6 +22,10 @@ public struct AxialCoordinate
     public readonly int GetDistance(AxialCoordinate other)
     {
         AxialCoordinate upCoord, downCoord;
+        if (R == other.R)
+        {
+            return Math.Abs(Q - other.Q);
+        }
         if (R < other.R)
         {
             upCoord = this;
@@ -65,7 +69,7 @@ public class HexNode : MonoBehaviour
         new (int, int)[] { (-1, -1), (-1, 0), (0, -1), (0, 1), (1, -1), (1, 0) },
     };
 
-    public B_Object occupant;
+    public B_Creature occupant;
     public AxialCoordinate coord;
     public bool walkable;
     public int GetDistance(HexNode other) => coord.GetDistance(other.coord);

@@ -27,11 +27,16 @@ public class TimeManager : MonoBehaviour
     {
         gameTimeState = GameTimeState.ProduceState;
         timeProgressBar.StartProgressBar(productionStateDuration, ChangeState);
+        SceneManager.AfterSceneChanged += OnChangeScene;
+    }
+
+    private void OnChangeScene()
+    {
+        timeProgressBar = GameObject.FindWithTag("TimeProgressBar")?.GetComponent<ProgressBar>();
     }
 
     public void ChangeState()
     {
-        timeProgressBar?.StopProgressBar();
         GameTimeState nextState = gameTimeState switch
         {
             GameTimeState.ProduceState => GameTimeState.SettlementState,
@@ -52,6 +57,7 @@ public class TimeManager : MonoBehaviour
             case GameTimeState.SettlementState:
                 // Handle settlement logic here
                 // Debug.Log("Entering Settlement State");
+                timeProgressBar.StopProgressBar();
                 SceneManager.LoadScene(SceneManager.SettlementScene);
                 break;
             case GameTimeState.BattleState:

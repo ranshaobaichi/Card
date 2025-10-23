@@ -3,6 +3,7 @@ using Category.Production;
 using Category;
 using UnityEngine;
 using static CardAttributeDB;
+using Unity.VisualScripting;
 
 public class CardManager : MonoBehaviour
 {
@@ -21,12 +22,8 @@ public class CardManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        DontDestroyOnLoad(gameObject);
     }
-
-    #region 卡牌逻辑内容管理    
-    private long cardIdentityID = 1;
-    [HideInInspector] public bool isDragging;
-    [HideInInspector] public Card draggingCard;
 
     public void Start()
     {
@@ -42,10 +39,43 @@ public class CardManager : MonoBehaviour
         foreach (var card in FindObjectsByType<Card>(sortMode: FindObjectsSortMode.None))
         {
             allCards[card.cardDescription.cardType].Add(card);
-            AddCardAttribute(card);
             card.OnCardDeleted += OnCardDeleted;
+            card.cardID = GetCardIdentityID();
+            AddCardAttribute(card);
+        }
+
+        SceneManager.AfterSceneChanged += OnSceneChanged;
+    }
+
+    private void OnSceneChanged()
+    {
+        // Clear all cards
+        allCards.Clear();
+
+        // Clear battle cards
+        if (SceneManager.Instance.currentSceneName != SceneManager.BattleScene)
+            battleSceneCreatureCardIDs.Clear();
+    }
+
+    public void RemoveCardAttribute(long cardID)
+    {
+        // delete the card attribute
+        if (creatureCardAttributes.ContainsKey(cardID))
+        {
+            creatureCardAttributes.Remove(cardID);
+        }
+        if (resourceCardAttributes.ContainsKey(cardID))
+        {
+            resourceCardAttributes.Remove(cardID);
         }
     }
+
+
+    #region 卡牌逻辑内容管理    
+    private static long cardIdentityID = 1;
+    private static long cardSlotIdentityID = 1;
+    [HideInInspector] public bool isDragging;
+    [HideInInspector] public Card draggingCard;
 
     public long GetCardIdentityID()
     {
@@ -54,7 +84,14 @@ public class CardManager : MonoBehaviour
         return newID % long.MaxValue;
     }
 
-    public Card CreateCard(Card.CardDescription cardDescription, Vector2 position = default)
+    public long GetCardSlotIdentityID()
+    {
+        long newID = cardSlotIdentityID++;
+        // Debug.Log($"Generated new card slot ID: {newID}");
+        return newID % long.MaxValue;
+    }
+
+    public Card CreateCard(Card.CardDescription cardDescription, Vector2 position = default, long cardID = -1)
     {
         if (!cardDescription.IsValid())
         {
@@ -62,6 +99,8 @@ public class CardManager : MonoBehaviour
             return null;
         }
         Card newCard = Instantiate(cardPrefab, position, Quaternion.identity).GetComponent<Card>();
+        if (cardID == -1) cardID = GetCardIdentityID();
+        newCard.cardID = cardID;
         newCard.SetCardType(cardDescription);
         allCards[newCard.cardDescription.cardType].Add(newCard);
         AddCardAttribute(newCard);
@@ -177,18 +216,30 @@ public class CardManager : MonoBehaviour
     # endregion
 
     # region 卡牌属性管理
-    private void AddCardAttribute(Card card)
+    private void AddCardAttribute(Card card, object attribute = null)
     {
         switch (card.cardDescription.cardType)
         {
             case CardType.Creatures:
-                creatureCardAttributes[card] = DataBaseManager.Instance.GetCardAttribute<CreatureCardAttribute>(card.cardDescription);
+                if (attribute != null && attribute is CreatureCardAttribute cca)
+                    creatureCardAttributes[card.cardID] = cca.Clone() as CreatureCardAttribute;
+                else
+                {
+                    var dbAttr = DataBaseManager.Instance.GetCardAttribute<CreatureCardAttribute>(card.cardDescription);
+                    creatureCardAttributes[card.cardID] = dbAttr?.Clone() as CreatureCardAttribute;
+                }
+                Debug.Log($"Added satiety attribute for creature card {card.name} : {creatureCardAttributes[card.cardID]?.basicAttributes.satiety}");
                 break;
             case CardType.Resources:
-                resourceCardAttributes[card] = DataBaseManager.Instance.GetCardAttribute<ResourceCardAttribute>(card.cardDescription);
+                if (attribute != null && attribute is ResourceCardAttribute rca)
+                    resourceCardAttributes[card.cardID] = rca.Clone() as ResourceCardAttribute;
+                else
+                {
+                    var dbAttr = DataBaseManager.Instance.GetCardAttribute<ResourceCardAttribute>(card.cardDescription);
+                    resourceCardAttributes[card.cardID] = dbAttr?.Clone() as ResourceCardAttribute;
+                }
                 break;
             case CardType.Events:
-                // No attributes for event cards currently
                 Debug.Log("Event Card has no attributes to add.");
                 break;
             default:
@@ -196,34 +247,64 @@ public class CardManager : MonoBehaviour
                 break;
         }
     }
-
     private void RemoveCardAttribute(Card card)
     {
         switch (card.cardDescription.cardType)
         {
             case CardType.Creatures:
-                creatureCardAttributes.Remove(card);
+                creatureCardAttributes.Remove(card.cardID);
                 break;
             case CardType.Resources:
-                resourceCardAttributes.Remove(card);
+                resourceCardAttributes.Remove(card.cardID);
                 break;
             default:
                 Debug.LogWarning($"CardManager: No attribute removed for {card.name} CardType {card.GetCardTypeString()}");
                 break;
         }
     }
+    public T GetCardAttribute<T>(long cardID) where T : class
+    {
+        if (typeof(T) == typeof(CreatureCardAttribute))
+        {
+            if (!creatureCardAttributes.TryGetValue(cardID, out var v))
+            {
+                Debug.LogWarning($"CardManager: No CreatureCardAttribute for cardID={cardID}");
+                return null;
+            }
+            return v as T;
+        }
 
-    # region 资源卡
-    Dictionary<Card, ResourceCardAttribute> resourceCardAttributes = new Dictionary<Card, ResourceCardAttribute>();
+        if (typeof(T) == typeof(ResourceCardAttribute))
+        {
+            if (!resourceCardAttributes.TryGetValue(cardID, out var v))
+            {
+                Debug.LogWarning($"CardManager: No ResourceCardAttribute for cardID={cardID}");
+                return null;
+            }
+            return v as T;
+        }
+
+        Debug.LogWarning($"CardManager.GetCardAttribute<{typeof(T).Name}> unsupported type.");
+        return null;
+    }
+    public T GetCardAttribute<T>(Card card) where T : class
+        => card ? GetCardAttribute<T>(card.cardID) : null;
+
+    #region 资源卡
+    Dictionary<long, ResourceCardAttribute> resourceCardAttributes = new Dictionary<long, ResourceCardAttribute>();
+    public IReadOnlyDictionary<long, ResourceCardAttribute> GetResourceCardAttributes()
+        => resourceCardAttributes;
     # endregion
 
     # region 生物卡
-    Dictionary<Card, CreatureCardAttribute> creatureCardAttributes = new Dictionary<Card, CreatureCardAttribute>();
+    Dictionary<long, CreatureCardAttribute> creatureCardAttributes = new Dictionary<long, CreatureCardAttribute>();
+    public IReadOnlyDictionary<long, CreatureCardAttribute> GetCreatureCardAttributes()
+        => creatureCardAttributes;
     public float GetWorkEfficiencyValue(Card creatureCard)
     {
-        if (creatureCardAttributes.ContainsKey(creatureCard))
+        if (creatureCardAttributes.ContainsKey(creatureCard.cardID))
         {
-            var workEfficiencyType = creatureCardAttributes[creatureCard].basicAttributes.workEfficiencyAttributes.craftWorkEfficiency;
+            var workEfficiencyType = creatureCardAttributes[creatureCard.cardID].basicAttributes.workEfficiencyAttributes.craftWorkEfficiency;
             return DataBaseManager.Instance.GetWorkEfficiencyValue(workEfficiencyType);
         }
         Debug.LogWarning($"CardManager: No CreatureCardAttribute found for {creatureCard.name}");
@@ -231,12 +312,16 @@ public class CardManager : MonoBehaviour
     }
     public float GetWorkEfficiencyValue(WorkEfficiencyType workEfficiencyType)
         => DataBaseManager.Instance.GetWorkEfficiencyValue(workEfficiencyType);
-    
 
-    # endregion
 
-    # region 事件卡
-    # endregion
+    #endregion
 
+    #region 事件卡
+    #endregion
+
+    #endregion
+
+    # region 战斗场景数据
+    public List<long> battleSceneCreatureCardIDs = new List<long>();
     # endregion
 }

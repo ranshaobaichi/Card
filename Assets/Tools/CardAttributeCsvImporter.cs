@@ -134,10 +134,12 @@ public class CardAttributeDBCsvImporter : EditorWindow
 
             // 开始记录操作以支持撤销
             Undo.RecordObject(cardAttributeDB, "Import Creature Card Data from CSV");
+            cardAttributeDB.creatureCardAttributes = new List<CardAttributeDB.CreatureCardAttribute>();
             cardAttributeDB.creatureCardAttributes.Clear();
             errorList.Clear();
 
             int successCount = 0;
+            int valNums = 25;
 
             // 从第二行开始处理数据
             for (int i = 1; i < lines.Length; i++)
@@ -169,9 +171,16 @@ public class CardAttributeDBCsvImporter : EditorWindow
                     // 创建新的生物卡属性
                     CardAttributeDB.CreatureCardAttribute attribute = new CardAttributeDB.CreatureCardAttribute();
                     attribute.basicAttributes = new CardAttributeDB.CreatureCardAttribute.BasicAttributes();
-                    attribute.basicAttributes.workEfficiencyAttributes = 
+                    attribute.basicAttributes.workEfficiencyAttributes =
                         new CardAttributeDB.CreatureCardAttribute.BasicAttributes.WorkEfficiencyAttributes();
-                
+                    attribute.levelUpAttributes = new CardAttributeDB.CreatureCardAttribute.LevelUpAttributes();
+
+                    attribute.creatureCardType = creatureType;
+                    attribute.basicAttributes.EXP = 0;
+                    attribute.basicAttributes.level = 1;
+
+                    int valCount = 0;
+
                     // 解析工作效率
                     Func<string, string> ParseWorkType = value => value.Split('-').Last();
                 
@@ -179,7 +188,10 @@ public class CardAttributeDBCsvImporter : EditorWindow
                     {
                         string craftTypeString = ParseWorkType(values[columnIndices["CraftEfficiency"]]);
                         if (Enum.TryParse<WorkEfficiencyType>(craftTypeString, out WorkEfficiencyType craftEfficiency))
+                        {
                             attribute.basicAttributes.workEfficiencyAttributes.craftWorkEfficiency = craftEfficiency;
+                            valCount++;
+                        }
                         else
                             errorList.Add($"第{i + 1}行: 无效的合成效率类型 '{values[columnIndices["CraftEfficiency"]]}'");
                     }
@@ -188,7 +200,10 @@ public class CardAttributeDBCsvImporter : EditorWindow
                     {
                         string exploreTypeString = ParseWorkType(values[columnIndices["ExploreEfficiency"]]);
                         if (Enum.TryParse<WorkEfficiencyType>(exploreTypeString, out WorkEfficiencyType exploreEfficiency))
+                        {
                             attribute.basicAttributes.workEfficiencyAttributes.exploreWorkEfficiency = exploreEfficiency;
+                            valCount++;
+                        }
                         else
                             errorList.Add($"第{i + 1}行: 无效的探索效率类型 '{values[columnIndices["ExploreEfficiency"]]}'");
                     }
@@ -197,14 +212,14 @@ public class CardAttributeDBCsvImporter : EditorWindow
                     {
                         string interactTypeString = ParseWorkType(values[columnIndices["InteractEfficiency"]]);
                         if (Enum.TryParse<WorkEfficiencyType>(interactTypeString, out WorkEfficiencyType interactEfficiency))
+                        {
                             attribute.basicAttributes.workEfficiencyAttributes.interactWorkEfficiency = interactEfficiency;
+                            valCount++;
+                        }
                         else
                             errorList.Add($"第{i + 1}行: 无效的互动效率类型 '{values[columnIndices["InteractEfficiency"]]}'");
                     }
                 
-                    // 初始化成长属性
-                    attribute.levelUpAttributes = new CardAttributeDB.CreatureCardAttribute.LevelUpAttributes();
-
                     // 解析常规属性
                     if (columnIndices.ContainsKey("Satiety") && values.Length > columnIndices["Satiety"])
                     {
@@ -212,6 +227,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
                         {
                             attribute.basicAttributes.satiety = satietyBase;
                             attribute.levelUpAttributes.satietyGrowth = satietyGrowth;
+                            valCount += 2;
                         }
                     }
 
@@ -221,6 +237,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
                         {
                             attribute.basicAttributes.health = healthBase;
                             attribute.levelUpAttributes.healthGrowth = healthGrowth;
+                            valCount += 2;
                         }
                     }
                 
@@ -230,6 +247,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
                         {
                             attribute.basicAttributes.attackPower = attackBase;
                             attribute.levelUpAttributes.attackPowerGrowth = attackGrowth;
+                            valCount += 2;
                         }
                     }
 
@@ -239,6 +257,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
                         {
                             attribute.basicAttributes.spellPower = spellBase;
                             attribute.levelUpAttributes.spellPowerGrowth = spellGrowth;
+                            valCount += 2;
                         }
                     }
 
@@ -248,6 +267,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
                         {
                             attribute.basicAttributes.armor = armorBase;
                             attribute.levelUpAttributes.armorGrowth = armorGrowth;
+                            valCount += 2;
                         }
                     }
 
@@ -257,6 +277,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
                         {
                             attribute.basicAttributes.spellResistance = srBase;
                             attribute.levelUpAttributes.spellResistanceGrowth = srGrowth;
+                            valCount += 2;
                         }
                     }
 
@@ -265,7 +286,9 @@ public class CardAttributeDBCsvImporter : EditorWindow
                         if (TryParseIntStat(values[columnIndices["MoveSpeed"]], out int moveBase, out int moveGrowth))
                         {
                             attribute.basicAttributes.moveSpeed = moveBase;
+                            attribute.levelUpAttributes.moveSpeedGrowth = moveGrowth;
                             // 注意：移动速度成长需要存储减少值，不是增加值
+                            valCount += 2;
                         }
                     }
 
@@ -275,6 +298,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
                         {
                             attribute.basicAttributes.dodgeRate = dodgeBase;
                             attribute.levelUpAttributes.dodgeRateGrowth = dodgeGrowth;
+                            valCount += 2;
                         }
                     }
 
@@ -284,6 +308,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
                         {
                             attribute.basicAttributes.attackSpeed = asBase;
                             attribute.levelUpAttributes.attackSpeedGrowth = asGrowth;
+                            valCount += 2;
                         }
                     }
 
@@ -293,6 +318,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
                         {
                             attribute.basicAttributes.attackRange = arBase;
                             attribute.levelUpAttributes.attackRangeGrowth = arGrowth;
+                            valCount += 2;
                         }
                     }
                 
@@ -301,13 +327,14 @@ public class CardAttributeDBCsvImporter : EditorWindow
                     {
                         attribute.basicAttributes.dropItem = ParseDropItems(values[columnIndices["DropItem"]]);
                     }
-                
+
                     // 解析伤害类型
                     if (columnIndices.ContainsKey("NormalAttackDamageType") && values.Length > columnIndices["NormalAttackDamageType"])
                     {
                         if (Enum.TryParse<Category.Battle.DamageType>(values[columnIndices["NormalAttackDamageType"]], out var damageType))
                         {
                             attribute.basicAttributes.normalAttackDamageType = damageType;
+                            valCount++;
                         }
                         else
                         {
@@ -315,10 +342,30 @@ public class CardAttributeDBCsvImporter : EditorWindow
                         }
                     }
 
+                    // 解析经验值
+                    if (columnIndices.ContainsKey("LevelUpEXPIncreasePercent") && values.Length > columnIndices["LevelUpEXPIncreasePercent"])
+                    {
+                        if (int.TryParse(values[columnIndices["LevelUpEXPIncreasePercent"]], out int levelUpExpIncreasePercent))
+                        {
+                            attribute.levelUpExpIncreasePercent = levelUpExpIncreasePercent;
+                            valCount++;
+                        }
+                        else
+                        {
+                            errorList.Add($"第{i + 1}行: 无效的 '{values[columnIndices["LevelUpEXPIncreasePercent"]]}' 经验值提升百分比");
+                        }
+                    }
+
                     // 添加到字典
-                    cardAttributeDB.creatureCardAttributes[creatureType] = attribute;
-                    successCount++;
-                    Debug.Log($"成功导入生物卡属性: {creatureType}");
+                    cardAttributeDB.creatureCardAttributes.Add(attribute);
+
+                    if (valCount >= valNums)
+                    {
+                        successCount++;
+                        Debug.Log($"导入生物卡属性: {creatureType}");
+                    }
+                    else
+                        errorList.Add($"第{i + 1}行: 生物卡 {creatureType} 属性值不完整，仅设置了 {valCount}/{valNums} 个属性值");
                 }
                 catch (Exception ex)
                 {
@@ -417,7 +464,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
                     if (Enum.TryParse<ResourceCardType>(values[typeIndex], out ResourceCardType resourceType))
                     {
                         CardAttributeDB.ResourceCardAttribute attribute = new CardAttributeDB.ResourceCardAttribute();
-
+                        attribute.resourceCardType = resourceType;
                         // 解析资源卡分类，默认 None
                         ResourceCardClassification classification = ResourceCardClassification.None;
                         if (classificationIndex >= 0 && values.Length > classificationIndex && !string.IsNullOrWhiteSpace(values[classificationIndex]))
@@ -460,12 +507,12 @@ public class CardAttributeDBCsvImporter : EditorWindow
                         }
 
                         // 添加到字典
-                        cardAttributeDB.resourceCardAttributes[resourceType] = attribute;
+                        cardAttributeDB.resourceCardAttributes.Add(attribute);
                         successCount++;
-                        if (classification != ResourceCardClassification.Food)
-                            Debug.Log($"成功导入资源卡属性: {resourceType} 分类: {attribute.resourceClassification} 耐久值: {attribute.durability}");
-                        else
-                            Debug.Log($"成功导入资源卡属性: {resourceType} 分类: {attribute.resourceClassification} 耐久值: {attribute.durability} 饱腹值: {attribute.satietyValue}");
+                        // if (classification != ResourceCardClassification.Food)
+                        //     Debug.Log($"成功导入资源卡属性: {resourceType} 分类: {attribute.resourceClassification} 耐久值: {attribute.durability}");
+                        // else
+                        //     Debug.Log($"成功导入资源卡属性: {resourceType} 分类: {attribute.resourceClassification} 耐久值: {attribute.durability} 饱腹值: {attribute.satietyValue}");
                     }
                     else
                     {
@@ -539,7 +586,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
         return result.ToArray();
     }
 
-    // 解析float类型的基础值和成长值 (格式: "基础值*成长值")
+    // 解析float类型的基础值和成长值 (格式: "基础值-成长值")
     private bool TryParseStat(string value, out float baseValue, out float growthValue)
     {
         baseValue = 0;
@@ -548,7 +595,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
         if (string.IsNullOrEmpty(value) || value.StartsWith("#"))
             return false;
             
-        string[] parts = value.Split('*');
+        string[] parts = value.Split('-');
         if (parts.Length != 2)
             return false;
             
@@ -564,7 +611,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
         if (string.IsNullOrEmpty(value) || value.StartsWith("#"))
             return false;
             
-        string[] parts = value.Split('*');
+        string[] parts = value.Split('-');
         if (parts.Length != 2)
             return false;
             

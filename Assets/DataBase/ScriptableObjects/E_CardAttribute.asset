@@ -12,9 +12,187 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532e12df87bc82e4bb825ad6033297d7, type: 3}
   m_Name: E_CardAttribute
   m_EditorClassIdentifier: 
-  workEfficiencyValuesList:
+  workEfficiencyValues:
   - 175
   - 125
   - 100
   - 75
   - 50
+  creatureCardAttributes:
+  - creatureCardType: 2
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 3
+        exploreWorkEfficiency: 2
+        interactWorkEfficiency: 4
+      satiety: 1
+      health: 10
+      experience: 0
+      attackPower: 3
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 0
+      spellResistance: 2
+      moveSpeed: 10
+      dodgeRate: 0.05
+      attackSpeed: 10
+      attackRange: 1
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 0
+      attackPowerGrowth: 0
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0
+      attackSpeedGrowth: 1
+      attackRangeGrowth: 0
+  - creatureCardType: 3
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 3
+        exploreWorkEfficiency: 3
+        interactWorkEfficiency: 3
+      satiety: 2
+      health: 6
+      experience: 0
+      attackPower: 4
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 0
+      spellResistance: 0
+      moveSpeed: 7
+      dodgeRate: 0.05
+      attackSpeed: 10
+      attackRange: 1
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 0
+      attackPowerGrowth: 0
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0
+      attackSpeedGrowth: 1
+      attackRangeGrowth: 0
+  - creatureCardType: 4
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 3
+        exploreWorkEfficiency: 3
+        interactWorkEfficiency: 3
+      satiety: 3
+      health: 12
+      experience: 0
+      attackPower: 4
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 1
+      spellResistance: 0
+      moveSpeed: 10
+      dodgeRate: 0.05
+      attackSpeed: 10
+      attackRange: 1
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 0
+      attackPowerGrowth: 0
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0
+      attackSpeedGrowth: 1
+      attackRangeGrowth: 0
+  - creatureCardType: 5
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 3
+        exploreWorkEfficiency: 2
+        interactWorkEfficiency: 3
+      satiety: 3
+      health: 12
+      experience: 0
+      attackPower: 4
+      spellPower: 10
+      normalAttackDamageType: 1
+      armor: 0
+      spellResistance: 2
+      moveSpeed: 10
+      dodgeRate: 0.05
+      attackSpeed: 10
+      attackRange: 4
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 0
+      attackPowerGrowth: 0
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0
+      attackSpeedGrowth: 1
+      attackRangeGrowth: 0
+  resourceCardAttributes:
+  - resourceCardType: 1
+    resourceClassification: 4
+    durability: 1
+    satietyValue: 0
+  - resourceCardType: 3
+    resourceClassification: 0
+    durability: 1
+    satietyValue: 0
+  - resourceCardType: 29
+    resourceClassification: 0
+    durability: 1
+    satietyValue: 0
+  - resourceCardType: 28
+    resourceClassification: 0
+    durability: 1
+    satietyValue: 0
+  - resourceCardType: 19
+    resourceClassification: 0
+    durability: 1
+    satietyValue: 0
+  - resourceCardType: 25
+    resourceClassification: 0
+    durability: 1
+    satietyValue: 0
+  - resourceCardType: 24
+    resourceClassification: 0
+    durability: 1
+    satietyValue: 0
+  - resourceCardType: 14
+    resourceClassification: 0
+    durability: 1
+    satietyValue: 0
+  - resourceCardType: 13
+    resourceClassification: 0
+    durability: 1
+    satietyValue: 0
+  - resourceCardType: 22
+    resourceClassification: 0
+    durability: 1
+    satietyValue: 0
+  - resourceCardType: 23
+    resourceClassification: 1
+    durability: 1
+    satietyValue: 2
+  - resourceCardType: 21
+    resourceClassification: 1
+    durability: 1
+    satietyValue: 5
+  - resourceCardType: 26
+    resourceClassification: 0
+    durability: 1
+    satietyValue: 0
+  - resourceCardType: 27
+    resourceClassification: 0
+    durability: 1
+    satietyValue: 0

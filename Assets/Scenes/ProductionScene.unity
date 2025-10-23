@@ -384,7 +384,7 @@ GameObject:
   - component: {fileID: 95372214}
   m_Layer: 5
   m_Name: ProgressBar
-  m_TagString: Untagged
+  m_TagString: TimeProgressBar
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3791,6 +3791,7 @@ MonoBehaviour:
   maxCardCount: 3
   cards: []
   progressBar: {fileID: 0}
+  cardSlotID: 0
 --- !u!1 &674264247
 GameObject:
   m_ObjectHideFlags: 0
@@ -5897,7 +5898,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &952374517
 Transform:
   m_ObjectHideFlags: 0
@@ -5925,7 +5926,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62ff4c30dd18954438f5ba4bf08de25f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  productionStateDuration: 10
+  productionStateDuration: 999
   timeProgressBar: {fileID: 95372214}
 --- !u!1 &956422118
 GameObject:
@@ -6978,7 +6979,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8589946192954761972, guid: a9ae7891dab24a84e951d2b3efced243, type: 3}
       propertyPath: cardDescription.resourceCardType
-      value: 1
+      value: 23
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8391,6 +8392,7 @@ MonoBehaviour:
   eventUIParent: {fileID: 538339484}
   eventUIoffset: {x: 20, y: 20}
   UIthreshold: {x: 100, y: 100}
+  battleSceneCreatureCardIDs: 
 --- !u!1001 &1446028288
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10084,7 +10086,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8589946192954761972, guid: a9ae7891dab24a84e951d2b3efced243, type: 3}
       propertyPath: cardDescription.cardType
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8589946192954761972, guid: a9ae7891dab24a84e951d2b3efced243, type: 3}
       propertyPath: cardType.creatureCardType
@@ -10096,7 +10098,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8589946192954761972, guid: a9ae7891dab24a84e951d2b3efced243, type: 3}
       propertyPath: cardDescription.eventCardType
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8589946192954761972, guid: a9ae7891dab24a84e951d2b3efced243, type: 3}
+      propertyPath: cardDescription.creatureCardType
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10238,15 +10244,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8589946192954761972, guid: a9ae7891dab24a84e951d2b3efced243, type: 3}
       propertyPath: cardDescription.cardType
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8589946192954761972, guid: a9ae7891dab24a84e951d2b3efced243, type: 3}
       propertyPath: cardType.resourceCardType
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8589946192954761972, guid: a9ae7891dab24a84e951d2b3efced243, type: 3}
-      propertyPath: cardDescription.resourceCardType
+      propertyPath: cardDescription.creatureCardType
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8589946192954761972, guid: a9ae7891dab24a84e951d2b3efced243, type: 3}
+      propertyPath: cardDescription.resourceCardType
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

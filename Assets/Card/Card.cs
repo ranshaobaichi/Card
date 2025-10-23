@@ -62,17 +62,50 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
     [Header("卡牌设置")]
     public CardDescription cardDescription;
+    public Card preCardBeforeDrag;
     [Tooltip("是否可以被拖动")] public bool canBeDragged;
     [Tooltip("是否可以被放置")] public bool canBePlaced;
     [Tooltip("是否可以放置在其他卡牌上")] public bool canPlaceOnCard;
-    public int durability;
-    protected long cardID;
+    public int durability
+    {
+        get => cardDescription.cardType switch
+        {
+            CardType.Resources => CardManager.Instance.GetCardAttribute<CardAttributeDB.ResourceCardAttribute>(cardID).durability,
+            CardType.Creatures => 999,
+            CardType.Events => 999,
+            _ => throw new Exception("Invalid card type for durability retrieval."),
+        };
+        set
+        {
+            if (cardDescription.cardType == CardType.Resources)
+            {
+                var resourceAttr = CardManager.Instance.GetCardAttribute<CardAttributeDB.ResourceCardAttribute>(cardID);
+                resourceAttr.durability = value;
+            }
+        }
+    }
+    public long cardID;
     protected bool isMoving;
 
-    public void SetCardID(long id) => cardID = id;
-    public long GetCardID() => cardID;
     public void SetCardType(CardDescription description) => cardDescription = description;
     public string GetCardTypeString() => cardDescription.ToString();
+
+    #region 静态接口
+    public static bool CanPlacedOn(Card card, Card cardToPlace)
+    {
+        // Check if the card can be placed on the target card
+        bool basicCheck = cardToPlace.canBePlaced == true &&
+                            card.cardSlot.cardSlotID != cardToPlace.cardSlot.cardSlotID &&
+                            card.canPlaceOnCard == true;
+
+        // Event card can't put on another event card
+        // bool eventCardCheck = !(cardSlot.TryGetEventCard(out _) && card.cardSlot.TryGetEventCard(out _));
+        bool eventCardCheck = true;
+
+        return basicCheck && eventCardCheck;
+    }
+
+    #endregion
 
     protected void Awake()
     {
@@ -89,19 +122,10 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         cardSlot = null;
         // cardID = CardManager.Instance.GetCardIdentityID();
         isMoving = false;
-        durability = cardDescription.cardType switch
-        {
-            // CardType.Resources => CardManager.Instance.cardAttributeDB.GetDurability(cardDescription.resourceCardType),
-            CardType.Resources => 1,
-            CardType.Creatures => 99999,
-            CardType.Events => 99999,
-            _ => throw new NotSupportedException("Unsupported card type for durability initialization"),
-        };
 
         // Set the initial cardslot
-        var originalCardSlot = CreateNewSlot();
+        var originalCardSlot = CreateNewSlot(transform.position);
         UpdateCardSlot(originalCardSlot);
-        originalCardSlot.name = $"CardSlot_{cardID}";
 
         // Set the material
         cardImage.material = null;
@@ -127,7 +151,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         var pos = Vector3.Lerp(transform.position, targetPosition, Time.unscaledDeltaTime * followSpeed);
         transform.position = pos;
 
-        if (isMoving == false && transform.position == targetPosition)
+        if (transform.position == targetPosition)
         {
             CancelInvoke(nameof(FollowPosition));
         }
@@ -136,12 +160,14 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     public void OnBeginDrag(PointerEventData eventData)
     {
         // Set the self state and global dragging state
-        isMoving = true;
-        canBePlaced = true;
         cardImage.raycastTarget = false;
         CardManager.Instance.draggingCard = this;
         CardManager.Instance.isDragging = true;
         cardSlot.EndProduction();
+
+        // Record the pre-card and initial position
+        preCardBeforeDrag = preCard;
+        initPosition = transform.position;
 
         // Update card slot information
         UpdateCardSlot(movingCardSlot);
@@ -152,7 +178,6 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         {
             card.transform.localScale = dragScaleFactor * Vector3.one;
         }
-        initPosition = transform.position;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -172,22 +197,19 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
             if (hitObject.CompareTag("Card"))
             {
+                endOnCard = true;
                 // Debug.Log($"Hit card: {hitObject.name}");
                 Card card = hitObject.GetComponent<Card>();
-                // Can't place on the card at the end position
-                if ((card.canBePlaced == false && card.cardID != cardID) || canPlaceOnCard == false)
-                {
-                    transform.position = initPosition;
-                }
                 // Can place on the card
-                else if (card.CanBePlacedOn(this))
+                if (CanPlacedOn(this, card))
                 {
-                    // Debug.Log($"Placing {name} after {card.name}");
-                    CardSlot.ChangeCardToSlot(cardSlot, card.cardSlot, this);
-                    endOnCard = true;
-                    Vector2 targetPosition = card.transform.position - new Vector3(0, yAlignedDistance, 0);
-                    transform.position = targetPosition;
-                    // Debug.Log($"PreCard is {preCard}");
+                    transform.position = card.transform.position - new Vector3(0, yAlignedDistance, 0);
+                    CardSlot.ChangeCardsToSlot(cardSlot, card.cardSlot, GetFollowingCards(), card, false);
+                }
+                else // Put to original cardSlot or create a new slot
+                {
+                    transform.position = initPosition - new Vector3(0, yAlignedDistance, 0);    
+                    CardSlot.ChangeCardsToSlot(cardSlot, preCardBeforeDrag == null ? CreateNewSlot(initPosition) : preCardBeforeDrag.cardSlot, GetFollowingCards(), preCardBeforeDrag, false);
                 }
             }
         }
@@ -196,14 +218,16 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         if (endOnCard == false)
         {
             Debug.Log($"Put on blank, creating new slot for {name}");
-            UpdateCardSlot(CreateNewSlot());
-            cardSlot.name = $"CardSlot_{cardID}";
+            CardSlot tmp = CreateNewSlot(transform.position);
+            CardSlot.ChangeCardsToSlot(cardSlot, tmp, GetFollowingCards(), null, false);
         }
 
         // Reset the card's state
         CardManager.Instance.draggingCard = null;
         CardManager.Instance.isDragging = false;
         cardImage.raycastTarget = true;
+        preCardBeforeDrag = null;
+        initPosition = Vector3.zero;
         cardSlot.UpdateMovingState(this, false);
         foreach (var card in GetFollowingCards())
         {
@@ -241,9 +265,9 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         CardSlot.ChangeCardsToSlot(cardSlot, newSlot, followingCards);
     }
 
-    public CardSlot CreateNewSlot()
+    public CardSlot CreateNewSlot(Vector2 position)
     {
-        var cardSlotObject = Instantiate(cardSlotPrefab, transform.position, transform.rotation, cardSlotSet);
+        var cardSlotObject = Instantiate(cardSlotPrefab, position, transform.rotation, cardSlotSet);
         // cardSlotObject.name = $"CardSlot_{cardID}";
         return cardSlotObject.GetComponent<CardSlot>();
     }
@@ -265,7 +289,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         Card draggingCard = CardManager.Instance.draggingCard;
         if (CardManager.Instance.isDragging &&
             draggingCard != null &&
-            draggingCard.cardID != cardID
+            CanPlacedOn(draggingCard, this)
             )
         {
             SetOutline(true);
@@ -284,7 +308,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
             // Show outline
             cardImage.material = outlineMaterialInstance;
 
-            if (CanBePlacedOn(CardManager.Instance.draggingCard))
+            if (CanPlacedOn(CardManager.Instance.draggingCard, this))
                 outlineMaterialInstance.SetColor("_OutlineColor", successOutlineColor);
             else
                 outlineMaterialInstance.SetColor("_OutlineColor", failureOutlineColor);
@@ -306,18 +330,6 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
             outlineOffset += outlineMoveSpeed % 10.0f;
             outlineMaterialInstance.SetFloat("_DashOffset", outlineOffset);
         }
-    }
-
-    public bool CanBePlacedOn(Card card)
-    {
-        // Check if the card can be placed on the target card
-        bool basicCheck = card.canBePlaced == true && card.cardID != cardID && card.canPlaceOnCard == true;
-
-        // Event card can't put on another event card
-        // bool eventCardCheck = !(cardSlot.TryGetEventCard(out _) && card.cardSlot.TryGetEventCard(out _));
-        bool eventCardCheck = true;
-
-        return basicCheck && eventCardCheck;
     }
 
     public void OnPointerClick(PointerEventData eventData)

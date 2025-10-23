@@ -44,22 +44,11 @@ public class HexNodeManager : MonoBehaviour
             if (tile.occupant == null)
                 tile.walkable = true;
             else
-            {
-                switch (tile.occupant)
-                {
-                    case B_Creatures:
-                        tile.walkable = (tile.occupant as B_Creatures).IsMovingState;
-                        break;
-                    default:
-                        Debug.LogError("Unknown occupant type");
-                        tile.walkable = false;
-                        break;
-                }
-            }
+                tile.walkable = false;
         }
     }
 
-    public static void ReserveObject(B_Object obj, HexNode node)
+    public static void ReserveObject(B_Creature obj, HexNode node)
     {
         if (node.occupant != null)
         {
@@ -69,19 +58,23 @@ public class HexNodeManager : MonoBehaviour
         node.walkable = false;
     }
 
-    public static void MoveObject(B_Object obj, HexNode from, HexNode to)
+    public static void MoveObject(B_Creature obj, HexNode from, HexNode to)
     {
         if (from != null)
         {
             from.occupant = null;
             from.walkable = true;
         }
-        to.occupant = obj;
-        to.walkable = false;
         obj.hexNode = to;
+        if (to != null)
+        {
+            to.occupant = obj;
+            to.walkable = false;
+            // TODO: Add some animation here
+            obj.transform.SetParent(to.transform, false);
+            obj.transform.position = new Vector3(to.transform.position.x, to.transform.position.y, obj.transform.position.z);
+        }
 
-        // TODO: Add some animation here
-        obj.transform.position = new Vector3(to.transform.position.x, to.transform.position.y, obj.transform.position.z);
         Debug.Log($"Moved object {obj.name} to node at position {to}");
     }
 }
