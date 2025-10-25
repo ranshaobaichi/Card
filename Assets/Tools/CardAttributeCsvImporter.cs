@@ -417,6 +417,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
             int classificationIndex = Array.IndexOf(headers, "ResourceCardClassification");
             int durabilityIndex = Array.IndexOf(headers, "Durability");
             int satietyIndex = Array.IndexOf(headers, "SatietyValue");
+            int priceIndex = Array.IndexOf(headers, "PriceValue");
 
             // 验证类型列存在
             if (typeIndex < 0)
@@ -432,6 +433,8 @@ public class CardAttributeDBCsvImporter : EditorWindow
                 Debug.LogWarning("CSV 未包含 Durability 列，所有耐久度将使用默认值 1。");
             if (satietyIndex < 0)
                 Debug.LogWarning("CSV 未包含 SatietyValue 列，所有饱腹值将使用默认值 1。");
+            if (priceIndex < 0)
+                Debug.LogWarning("CSV 未包含 PriceValue 列，所有价值将使用默认值 1。");
 
             // 开始记录操作以支持撤销
             Undo.RecordObject(cardAttributeDB, "Import Resource Card Data from CSV");
@@ -505,6 +508,18 @@ public class CardAttributeDBCsvImporter : EditorWindow
                             // 非食物分类，饱腹值设为0
                             attribute.satietyValue = 0;
                         }
+
+                        // 解析价值，默认 1（当 CSV 为空时）
+                        int priceValue = 1;
+                        if (priceIndex >= 0 && values.Length > priceIndex && !string.IsNullOrWhiteSpace(values[priceIndex]))
+                        {
+                            if (!int.TryParse(values[priceIndex], out priceValue))
+                            {
+                                errorList.Add($"第{i + 1}行{resourceType}: 无效的价值 '{values[priceIndex]}'，已使用默认值 1");
+                                priceValue = 1;
+                            }
+                        }
+                        attribute.priceValue = priceValue;
 
                         // 添加到字典
                         cardAttributeDB.resourceCardAttributes.Add(attribute);
@@ -586,7 +601,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
         return result.ToArray();
     }
 
-    // 解析float类型的基础值和成长值 (格式: "基础值-成长值")
+    // 解析float类型的基础值和成长值 (格式: "基础值*成长值")
     private bool TryParseStat(string value, out float baseValue, out float growthValue)
     {
         baseValue = 0;
@@ -595,7 +610,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
         if (string.IsNullOrEmpty(value) || value.StartsWith("#"))
             return false;
             
-        string[] parts = value.Split('-');
+        string[] parts = value.Split('*');
         if (parts.Length != 2)
             return false;
             
@@ -611,7 +626,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
         if (string.IsNullOrEmpty(value) || value.StartsWith("#"))
             return false;
             
-        string[] parts = value.Split('-');
+        string[] parts = value.Split('*');
         if (parts.Length != 2)
             return false;
             
@@ -629,7 +644,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
         string[] cardEntries = cardsString.Split(',');
         foreach (string cardEntry in cardEntries)
         {
-            string[] parts = cardEntry.Trim().Split('-');
+            string[] parts = cardEntry.Trim().Split('*');
             if (parts.Length == 4)
             {
                 char typePrefix = parts[0].Trim()[0]; // R, C, E

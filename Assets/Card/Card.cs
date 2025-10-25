@@ -36,14 +36,12 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
             };
         }
     }
-    protected Transform cardSlotSet;
-    public Card preCard, laterCard;
+    public Card preCard = null, laterCard = null;
     protected Image cardImage;
     public CardSlot cardSlot;
     private CardSlot movingCardSlot;
     private GameObject canvas;
     public GameObject cardSlotPrefab;
-    public event Action<Card> OnCardDeleted;
 
     [Header("拖拽与对齐设置")]
     [Range(5f, 10f)][Tooltip("卡牌跟随速度")] public float followSpeed;
@@ -112,20 +110,17 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         cardImage = GetComponent<Image>();
         canvas = GameObject.FindGameObjectWithTag("Canvas");
         movingCardSlot = GameObject.FindGameObjectWithTag("MovingCardSlot").GetComponent<CardSlot>();
-        cardSlotSet = GameObject.FindGameObjectWithTag("CardSlotSet").transform;
     }
 
     protected void Start()
     {
         // Initialize card parameters
-        preCard = laterCard = null;
-        cardSlot = null;
-        // cardID = CardManager.Instance.GetCardIdentityID();
         isMoving = false;
+        this.name = $"Card_{cardID}";
 
-        // Set the initial cardslot
-        var originalCardSlot = CreateNewSlot(transform.position);
-        UpdateCardSlot(originalCardSlot);
+        // // Set the initial cardslot
+        // var originalCardSlot = CardManager.Instance.CreateCardSlot(transform.position);
+        // CardSlot.ChangeCardToSlot(cardSlot, originalCardSlot, this);
 
         // Set the material
         cardImage.material = null;
@@ -170,7 +165,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         initPosition = transform.position;
 
         // Update card slot information
-        UpdateCardSlot(movingCardSlot);
+        CardSlot.ChangeCardsToSlot(cardSlot, movingCardSlot, GetFollowingCards());
         cardSlot.UpdateMovingState(this, true);
 
         // Several initializations
@@ -208,8 +203,8 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
                 }
                 else // Put to original cardSlot or create a new slot
                 {
-                    transform.position = initPosition - new Vector3(0, yAlignedDistance, 0);    
-                    CardSlot.ChangeCardsToSlot(cardSlot, preCardBeforeDrag == null ? CreateNewSlot(initPosition) : preCardBeforeDrag.cardSlot, GetFollowingCards(), preCardBeforeDrag, false);
+                    transform.position = initPosition - new Vector3(0, yAlignedDistance, 0);
+                    CardSlot.ChangeCardsToSlot(cardSlot, preCardBeforeDrag == null ? CardManager.Instance.CreateCardSlot(initPosition) : preCardBeforeDrag.cardSlot, GetFollowingCards(), preCardBeforeDrag, false);
                 }
             }
         }
@@ -218,7 +213,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         if (endOnCard == false)
         {
             Debug.Log($"Put on blank, creating new slot for {name}");
-            CardSlot tmp = CreateNewSlot(transform.position);
+            CardSlot tmp = CardManager.Instance.CreateCardSlot(transform.position);
             CardSlot.ChangeCardsToSlot(cardSlot, tmp, GetFollowingCards(), null, false);
         }
 
@@ -263,13 +258,6 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
             return;
         List<Card> followingCards = GetFollowingCards();
         CardSlot.ChangeCardsToSlot(cardSlot, newSlot, followingCards);
-    }
-
-    public CardSlot CreateNewSlot(Vector2 position)
-    {
-        var cardSlotObject = Instantiate(cardSlotPrefab, position, transform.rotation, cardSlotSet);
-        // cardSlotObject.name = $"CardSlot_{cardID}";
-        return cardSlotObject.GetComponent<CardSlot>();
     }
 
     protected List<Card> GetFollowingCards()
@@ -340,11 +328,5 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         // }
         if (cardDescription.cardType == CardType.Events)
             CardManager.Instance.PopUpEventUI(this);
-    }
-
-    public void DeleteCard()
-    {
-        OnCardDeleted?.Invoke(this);
-        Destroy(gameObject);
     }
 }

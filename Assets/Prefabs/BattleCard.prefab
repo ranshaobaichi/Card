@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7526775750438770042}
   - component: {fileID: 4016379625845729246}
   m_Layer: 5
-  m_Name: B_Obj_Test
+  m_Name: BattleCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,7 +28,7 @@ RectTransform:
   m_GameObject: {fileID: 1199791827373344116}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 447, y: 6}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 135, y: 198}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6805414475864892471
 CanvasRenderer:
@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -89,32 +89,50 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexNode: {fileID: 0}
+  cardID: 0
+  cd: 0
   creatureAttribute:
-    workEfficiencyAttributes:
-      craftWorkEfficiency: 0
-      exploreWorkEfficiency: 0
-      interactWorkEfficiency: 0
-    satiety: 0
-    health: 0
-    experience: 0
-    attackPower: 0
-    spellPower: 0
-    normalAttackDamageType: 0
-    armor: 0
-    spellResistance: 0
-    moveSpeed: 0
-    dodgeRate: 0
-    attackSpeed: 0
-    attackRange: 0
-    dropItem: []
+    levelUpExpIncreasePercent: 0
+    creatureCardType: 0
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 0
+        exploreWorkEfficiency: 0
+        interactWorkEfficiency: 0
+      EXP: 0
+      level: 0
+      satiety: 0
+      health: 0
+      attackPower: 0
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 0
+      spellResistance: 0
+      moveSpeed: 0
+      dodgeRate: 0
+      attackSpeed: 0
+      attackRange: 0
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 0
+      attackPowerGrowth: 0
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
   curAttribute:
     workEfficiencyAttributes:
       craftWorkEfficiency: 0
       exploreWorkEfficiency: 0
       interactWorkEfficiency: 0
+    EXP: 0
+    level: 0
     satiety: 0
     health: 0
-    experience: 0
     attackPower: 0
     spellPower: 0
     normalAttackDamageType: 0
@@ -125,3 +143,4 @@ MonoBehaviour:
     attackSpeed: 0
     attackRange: 0
     dropItem: []
+  lineUp: 0

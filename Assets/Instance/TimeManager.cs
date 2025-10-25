@@ -1,5 +1,6 @@
 using UnityEngine;
 using Category;
+using UnityEngine.UI;
 
 public class TimeManager : MonoBehaviour
 {
@@ -7,6 +8,9 @@ public class TimeManager : MonoBehaviour
     public float productionStateDuration = 60f;
     private GameTimeState gameTimeState;
     public ProgressBar timeProgressBar;
+    public float speedUpScale = 2f;
+    private bool isPaused = false, isSpeedUp = false;
+    private Button pauseButton, speedUpButton;
 
     public GameTimeState GetCurrentState() => gameTimeState;
 
@@ -21,6 +25,26 @@ public class TimeManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        pauseButton = GameObject.FindWithTag("PauseButton")?.GetComponent<Button>();
+        speedUpButton = GameObject.FindWithTag("SpeedUpButton")?.GetComponent<Button>();
+    }
+
+    void OnEnable()
+    {
+        pauseButton.onClick.AddListener(() =>
+        {
+            isPaused = !isPaused;
+            if (isPaused) Time.timeScale = 0f;
+            else Time.timeScale = isSpeedUp ? speedUpScale : 1f;
+        });
+
+        speedUpButton.onClick.AddListener(() =>
+        {
+            isSpeedUp = !isSpeedUp;
+            if (isSpeedUp) Time.timeScale = isPaused ? 0f : speedUpScale;
+            else Time.timeScale = isPaused ? 0f : 1f;
+        });
     }
 
     void Start()
@@ -28,11 +52,23 @@ public class TimeManager : MonoBehaviour
         gameTimeState = GameTimeState.ProduceState;
         timeProgressBar.StartProgressBar(productionStateDuration, ChangeState);
         SceneManager.AfterSceneChanged += OnChangeScene;
+        SceneManager.BeforeSceneChanged += BeforeChangeScene;
+    }
+
+    private void BeforeChangeScene()
+    {
+        pauseButton.onClick.RemoveAllListeners();
+        speedUpButton.onClick.RemoveAllListeners();
     }
 
     private void OnChangeScene()
     {
-        timeProgressBar = GameObject.FindWithTag("TimeProgressBar")?.GetComponent<ProgressBar>();
+        if (SceneManager.currentScene == SceneManager.ProductionScene)
+        {
+            timeProgressBar = GameObject.FindWithTag("TimeProgressBar")?.GetComponent<ProgressBar>();
+            pauseButton = GameObject.FindWithTag("PauseButton")?.GetComponent<Button>();
+            speedUpButton = GameObject.FindWithTag("SpeedUpButton")?.GetComponent<Button>();
+        }
     }
 
     public void ChangeState()
@@ -65,34 +101,6 @@ public class TimeManager : MonoBehaviour
                 break;
             default:
                 break;
-        }
-    }
-
-    public void PauseGame()
-    {
-        switch (gameTimeState)
-        {
-            case GameTimeState.ProduceState:
-                timeProgressBar?.PauseProgressBar();
-                break;
-            case GameTimeState.SettlementState:                
-            case GameTimeState.BattleState:
-            default:
-                throw new System.NotImplementedException();
-        }
-    }
-
-    public void ResumeGame()
-    {
-        switch (gameTimeState)
-        {
-            case GameTimeState.ProduceState:
-                timeProgressBar?.ResumeProgressBar();
-                break;
-            case GameTimeState.SettlementState:
-            case GameTimeState.BattleState:
-            default:
-                throw new System.NotImplementedException();
         }
     }
 }

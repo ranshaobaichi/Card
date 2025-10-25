@@ -10,6 +10,8 @@ TagManager:
   - HexNode
   - TimeProgressBar
   - CardSlotSet
+  - PauseButton
+  - SpeedUpButton
   layers:
   - Default
   - TransparentFX

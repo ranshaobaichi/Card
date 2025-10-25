@@ -111,7 +111,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6889423321480131622}
   m_Father: {fileID: 0}
@@ -119,7 +119,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 200}
+  m_SizeDelta: {x: 150, y: 220}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7879245232003632746
 CanvasRenderer:
@@ -260,8 +260,6 @@ MonoBehaviour:
   preCard: {fileID: 0}
   laterCard: {fileID: 0}
   cardSlot: {fileID: 0}
-  movingCardSlot: {fileID: 0}
-  canvas: {fileID: 0}
   cardSlotPrefab: {fileID: 863495346659058865, guid: a6710db8f3c334d459cc800f7576a81b, type: 3}
   followSpeed: 5
   tolerantDistance: 20
@@ -271,14 +269,16 @@ MonoBehaviour:
   outlineMoveSpeed: 1
   successOutlineColor: {r: 0, g: 1, b: 0, a: 1}
   failureOutlineColor: {r: 1, g: 0, b: 0, a: 1}
-  cardType:
+  cardDescription:
     cardType: 0
     resourceCardType: 0
     creatureCardType: 0
     eventCardType: 0
+  preCardBeforeDrag: {fileID: 0}
   canBeDragged: 1
   canBePlaced: 1
   canPlaceOnCard: 1
+  cardID: 0
 --- !u!114 &5405084790060809205
 MonoBehaviour:
   m_ObjectHideFlags: 0

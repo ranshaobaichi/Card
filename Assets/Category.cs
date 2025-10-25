@@ -13,6 +13,7 @@ namespace Category
         Events,
     }
 
+    [Serializable]
     public enum ResourceCardType
     {
         None,
@@ -47,6 +48,7 @@ namespace Category
         挖掘点,
     }
 
+    [Serializable]
     public enum ResourceCardClassification
     {
         None,
@@ -56,14 +58,13 @@ namespace Category
         Others,
     }
 
+    [Serializable]
     public enum CreatureCardType
     {
         None,
         Any,
         小鬼,
-        地精,
-        兽人,
-        萨满,
+        部落拾荒者
     }
 
     public enum EventCardType
@@ -92,6 +93,7 @@ namespace Category
             [Tooltip("互动")] Interact
         }
 
+        [Serializable]
         public enum WorkEfficiencyType
         {
             None,
@@ -121,6 +123,7 @@ namespace Category
             Enemy
         }
 
+        [Serializable]
         public enum DamageType
 
         {

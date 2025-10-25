@@ -9,10 +9,10 @@ public class GlobalTestFunction : MonoBehaviour
     // /// 创建一个战斗世界对象
     // /// </summary>
     [SerializeField] public Category.Battle.LineUp lineUp;
-    [SerializeField] public int priority;
+    [SerializeField] public Category.CreatureCardType creatureCardType;
     public void CreateBattleWorldObj()
     {
-        // FindAnyObjectByType<BattleWorldObjManager>().InstantiateObj(lineUp, priority);
+        FindAnyObjectByType<BattleWorldManager>().AddObj(lineUp, creatureCardType);
     }
 
     /// <summary>
@@ -32,5 +32,14 @@ public class GlobalTestFunction : MonoBehaviour
     public void ChangeGameState()
     {
         FindAnyObjectByType<TimeManager>().ChangeState();
+    }
+
+
+    /// <summary>
+    /// 保存游戏数据
+    /// </summary>
+    public void SaveGameData()
+    {
+        FindAnyObjectByType<SaveDataManager>().SaveGame();
     }
 }

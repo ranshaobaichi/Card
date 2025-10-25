@@ -7,11 +7,15 @@ using UnityEngine;
 public class BattleWorldManager : MonoBehaviour
 {
     public static BattleWorldManager Instance;
-    public GameObject PreparationArea;
     public GameObject BattleCreaturePrefab;
+    public GameObject EquipmentSlotPrefab;
+    public GameObject PreparationAreaContent;
+    public GameObject EquipmentAreaContent;
+    public RectTransform CreatureScrollView;
     public Transform DraggingSlot;
     public List<B_Creature> playerCreatures = new List<B_Creature>();
     public List<B_Creature> enemyCreatures = new List<B_Creature>();
+    public List<B_Equipment> equipments = new List<B_Equipment>();
     // Tick 事件
     public event Action PlayerTick;
     public event Action EnemyTick;
@@ -37,6 +41,14 @@ public class BattleWorldManager : MonoBehaviour
             Debug.Log($"BattleWorldManager adding battle object with card ID: {id}");
             AddBattleObject(id);
         }
+
+        foreach (var (id, attr) in CardManager.Instance.GetResourceCardAttributes())
+            if (attr.resourceClassification == ResourceCardClassification.Equipment)
+            {
+                var equipmentSlot = Instantiate(EquipmentSlotPrefab, EquipmentAreaContent.transform);
+                var equipment = equipmentSlot.GetComponentInChildren<B_Equipment>();
+                equipments.Add(equipment);
+            }
     }
 
     void Update()
@@ -61,14 +73,14 @@ public class BattleWorldManager : MonoBehaviour
         Debug.Log("BattleWorldManager Tick End");
     }
 
-    // Test
-    [Header("Test Methods")]
-    public CreatureCardType testCreatureCardType;
-    public LineUp lineUp;
-    [ContextMenu("Add Obj")]
-    public void AddObj()
+    /// <summary>
+    /// TEST FUNCTION, create a tmp battle creature which will not be saved
+    /// </summary>
+    /// <param name="lineUp"></param>
+    /// <param name="testCreatureCardType"></param>
+    public void AddObj(LineUp lineUp, CreatureCardType testCreatureCardType)
     {
-        var creatureGO = Instantiate(BattleCreaturePrefab, PreparationArea.transform.position, Quaternion.identity, PreparationArea.transform);
+        var creatureGO = Instantiate(BattleCreaturePrefab, PreparationAreaContent.transform.position, Quaternion.identity, PreparationAreaContent.transform);
         var creature = creatureGO.GetComponent<B_Creature>();
         if (lineUp == LineUp.Player)
         {
@@ -116,8 +128,7 @@ public class BattleWorldManager : MonoBehaviour
     public void AddBattleObject(long cardID)
     {
         var attr = CardManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(cardID);
-        var creatureGO = Instantiate(BattleCreaturePrefab, PreparationArea.transform.position, Quaternion.identity, PreparationArea.transform);
-        creatureGO.transform.position += new Vector3(UnityEngine.Random.Range(-15f, 15f), UnityEngine.Random.Range(-15f, 15f), 0);
+        var creatureGO = Instantiate(BattleCreaturePrefab, PreparationAreaContent.transform.position, Quaternion.identity, PreparationAreaContent.transform);
 
         var creature = creatureGO.GetComponent<B_Creature>();
         playerCreatures.Add(creature);

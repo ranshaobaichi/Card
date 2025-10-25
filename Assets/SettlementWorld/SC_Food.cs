@@ -27,7 +27,7 @@ class SC_Food : SettlementCard
         {
             // Handle food depletion (e.g., remove card from panel)
             Debug.Log($"Food card {cardSlot.name} is depleted and will be removed.");
-            SettlementCardManager.Instance.FoodPanel.DeleteCard(this);
+            SettlementCardManager.Instance.FoodPanel.DeleteCard(this, true);
         }
         return true;
     }

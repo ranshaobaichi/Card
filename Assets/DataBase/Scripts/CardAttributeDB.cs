@@ -133,6 +133,7 @@ public class CardAttributeDB : ScriptableObject
         [Tooltip("资源卡分类")] public ResourceCardClassification resourceClassification;
         [Tooltip("资源卡耐久值")] public int durability;
         [Tooltip("资源卡饱腹值")] public int satietyValue; // 仅resourceClassification为Food时有效
+        [Tooltip("资源卡价值")] public int priceValue;
         public object Clone()
         {
             return new ResourceCardAttribute

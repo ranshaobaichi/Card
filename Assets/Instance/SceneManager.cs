@@ -5,7 +5,7 @@ public class SceneManager : MonoBehaviour
     public static string ProductionScene = "ProductionScene";
     public static string BattleScene = "BattleScene";
     public static string SettlementScene = "SettlementScene";
-    public string currentSceneName = "";
+    public static string currentScene = "";
     public static SceneManager Instance;
 
     public static event System.Action BeforeSceneChanged;
@@ -37,12 +37,12 @@ public class SceneManager : MonoBehaviour
 
     void Start()
     {
-        currentSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
     }
 
     private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
     {
-        currentSceneName = scene.name;
+        currentScene = scene.name;
         AfterSceneChanged?.Invoke();
     }
 

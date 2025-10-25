@@ -96,14 +96,15 @@ public class SettlementCardPanel : MonoBehaviour
         return newCard;
     }
 
-    public void DeleteCard(SettlementCard card)
+    public void DeleteCard(SettlementCard card, bool removeAttr = true)
     {
         if (!cards.Contains(card)) return;
 
         cards.Remove(card);
         card.transform.SetParent(card.cardSlot.transform);
 
-        CardManager.Instance.RemoveCardAttribute(card.cardID);
+        if (removeAttr)
+            CardManager.Instance.RemoveCardAttribute(card.cardID);
         Destroy(card.cardSlot);
     }
 

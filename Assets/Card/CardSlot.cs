@@ -26,6 +26,7 @@ public class CardSlot : MonoBehaviour
     /// <param name="controlNewCardPos">Whether to control the new card position (set to false when moving cards)</param>
     public static void ChangeCardToSlot(CardSlot oldSlot, CardSlot newSlot, Card changedCard, Card afterCard = null, bool controlNewCardPos = false)
     {
+        // Debug.Log($"Changing card {changedCard?.name} from slot {oldSlot?.cardSlotID} to slot {newSlot?.cardSlotID}");
         // Validate input check
         if (changedCard == null) return;
         if (newSlot == null)
@@ -71,37 +72,37 @@ public class CardSlot : MonoBehaviour
         changedCard.transform.SetParent(newSlot.transform);
 
         // Update the transform position
-            // Old slot cards
-            if (oldSlotCards?.Count > 0)
+        // Old slot cards
+        if (oldSlotCards?.Count > 0)
+        {
+            Vector3 preCardPos = oldSlotPreCard != null ? oldSlotPreCard.transform.position : oldSlot.transform.position;
+            Card cardToPos = oldSlotLaterCard;
+            while (cardToPos != null)
             {
-                Vector3 preCardPos = oldSlotPreCard != null ? oldSlotPreCard.transform.position : oldSlot.transform.position;
-                Card cardToPos = oldSlotLaterCard;
-                while (cardToPos != null)
-                {
-                    Vector3 targetPos = preCardPos - new Vector3(0, cardToPos.yAlignedDistance, 0);
-                    cardToPos.transform.position = targetPos;
-                    preCardPos = cardToPos.transform.position;
-                    cardToPos = cardToPos.laterCard;
-                }
+                Vector3 targetPos = preCardPos - new Vector3(0, cardToPos.yAlignedDistance, 0);
+                cardToPos.transform.position = targetPos;
+                preCardPos = cardToPos.transform.position;
+                cardToPos = cardToPos.laterCard;
             }
-            // New slot cards
-            if (controlNewCardPos)
+        }
+        // New slot cards
+        if (controlNewCardPos)
+        {
+            Vector3 newSlotPreCardPos = afterCard != null ? afterCard.transform.position : newSlot.transform.position;
+            Card newSlotCardToPos = changedCard;
+            while (newSlotCardToPos != null)
             {
-                Vector3 newSlotPreCardPos = afterCard != null ? afterCard.transform.position : newSlot.transform.position;
-                Card newSlotCardToPos = changedCard;
-                while (newSlotCardToPos != null)
-                {
-                    Vector3 targetPos = newSlotPreCardPos - new Vector3(0, newSlotCardToPos.yAlignedDistance, 0);
-                    newSlotCardToPos.transform.position = targetPos;
-                    newSlotPreCardPos = newSlotCardToPos.transform.position;
-                    newSlotCardToPos = newSlotCardToPos.laterCard;
-                }
+                Vector3 targetPos = newSlotPreCardPos - new Vector3(0, newSlotCardToPos.yAlignedDistance, 0);
+                newSlotCardToPos.transform.position = targetPos;
+                newSlotPreCardPos = newSlotCardToPos.transform.position;
+                newSlotCardToPos = newSlotCardToPos.laterCard;
             }
+        }
 
         // Delete old slot if empty
         if (oldSlotCards?.Count == 0 && oldSlot != movingCardSlot)
         {
-            Destroy(oldSlot.gameObject);
+            CardManager.Instance.DeleteCardSlot(oldSlot);
         }
 
         // Change the last card's placement state
@@ -200,7 +201,8 @@ public class CardSlot : MonoBehaviour
         // Delete old slot if empty
         if (oldSlotCards?.Count == 0 && oldSlot != movingCardSlot)
         {
-            Destroy(oldSlot.gameObject);
+            CardManager.Instance.DeleteCardSlot(oldSlot);
+            oldSlot = null;
         }
 
         // Change the last card's placement state
@@ -238,12 +240,12 @@ public class CardSlot : MonoBehaviour
         card.cardSlot = null;
         card.transform.SetParent(null);
         if (destroyCard)
-            card.DeleteCard();
+            CardManager.Instance.DeleteCard(card);
 
         // If cardSlot is empty, destroy itself
         if (cards.Count == 0 && cardSlot != movingCardSlot)
         {
-            Destroy(cardSlot.gameObject);
+            CardManager.Instance.DeleteCardSlot(cardSlot);
             return;
         }
 
@@ -297,13 +299,13 @@ public class CardSlot : MonoBehaviour
             card.cardSlot = null;
             card.transform.SetParent(null);
             if (destroyCards)
-                card.DeleteCard();
+                CardManager.Instance.DeleteCard(card);
         }
 
         // If cardSlot is empty, destroy itself
         if (cards.Count == 0 && cardSlot != movingCardSlot)
         {
-            Destroy(cardSlot.gameObject);
+            CardManager.Instance.DeleteCardSlot(cardSlot);
             return;
         }
 
@@ -349,7 +351,6 @@ public class CardSlot : MonoBehaviour
     void Start()
     {
         movingCardSlot = GameObject.FindGameObjectWithTag("MovingCardSlot").GetComponent<CardSlot>();
-        cardSlotID = CardManager.Instance.GetCardSlotIdentityID();  
         this.name = $"CardSlot_{cardSlotID}";
     }
 
@@ -441,7 +442,10 @@ public class CardSlot : MonoBehaviour
                         Vector2 dropPosition = transform.position + new Vector3(UnityEngine.Random.Range(-10f, 10f), UnityEngine.Random.Range(-10f, 10f), 0);
 
                         // 创建选中的卡牌
-                        CardManager.Instance.CreateCard(craftingCard.cardDescription, dropPosition);
+                        for(int i = 0; i < craftingCard.dropCount; i++)
+                        {
+                            CardManager.Instance.CreateCard(craftingCard.cardDescription, dropPosition);
+                        }
                         break;
                     }
                 }

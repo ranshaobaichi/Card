@@ -1,10 +1,8 @@
-﻿CreatureType,CraftEfficiency,ExploreEfficiency,InteractEfficiency,Satiety,Health,AttackPower,SpellPower,Armor,SpellResistance,MoveSpeed,DodgeRate,AttackSpeed,AttackRange,DropItem,NormalAttackDamageType,Experience
-#生物种类,#合成效率,#探索效率,#互动效率,# 饱食度,# 生命值,# 攻击力,# 法术强度,# 物理抗性,# 法术抗性,# 移动速度,# 闪避概率,# 攻击速度,# 攻击范围,# 掉落物品,# 普通攻击伤害类型
-#,,,,# 请填写整数,,,,,,# 即每间隔几个Tick移动一次,# 请填写0-1间的小数,# 即每间隔几个Tick攻击一次,# 请填写整数,# 格式同合成表,# Physical - 物理伤害
-#,,,,# 格式为：“基础值-成长值”,,,,,,# 该成长值为减少值,,# 该成长值为减少值,,,# Spell- 魔法伤害
-#,,,,# 使用英文标点，为0也需要标出,,,,,,# 即每等级移动间隔减少几Tick,,# 即每等级攻击间隔减少几Tick,,,# TrueDamage - 真实伤害
-# 这是一个示例生物,狂热-Frenzy,狂热-Frenzy,快速-Fast,10-5,20-8,16-8,22-22,1-1,1-0,6-1,0.5-0.05,8-1,6-0,"R:金矿石:1:10,R:银矿石:1:10,R:石料:1:2",TrueDamage
-小鬼,普通-Normal,缓慢-Slow,快速-Fast,2-0,10-0,3-0,0-0,0-0,2-0,10-0,0.05-0,10-1,1-0,R:石料:1:10,Physical,5
-地精,普通-Normal,普通-Normal,普通-Normal,2-0,6-0,4-0,0-0,0-0,0-0,7-0,0.05-0,10-1,1-0,,Physical,5
-兽人,普通-Normal,普通-Normal,普通-Normal,3-0,12-0,4-0,0-0,1-0,0-0,10-0,0.05-0,10-1,1-0,R:尸体:1:10,Physical,5
-萨满,普通-Normal,缓慢-Slow,普通-Normal,3-0,12-0,4-0,10-0,0-0,2-0,10-0,0.05-0,10-1,4-0,R:尸体:1:10,Spell,5
+﻿CreatureType,CraftEfficiency,ExploreEfficiency,InteractEfficiency,Satiety,Health,AttackPower,SpellPower,Armor,SpellResistance,MoveSpeed,DodgeRate,AttackSpeed,AttackRange,DropItem,NormalAttackDamageType,LevelUpEXPIncreasePercent,
+#生物种类,#合成效率,#探索效率,#互动效率,# 饱食度,# 生命值,# 攻击力,# 法术强度,# 物理抗性,# 法术抗性,# 移动速度,# 闪避概率,# 攻击速度,# 攻击范围,# 掉落物品,# 普通攻击伤害类型,# 升级提升的的经验倍率,
+#,,,,# 请填写整数,,,,,,# 即每间隔几个Tick移动一次,# 请填写0-1间的小数,# 即每间隔几个Tick攻击一次,# 请填写整数,# 每种产出卡牌使用以下格式:{类型标记符-卡牌类型-卡牌数量-掉落权重},# Physical - 物理伤害,"# 填写整数20,40,65",
+#,,,,# 格式为：“基础值*成长值”,,,,,,# 该成长值为减少值,,# 该成长值为减少值,,# 若无掉落物则空余不填写即可,# Spell- 魔法伤害,,
+#,,,,"# 使用英文标点,为0也需要标出",,,,,,# 即每等级移动间隔减少几Tick,,# 即每等级攻击间隔减少几Tick,,,# TrueDamage - 真实伤害,,
+# 这是一个示例生物,狂热-Frenzy,狂热-Frenzy,快速-Fast,10*5,20*8,16*8,22*22,1*1,1*0,6*1,0.5*0.05,8*1,6*0,"R-金矿石-1-10,R-银矿石-1-10,R-石料-1-2",TrueDamage,,
+小鬼,快速-Fast,普通-Normal,普通-Normal,2*9,40*0,12*0,0*0,4*0,1*0,15*0,0.05*0,10*0,1*0,,Physical,20,
+部落拾荒者,普通-Normal,快速-Fast,普通-Normal,2*0,32*0,16*0,0*0,0*0,0*0,12*0,0.1*0,9*0,1*0,,Physical,40,

@@ -60,7 +60,7 @@ public class SettlementCardManager : MonoBehaviour
     public void DealWithSettlementData()
     {
         // Show all the creature cards in the Creature Panel
-        Debug.Log($"Has creature cards count: {CardManager.Instance.GetCreatureCardAttributes().Count}");
+        // Debug.Log($"Has creature cards count: {CardManager.Instance.GetCreatureCardAttributes().Count}");
         foreach (var (cardID, creatureCardAttr) in CardManager.Instance.GetCreatureCardAttributes())
             CreaturePanel.AddCard<SC_Creature>(cardID);
 
@@ -91,9 +91,9 @@ public class SettlementCardManager : MonoBehaviour
                 return;
             }
             // Handle creature card being dragged over battle panel
-            Debug.Log($"Creature card {creatureCard.cardSlot.name} hovered over battle panel.");
+            // Debug.Log($"Creature card {creatureCard.cardSlot.name} hovered over battle panel.");
             BattleCardPanel.AddCard<SC_Battle>(creatureCard.cardID);
-            CreaturePanel.DeleteCard(creatureCard);
+            CreaturePanel.DeleteCard(creatureCard, false);
             BattlePopulationText.text = $"{BattleCardPanel.cards.Count}/{maxBattleCreatures}";
 
             // Add the card to CardManager's battle scene creature card list
@@ -114,7 +114,7 @@ public class SettlementCardManager : MonoBehaviour
                 creatureCardSatietyDict[battleCard.cardID] = creatureCard.satiety;
             else
                 creatureCard.InitCard(battleCard.cardID, creatureCardSatietyDict[battleCard.cardID]);
-            BattleCardPanel.DeleteCard(battleCard);
+            BattleCardPanel.DeleteCard(battleCard, false);
 
             // Update battle population text
             BattlePopulationText.text = $"{BattleCardPanel.cards.Count}/{maxBattleCreatures}";

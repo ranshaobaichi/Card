@@ -14,6 +14,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
     // 属性
     public long cardID;
+    // private readonly bool OnBattle => hexNode != null;
     public int cd;
     [HideInInspector] public CardAttributeDB.CreatureCardAttribute creatureAttribute;
     public BasicAttributes curAttribute;
@@ -203,24 +204,26 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             return RectTransformUtility.RectangleContainsScreenPoint(rect, Input.mousePosition, cam);
         }
 
+        bool succPut = false;
         if (eventData.pointerCurrentRaycast.gameObject != null)
         {
-            var node = eventData.pointerCurrentRaycast.gameObject.GetComponent<HexNode>();
-            if (node != null && node.walkable)
+            GameObject hitObj = eventData.pointerCurrentRaycast.gameObject;
+            if (hitObj.TryGetComponent<HexNode>(out var node) && node.walkable)
             {
+                Debug.Log("Dropped on HexNode");
+                succPut = true;
                 HexNodeManager.MoveObject(this, hexNode, node);
             }
-            else if (IsPointerOverRect(BattleWorldManager.Instance.PreparationArea.GetComponent<RectTransform>()))
+
+            if (IsPointerOverRect(BattleWorldManager.Instance.CreatureScrollView))
             {
-                transform.SetParent(BattleWorldManager.Instance.PreparationArea.transform, false);
-            }
-            else
-            {
-                transform.SetParent(oriParent.transform, false);
-                transform.position = oriPosition;
+                Debug.Log("Dropped on Preparation Area");
+                succPut = true;
+                transform.SetParent(BattleWorldManager.Instance.PreparationAreaContent.transform, false);
             }
         }
-        else
+        
+        if (!succPut)
         {
             transform.SetParent(oriParent.transform, false);
             transform.position = oriPosition;

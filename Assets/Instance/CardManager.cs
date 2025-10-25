@@ -9,8 +9,11 @@ public class CardManager : MonoBehaviour
 {
     public static CardManager Instance;
     public GameObject cardPrefab;
+    public GameObject cardSlotPrefab;
+    public Transform cardSlotSet;
     public Canvas canvas;
     public Dictionary<CardType, List<Card>> allCards = new Dictionary<CardType, List<Card>>();
+    public Dictionary<long, CardSlot> allCardSlots = new Dictionary<long, CardSlot>();
 
     private void Awake()
     {
@@ -39,12 +42,13 @@ public class CardManager : MonoBehaviour
         foreach (var card in FindObjectsByType<Card>(sortMode: FindObjectsSortMode.None))
         {
             allCards[card.cardDescription.cardType].Add(card);
-            card.OnCardDeleted += OnCardDeleted;
             card.cardID = GetCardIdentityID();
             AddCardAttribute(card);
         }
 
         SceneManager.AfterSceneChanged += OnSceneChanged;
+
+        InitProductionScene();
     }
 
     private void OnSceneChanged()
@@ -53,8 +57,16 @@ public class CardManager : MonoBehaviour
         allCards.Clear();
 
         // Clear battle cards
-        if (SceneManager.Instance.currentSceneName != SceneManager.BattleScene)
+        if (SceneManager.currentScene != SceneManager.BattleScene)
             battleSceneCreatureCardIDs.Clear();
+
+        // Reinitialize the allCards dictionary
+        if (SceneManager.currentScene == SceneManager.ProductionScene)
+        {
+            cardSlotSet = GameObject.FindGameObjectWithTag("CardSlotSet").transform;
+            Debug.Log("Initializing Production Scene Cards...");
+            InitProductionScene();
+        }
     }
 
     public void RemoveCardAttribute(long cardID)
@@ -70,12 +82,54 @@ public class CardManager : MonoBehaviour
         }
     }
 
+    public void InitProductionScene()
+    {
+        if (!SaveDataManager.Instance.TryGetSaveData(out SaveDataManager.SaveData saveData))
+            return;
+        Dictionary<long, Card> tmpCardsDict = new Dictionary<long, Card>();
+
+        // Set all identity IDs
+        CurCardID = saveData.curCardID;
+        CurCardSlotID = saveData.curCardSlotID;
+
+        // first create all cards
+        foreach (var cardData in saveData.allCardData)
+        {
+            object attribute = cardData.cardDescription.cardType switch
+            {
+                CardType.Creatures => JsonUtility.FromJson<CreatureCardAttribute>(cardData.attribute),
+                CardType.Resources => JsonUtility.FromJson<ResourceCardAttribute>(cardData.attribute),
+                _ => null,
+            };
+            Card card = CreateCard(cardData.cardDescription, Vector2.zero, cardData.cardID, attribute);
+            tmpCardsDict[card.cardID] = card;
+        }
+
+        // then create all card slots and place cards into slots
+        foreach (var cardSlotData in saveData.allCardSlotData)
+        {
+            CardSlot cardSlot = CreateCardSlot(cardSlotData.position);
+            foreach (var cardID in cardSlotData.cardIDs)
+            {
+                if (tmpCardsDict.TryGetValue(cardID, out var card))
+                {
+                    CardSlot.ChangeCardToSlot(card.cardSlot, cardSlot, card, null, true);
+                }
+                else
+                {
+                    Debug.LogError($"CardSlotData contains unknown cardID: {cardID}");
+                }
+            }
+        }
+    }
 
     #region 卡牌逻辑内容管理    
     private static long cardIdentityID = 1;
     private static long cardSlotIdentityID = 1;
     [HideInInspector] public bool isDragging;
     [HideInInspector] public Card draggingCard;
+    public long CurCardID { get => cardIdentityID; private set => cardIdentityID = value; }
+    public long CurCardSlotID { get => cardSlotIdentityID; private set => cardSlotIdentityID = value; }
 
     public long GetCardIdentityID()
     {
@@ -91,7 +145,7 @@ public class CardManager : MonoBehaviour
         return newID % long.MaxValue;
     }
 
-    public Card CreateCard(Card.CardDescription cardDescription, Vector2 position = default, long cardID = -1)
+    public Card CreateCard(Card.CardDescription cardDescription, Vector2 position = default, long cardID = -1, object attribute = null)
     {
         if (!cardDescription.IsValid())
         {
@@ -99,24 +153,58 @@ public class CardManager : MonoBehaviour
             return null;
         }
         Card newCard = Instantiate(cardPrefab, position, Quaternion.identity).GetComponent<Card>();
+
+        // Set the basic attr
         if (cardID == -1) cardID = GetCardIdentityID();
         newCard.cardID = cardID;
         newCard.SetCardType(cardDescription);
+
+        // Add cardslot
+        var newSlot = CreateCardSlot(position);
+        CardSlot.ChangeCardToSlot(null, newSlot, newCard, null, true);
+
+        // Add to manager
         allCards[newCard.cardDescription.cardType].Add(newCard);
-        AddCardAttribute(newCard);
-        newCard.OnCardDeleted += OnCardDeleted;
+        AddCardAttribute(newCard, attribute);
         return newCard;
     }
 
-    /// <summary>
-    /// 删除卡牌并移除其属性记录
-    /// </summary>
-    /// <param name="card"></param>
-    private void OnCardDeleted(Card card)
+    public void DeleteCard(Card card)
     {
+        if (card.cardSlot != null)
+            CardSlot.RemoveCard(card.cardSlot, card, false);
+
         allCards[card.cardDescription.cardType].Remove(card);
         RemoveCardAttribute(card);
+        if (card.cardDescription.cardType == CardType.Events)
+            StopTrackingUIEvent(card);
+        Destroy(card.gameObject);
     }
+
+    public CardSlot CreateCardSlot(Vector2 position)
+    {
+        var cardSlotObject = Instantiate(cardSlotPrefab, position, transform.rotation, cardSlotSet);
+        // cardSlotObject.name = $"CardSlot_{cardID}";
+        CardSlot cardSlot = cardSlotObject.GetComponent<CardSlot>();
+        cardSlot.cardSlotID = GetCardSlotIdentityID();
+        // Debug.Log($"Created CardSlot ID: {cardSlot.cardSlotID} at position {position}");
+        allCardSlots[cardSlot.cardSlotID] = cardSlot;
+        return cardSlot;
+    }
+
+    public void DeleteCardSlot(CardSlot cardSlot)
+    {
+        // Debug.Log($"Deleting CardSlot ID: {cardSlot.cardSlotID}");
+        allCardSlots.Remove(cardSlot.cardSlotID);
+
+        if (cardSlot.cards.Count > 0)
+        {
+            CardSlot.RemoveCards(cardSlot, cardSlot.cards, true);
+        }
+
+        Destroy(cardSlot.gameObject);
+    }
+
     #endregion
 
     # region 卡牌合成表管理
@@ -146,7 +234,6 @@ public class CardManager : MonoBehaviour
             }
             eventUI = Instantiate(prefab, eventUIParent).GetComponent<EventUI>();
             EventUIs[card] = eventUI;
-            card.OnCardDeleted += StopTrackingUIEvent;
         }
         eventUI.eventCard = card;
 
@@ -228,7 +315,7 @@ public class CardManager : MonoBehaviour
                     var dbAttr = DataBaseManager.Instance.GetCardAttribute<CreatureCardAttribute>(card.cardDescription);
                     creatureCardAttributes[card.cardID] = dbAttr?.Clone() as CreatureCardAttribute;
                 }
-                Debug.Log($"Added satiety attribute for creature card {card.name} : {creatureCardAttributes[card.cardID]?.basicAttributes.satiety}");
+                // Debug.Log($"Added satiety attribute for creature card {card.name} : {creatureCardAttributes[card.cardID]?.basicAttributes.satiety}");
                 break;
             case CardType.Resources:
                 if (attribute != null && attribute is ResourceCardAttribute rca)
