@@ -9,8 +9,13 @@ public class TimeManager : MonoBehaviour
     private GameTimeState gameTimeState;
     public ProgressBar timeProgressBar;
     public float speedUpScale = 2f;
-    private bool isPaused = false, isSpeedUp = false;
+    private bool isPaused = false;
     private Button pauseButton, speedUpButton;
+    private int currentSpeedUpLevel = 0;
+    private int[] speedUpLevel = new int[] { 1, 2, 3, 5 };
+
+    //TEST
+    private Text timescalelevelText;
 
     public GameTimeState GetCurrentState() => gameTimeState;
 
@@ -28,23 +33,15 @@ public class TimeManager : MonoBehaviour
 
         pauseButton = GameObject.FindWithTag("PauseButton")?.GetComponent<Button>();
         speedUpButton = GameObject.FindWithTag("SpeedUpButton")?.GetComponent<Button>();
+
+        timescalelevelText = GameObject.FindWithTag("TimeScaleLevelText")?.GetComponent<Text>();
+        timescalelevelText.text = $"当前速度倍率：{speedUpLevel[currentSpeedUpLevel]}";
     }
 
     void OnEnable()
     {
-        pauseButton.onClick.AddListener(() =>
-        {
-            isPaused = !isPaused;
-            if (isPaused) Time.timeScale = 0f;
-            else Time.timeScale = isSpeedUp ? speedUpScale : 1f;
-        });
-
-        speedUpButton.onClick.AddListener(() =>
-        {
-            isSpeedUp = !isSpeedUp;
-            if (isSpeedUp) Time.timeScale = isPaused ? 0f : speedUpScale;
-            else Time.timeScale = isPaused ? 0f : 1f;
-        });
+        pauseButton.onClick.AddListener(ChangePauseGameState);
+        speedUpButton.onClick.AddListener(ChangeSpeedUpLevel);
     }
 
     void Start()
@@ -68,6 +65,8 @@ public class TimeManager : MonoBehaviour
             timeProgressBar = GameObject.FindWithTag("TimeProgressBar")?.GetComponent<ProgressBar>();
             pauseButton = GameObject.FindWithTag("PauseButton")?.GetComponent<Button>();
             speedUpButton = GameObject.FindWithTag("SpeedUpButton")?.GetComponent<Button>();
+            timescalelevelText = GameObject.FindWithTag("TimeScaleLevelText")?.GetComponent<Text>();
+            timescalelevelText.text = $"当前速度倍率：{speedUpLevel[currentSpeedUpLevel]}";
         }
     }
 
@@ -102,5 +101,30 @@ public class TimeManager : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public void ChangeSpeedUpLevel()
+    {
+        if (isPaused) return;
+        currentSpeedUpLevel = (currentSpeedUpLevel + 1) % speedUpLevel.Length;
+        speedUpScale = speedUpLevel[currentSpeedUpLevel];
+        Time.timeScale = speedUpScale;
+        timescalelevelText.text = $"当前速度倍率：{speedUpLevel[currentSpeedUpLevel]}";
+    }
+
+    public void ChangePauseGameState()
+    {
+        isPaused = !isPaused;
+        if (isPaused)
+        {
+            Time.timeScale = 0f;
+            timescalelevelText.text = $"当前速度倍率：0";
+        }
+        else
+        {
+            Time.timeScale = speedUpScale;
+            timescalelevelText.text = $"当前速度倍率：{speedUpLevel[currentSpeedUpLevel]}";
+        }
+
     }
 }

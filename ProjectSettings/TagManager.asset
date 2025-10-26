@@ -12,6 +12,9 @@ TagManager:
   - CardSlotSet
   - PauseButton
   - SpeedUpButton
+  - TimeScaleLevelText
+  - ExitButton
+  - DontDestroyOnLoad
   layers:
   - Default
   - TransparentFX

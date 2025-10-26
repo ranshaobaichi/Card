@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEditor.SearchService;
 using UnityEngine;
 
 [CustomEditor(typeof(GlobalTestFunction))]
@@ -62,6 +63,16 @@ public class GlobalTestFunctionEditor : Editor
         if (GUILayout.Button("切换游戏阶段"))
         {
             globalTestFunc.ChangeGameState();
+        }
+        EditorGUILayout.Space();
+
+        /// 
+        GUI.enabled = true;
+        EditorGUILayout.LabelField("退出游戏", EditorStyles.boldLabel);
+        GUI.enabled = EditorApplication.isPlaying;
+        if (GUILayout.Button("退出游戏"))
+        {
+            SceneManager.QuitToStartScene();
         }
         EditorGUILayout.Space();
 

@@ -13,24 +13,1096 @@ MonoBehaviour:
   m_Name: E_CraftTable
   m_EditorClassIdentifier: 
   recipeList:
-  - recipeID: 0
-    recipeName: Test
-    recipeDescription: "\u6D4B\u8BD5"
-    workload: 150
-    workType: 1
+  - recipeID: 1
+    recipeName: "\u65E5\u5E38\u63A2\u7D22"
+    recipeDescription: "\u63A2\u7D22\u70B9\u89E6\u53D1,\u666E\u901A\u63A2\u7D22"
+    workload: 1200
+    workType: 2
     inputCards:
     - cardType: 1
       resourceCardType: 1
       creatureCardType: 0
       eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 2
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 20
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 3
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 15
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 4
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 5
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 20
+    - cardDescription:
+        cardType: 3
+        resourceCardType: 0
+        creatureCardType: 0
+        eventCardType: 1
+      dropCount: 1
+      dropWeight: 5
+    - cardDescription:
+        cardType: 3
+        resourceCardType: 0
+        creatureCardType: 0
+        eventCardType: 2
+      dropCount: 1
+      dropWeight: 2
+  - recipeID: 2
+    recipeName: "\u5F00\u91C7\u6316\u6398\u70B9"
+    recipeDescription: 
+    workload: 700
+    workType: 3
+    inputCards:
     - cardType: 1
       resourceCardType: 2
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 18
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 8
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 20
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 2
+  - recipeID: 3
+    recipeName: "\u6D45\u5C42\u63A2\u7D221"
+    recipeDescription: "\u63A2\u7D22\u574D\u584C\u7684\u623F\u95F4"
+    workload: 700
+    workType: 2
+    inputCards:
+    - cardType: 1
+      resourceCardType: 3
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 19
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 8
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 31
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 2
+  - recipeID: 4
+    recipeName: "\u6D45\u5C42\u63A2\u7D222"
+    recipeDescription: "\u63A2\u7D22\u9057\u5F03\u7684\u8611\u83C7\u519C\u573A"
+    workload: 700
+    workType: 2
+    inputCards:
+    - cardType: 1
+      resourceCardType: 5
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 32
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+  - recipeID: 5
+    recipeName: "\u6D45\u5C42\u6316\u63981"
+    recipeDescription: "\u6316\u6398\u5E9F\u5F03\u77FF\u5751"
+    workload: 700
+    workType: 3
+    inputCards:
+    - cardType: 1
+      resourceCardType: 4
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 22
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 21
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 18
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 2
+  - recipeID: 6
+    recipeName: "\u538B\u7F29\u6728\u6599"
+    recipeDescription: "\u4ECE\u70C2\u6728\u5934\u91CC\u5BFB\u627E\u53EF\u4EE5\u4F7F\u7528\u7684\u6599\u5B50"
+    workload: 1200
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 19
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 19
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 25
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+  - recipeID: 7
+    recipeName: "\u5207\u5272\u77F3\u7816"
+    recipeDescription: "\u5C06\u77F3\u6599\u5207\u5272\u6210\u5408\u9002\u7684\u5927\u5C0F"
+    workload: 1200
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 18
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 18
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 23
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+  - recipeID: 8
+    recipeName: "\u6E29\u5BA4\u4E00\u7EA7"
+    recipeDescription: "\u5408\u6210\u8425\u517B\u571F\u58E4\u95F4"
+    workload: 2000
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 5
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 31
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 10
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+  - recipeID: 9
+    recipeName: "\u8015\u79CD\u8611\u83C71"
+    recipeDescription: 
+    workload: 18000
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 10
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 32
       creatureCardType: 0
       eventCardType: 0
     outputCards:
     - cardDescription:
         cardType: 1
-        resourceCardType: 1
+        resourceCardType: 32
         creatureCardType: 0
         eventCardType: 0
+      dropCount: 2
+      dropWeight: 10
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 32
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 2
+      dropWeight: 10
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 32
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 3
+      dropWeight: 5
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 32
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 3
+      dropWeight: 5
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 32
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 3
+      dropWeight: 5
+  - recipeID: 10
+    recipeName: "\u9AD8\u6548\u79CD\u690D1"
+    recipeDescription: 
+    workload: 16000
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 10
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 32
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 31
+      creatureCardType: 0
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 32
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 4
+      dropWeight: 10
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 32
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 4
+      dropWeight: 10
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 32
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 4
+      dropWeight: 10
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 32
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 4
+      dropWeight: 10
+  - recipeID: 11
+    recipeName: "\u79CD\u690D\u6728\u67501"
+    recipeDescription: 
+    workload: 15000
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 10
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 19
+      creatureCardType: 0
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 25
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 2
+      dropWeight: 10
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 25
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 2
+      dropWeight: 10
+  - recipeID: 12
+    recipeName: "\u9AD8\u6548\u79CD\u690D2"
+    recipeDescription: 
+    workload: 12000
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 10
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 19
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 25
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 5
+      dropWeight: 10
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 25
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 5
+      dropWeight: 10
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 25
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 5
+      dropWeight: 10
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 25
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 5
+      dropWeight: 10
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 25
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 5
+      dropWeight: 10
+  - recipeID: 14
+    recipeName: "\u77FF\u4E95\u4E00\u7EA7"
+    recipeDescription: "\u5408\u6210\u3010\u6DF1\u5751\u3011"
+    workload: 2000
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 4
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 20
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 25
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 8
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+  - recipeID: 15
+    recipeName: "\u5DE8\u77F3\u5F00\u91C71"
+    recipeDescription: 
+    workload: 2500
+    workType: 3
+    inputCards:
+    - cardType: 1
+      resourceCardType: 8
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 24
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 20
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 7
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 1
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 6
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 5
+  - recipeID: 16
+    recipeName: "\u788E\u77F31"
+    recipeDescription: 
+    workload: 1500
+    workType: 3
+    inputCards:
+    - cardType: 1
+      resourceCardType: 24
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 18
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 4
+      dropWeight: 8
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 18
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 4
+      dropWeight: 8
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 18
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 4
+      dropWeight: 8
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 18
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 4
+      dropWeight: 8
+  - recipeID: 17
+    recipeName: "\u9AD8\u6548\u5F00\u91C71"
+    recipeDescription: 
+    workload: 2000
+    workType: 3
+    inputCards:
+    - cardType: 1
+      resourceCardType: 8
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 13
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 18
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 4
+      dropWeight: 8
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 18
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 4
+      dropWeight: 8
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 18
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 4
+      dropWeight: 8
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 18
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 4
+      dropWeight: 8
+  - recipeID: 18
+    recipeName: "\u77FF\u8109\u5F00\u91C71"
+    recipeDescription: "\u7A00\u6709\u77FF\u8109\u89E6\u53D1"
+    workload: 1200
+    workType: 3
+    inputCards:
+    - cardType: 1
+      resourceCardType: 7
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 22
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 21
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+  - recipeID: 19
+    recipeName: "\u77FF\u8109\u5F00\u91C72"
+    recipeDescription: "\u94C1\u77FF\u8109\u89E6\u53D1"
+    workload: 1200
+    workType: 3
+    inputCards:
+    - cardType: 1
+      resourceCardType: 6
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 20
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 18
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 2
+  - recipeID: 20
+    recipeName: "\u5DE5\u574A\u4E00\u7EA7"
+    recipeDescription: "\u5408\u6210\u3010\u7CBE\u602A\u5DE5\u574A\u3011"
+    workload: 2500
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 25
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 25
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 23
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 23
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 23
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 9
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+  - recipeID: 21
+    recipeName: "\u9AD8\u6548\u5207\u52721"
+    recipeDescription: "\u5207\u5272\u77F3\u7816"
+    workload: 1000
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 18
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 23
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+  - recipeID: 22
+    recipeName: "\u7194\u70BC1"
+    recipeDescription: "\u94C1"
+    workload: 2000
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 20
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 25
+      creatureCardType: 0
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 26
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+  - recipeID: 23
+    recipeName: "\u7194\u70BC2"
+    recipeDescription: "\u767D\u94F6"
+    workload: 2500
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 21
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 25
+      creatureCardType: 0
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 27
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+  - recipeID: 24
+    recipeName: "\u7194\u70BC3"
+    recipeDescription: "\u7C97\u7CD9\u91D1\u5757"
+    workload: 2500
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 22
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 25
+      creatureCardType: 0
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 28
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+  - recipeID: 25
+    recipeName: "\u96D5\u523B\u77F3\u50CF"
+    recipeDescription: "\u5236\u4F5C\u3010\u77F3\u50CF\u9B54\u3011,\u4F1A\u6D88\u8017\u3010\u5C0F\u9B3C\u3011\u5361"
+    workload: 6000
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 24
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 24
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 24
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 23
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 23
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 23
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 23
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 23
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 23
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 23
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 23
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 2
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 2
+        resourceCardType: 0
+        creatureCardType: 13
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+  - recipeID: 26
+    recipeName: "\u9152\u9986\u4E00\u7EA7"
+    recipeDescription: "\u5408\u6210\u3010\u9152\u9986\u3011"
+    workload: 2000
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 34
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 34
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 23
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 23
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 23
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 19
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 19
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 11
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+  - recipeID: 27
+    recipeName: "\u917F\u90201"
+    recipeDescription: 
+    workload: 10000
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 32
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 25
+      creatureCardType: 0
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 34
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 0
+  - recipeID: 28
+    recipeName: "\u9AD8\u6548\u917F\u90201"
+    recipeDescription: 
+    workload: 6000
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 32
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 32
+      creatureCardType: 0
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 34
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 2
+      dropWeight: 0
+  - recipeID: 31
+    recipeName: "\u90E8\u843D\u4E00\u7EA7"
+    recipeDescription: "\u5408\u6210\u3010\u90E8\u65CF\u96C6\u7ED3\u70B9\u3011"
+    workload: 2000
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 34
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 3
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 0
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+  - recipeID: 32
+    recipeName: "\u5C60\u5BB01"
+    recipeDescription: 
+    workload: 2500
+    workType: 3
+    inputCards:
+    - cardType: 1
+      resourceCardType: 31
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 33
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+  - recipeID: 33
+    recipeName: "\u8840\u8165\u51B3\u65971"
+    recipeDescription: "\u968F\u673A\u6B7B\u4EA11\u5F20\u751F\u7269\u5361,\u89E6\u53D1\u3010\u4E8B\u4EF6-\u90E8\u843D\u65CF\u4EBA\u3011"
+    workload: 4000
+    workType: 3
+    inputCards:
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 31
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+  - recipeID: 36
+    recipeName: "\u62F7\u6253\u5BA4\u4E00\u7EA7"
+    recipeDescription: "\u5408\u6210\u3010\u62F7\u6253\u5BA4\u3011"
+    workload: 2000
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 23
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 23
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 23
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 23
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 23
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 12
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+  - recipeID: 37
+    recipeName: "\u62DB\u52DF\u5224\u5B9A"
+    recipeDescription: "\u6BCF\u9694\u56FA\u5B9A\u65F6\u95F4\u8FDB\u884C\u4E00\u6B21\u5224\u5B9A,\u901A\u8FC7\u540E\u5373\u53EF\u51FA\u73B0\u62DB\u52DF\u4E8B\u4EF6,\u6B64\u5224\u5B9A\u65E0\u6CD5\u88AB\u4EFB\u4F55\u4E1C\u897F\u6253\u65AD"
+    workload: 4000
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 12
+      creatureCardType: 0
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 3
+        resourceCardType: 0
+        creatureCardType: 0
+        eventCardType: 5
+      dropCount: 1
+      dropWeight: 20
+  - recipeID: 38
+    recipeName: "\u65BD\u6CD5\u8005\u4E00\u7EA7"
+    recipeDescription: "\u5408\u6210\u3010\u9ED1\u9B54\u6CD5\u85CF\u5BA4\u3011"
+    workload: 4000
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 28
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 25
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 25
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 14
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
+  - recipeID: 39
+    recipeName: "\u62DB\u52DF\u5224\u5B9A"
+    recipeDescription: "\u5728\u540C\u65F6\u62E5\u6709\u9ED1\u9B54\u6CD5\u85CF\u5BA4\u4E0E\u90E8\u843D\u96C6\u7ED3\u70B9\uFF0C\u4E24\u5F20\u5361\u724C\u540E\uFF0C\u624D\u53EF\u4EE5\u89E6\u53D1\u6B64\u5224\u5B9A"
+    workload: 6000
+    workType: 1
+    inputCards:
+    - cardType: 1
+      resourceCardType: 14
+      creatureCardType: 0
+      eventCardType: 0
+    outputCards:
+    - cardDescription:
+        cardType: 3
+        resourceCardType: 0
+        creatureCardType: 0
+        eventCardType: 6
+      dropCount: 1
       dropWeight: 1

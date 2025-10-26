@@ -25,6 +25,7 @@ public class DataBaseManager : MonoBehaviour
     public CraftTableDB.Recipe? GetRecipe(int id) => craftTableDB.GetRecipe(id);
     public CraftTableDB.Recipe? GetRecipe(string name) => craftTableDB.GetRecipe(name);
     public (List<Card>, CraftTableDB.Recipe)? GetRecipe(List<Card> inputCards) => craftTableDB.GetRecipe(inputCards);
+    public List<CraftTableDB.Recipe> GetAllRecipes() => craftTableDB.recipeList;
     #endregion
 
     #region 卡牌属性管理

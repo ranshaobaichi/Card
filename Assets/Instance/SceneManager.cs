@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SceneManager : MonoBehaviour
@@ -5,6 +6,7 @@ public class SceneManager : MonoBehaviour
     public static string ProductionScene = "ProductionScene";
     public static string BattleScene = "BattleScene";
     public static string SettlementScene = "SettlementScene";
+    public static string StartScene = "StartScene";
     public static string currentScene = "";
     public static SceneManager Instance;
 
@@ -50,5 +52,34 @@ public class SceneManager : MonoBehaviour
     {
         BeforeSceneChanged?.Invoke();
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+    }
+    
+    public static void QuitToStartScene()
+    {
+        BeforeSceneChanged?.Invoke();
+        UnityEngine.SceneManagement.SceneManager.LoadScene(StartScene);
+        GameObject[] ddolObjs = GameObject.FindGameObjectsWithTag("DontDestroyOnLoad");
+        foreach (var obj in ddolObjs)
+        {
+            // TEST
+            // Debug.Log("Destroying object: " + obj.name);
+            if (obj.name == "SceneManager" || obj.name == "GlobalTestFunction" || obj.name == "SaveDataManager")
+                continue;
+            Destroy(obj);
+        }
+
+        BeforeSceneChanged = null;
+        AfterSceneChanged = null;
+    }
+
+    public static void QuitGame()
+    {
+#if UNITY_EDITOR
+            // 停止编辑器中的播放模式
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            // 在发布版中退出应用
+            UnityEngine.Application.Quit();
+#endif
     }
 }

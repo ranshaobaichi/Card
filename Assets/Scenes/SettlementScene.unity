@@ -2499,6 +2499,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settlementCardSlotPrefab: {fileID: 3844467087724492478, guid: 2462ce6c0a14cff4c9de1b1256f9ef80, type: 3}
+  exitButton: {fileID: 0}
   FoodPanel: {fileID: 1171590955}
   CreaturePanel: {fileID: 1775534163}
   CreaturePanelPutArea: {fileID: 1732031412}
@@ -3188,7 +3189,7 @@ GameObject:
   - component: {fileID: 1949594700}
   m_Layer: 5
   m_Name: ExitButton
-  m_TagString: Untagged
+  m_TagString: ExitButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

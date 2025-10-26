@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8048833546865340491}
   - component: {fileID: 3297159155092708337}
   - component: {fileID: 4943629140854272563}
+  - component: {fileID: 3610532473733171654}
   m_Layer: 7
   m_Name: foldTaskBtn
   m_TagString: Untagged
@@ -141,6 +142,21 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &3610532473733171654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1507321384969390810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39a197e1b190dae4a9ee22bec39630d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  normalSprite: {fileID: 21300000, guid: e4cdb619d017e574db4a5c92013a7006, type: 3}
+  pressedSprite: {fileID: 21300000, guid: d5d1118ca5ec7ba4eb651caff34d030e, type: 3}
+  changeType: 1
 --- !u!1 &5122461140232220368
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,7 +224,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 42
+    m_FontSize: 25
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0

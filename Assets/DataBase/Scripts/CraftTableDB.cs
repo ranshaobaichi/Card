@@ -158,7 +158,7 @@ public class CraftTableDB : ScriptableObject
         // 处理任意生物卡需求
         if (anyCreatureCount > 0)
         {
-            Debug.Log($"需要任意生物卡 x {anyCreatureCount}");
+            // Debug.Log($"需要任意生物卡 x {anyCreatureCount}");
             int found = 0;
             for (int i = 0; i < availableCards.Count; i++)
             {

@@ -29,29 +29,29 @@ MonoBehaviour:
       EXP: 0
       level: 1
       satiety: 2
-      health: 40
-      attackPower: 12
+      health: 10
+      attackPower: 3
       spellPower: 0
       normalAttackDamageType: 0
-      armor: 4
-      spellResistance: 1
+      armor: 5
+      spellResistance: 5
       moveSpeed: 15
       dodgeRate: 0.05
-      attackSpeed: 10
+      attackSpeed: 9
       attackRange: 1
       dropItem: []
     levelUpAttributes:
-      satietyGrowth: 9
-      healthGrowth: 0
-      attackPowerGrowth: 0
+      satietyGrowth: 0
+      healthGrowth: 8
+      attackPowerGrowth: 2
       spellPowerGrowth: 0
       armorGrowth: 0
       spellResistanceGrowth: 0
       moveSpeedGrowth: 0
-      dodgeRateGrowth: 0
+      dodgeRateGrowth: 0.02
       attackSpeedGrowth: 0
       attackRangeGrowth: 0
-  - levelUpExpIncreasePercent: 40
+  - levelUpExpIncreasePercent: 20
     creatureCardType: 3
     basicAttributes:
       workEfficiencyAttributes:
@@ -61,16 +61,656 @@ MonoBehaviour:
       EXP: 0
       level: 1
       satiety: 2
-      health: 32
-      attackPower: 16
+      health: 8
+      attackPower: 4
       spellPower: 0
       normalAttackDamageType: 0
-      armor: 0
+      armor: 5
+      spellResistance: 5
+      moveSpeed: 12
+      dodgeRate: 0.1
+      attackSpeed: 9
+      attackRange: 1
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 6
+      attackPowerGrowth: 3
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0.04
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 20
+    creatureCardType: 4
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 3
+        exploreWorkEfficiency: 4
+        interactWorkEfficiency: 3
+      EXP: 0
+      level: 1
+      satiety: 2
+      health: 8
+      attackPower: 4
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 15
+      spellResistance: 5
+      moveSpeed: 12
+      dodgeRate: 0.15
+      attackSpeed: 9
+      attackRange: 1
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 6
+      attackPowerGrowth: 2
+      spellPowerGrowth: 0
+      armorGrowth: 2
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0.05
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 35
+    creatureCardType: 5
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 3
+        exploreWorkEfficiency: 4
+        interactWorkEfficiency: 3
+      EXP: 0
+      level: 1
+      satiety: 2
+      health: 15
+      attackPower: 6
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 8
       spellResistance: 0
       moveSpeed: 12
       dodgeRate: 0.1
       attackSpeed: 9
       attackRange: 1
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 12
+      attackPowerGrowth: 3
+      spellPowerGrowth: 0
+      armorGrowth: 1
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0.04
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 20
+    creatureCardType: 6
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 3
+        exploreWorkEfficiency: 2
+        interactWorkEfficiency: 3
+      EXP: 0
+      level: 1
+      satiety: 3
+      health: 12
+      attackPower: 5
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 15
+      spellResistance: 0
+      moveSpeed: 15
+      dodgeRate: 0.05
+      attackSpeed: 15
+      attackRange: 1
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 9
+      attackPowerGrowth: 2
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0.02
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 35
+    creatureCardType: 7
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 3
+        exploreWorkEfficiency: 2
+        interactWorkEfficiency: 3
+      EXP: 0
+      level: 1
+      satiety: 3
+      health: 18
+      attackPower: 6
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 20
+      spellResistance: 0
+      moveSpeed: 15
+      dodgeRate: 0.1
+      attackSpeed: 9
+      attackRange: 1
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 14
+      attackPowerGrowth: 4
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0.04
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 35
+    creatureCardType: 8
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 3
+        exploreWorkEfficiency: 2
+        interactWorkEfficiency: 3
+      EXP: 0
+      level: 1
+      satiety: 3
+      health: 18
+      attackPower: 8
+      spellPower: 0
+      normalAttackDamageType: 2
+      armor: 15
+      spellResistance: 0
+      moveSpeed: 12
+      dodgeRate: 0.1
+      attackSpeed: 12
+      attackRange: 1
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 14
+      attackPowerGrowth: 3
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0.04
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 35
+    creatureCardType: 9
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 3
+        exploreWorkEfficiency: 2
+        interactWorkEfficiency: 3
+      EXP: 0
+      level: 1
+      satiety: 3
+      health: 18
+      attackPower: 8
+      spellPower: 10
+      normalAttackDamageType: 1
+      armor: 20
+      spellResistance: 0
+      moveSpeed: 15
+      dodgeRate: 0.05
+      attackSpeed: 12
+      attackRange: 4
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 14
+      attackPowerGrowth: 3
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0.02
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 60
+    creatureCardType: 10
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 3
+        exploreWorkEfficiency: 2
+        interactWorkEfficiency: 3
+      EXP: 0
+      level: 1
+      satiety: 5
+      health: 24
+      attackPower: 18
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 25
+      spellResistance: 0
+      moveSpeed: 15
+      dodgeRate: 0.1
+      attackSpeed: 18
+      attackRange: 1
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 20
+      attackPowerGrowth: 5
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0.04
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 20
+    creatureCardType: 11
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 3
+        exploreWorkEfficiency: 4
+        interactWorkEfficiency: 3
+      EXP: 0
+      level: 1
+      satiety: 2
+      health: 8
+      attackPower: 4
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 5
+      spellResistance: 5
+      moveSpeed: 9
+      dodgeRate: 0.2
+      attackSpeed: 12
+      attackRange: 1
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 6
+      attackPowerGrowth: 2
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0.06
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 35
+    creatureCardType: 12
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 3
+        exploreWorkEfficiency: 3
+        interactWorkEfficiency: 3
+      EXP: 0
+      level: 1
+      satiety: 4
+      health: 30
+      attackPower: 16
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 10
+      spellResistance: 10
+      moveSpeed: 12
+      dodgeRate: 0.1
+      attackSpeed: 9
+      attackRange: 1
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 24
+      attackPowerGrowth: 6
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0.04
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 35
+    creatureCardType: 13
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 2
+        exploreWorkEfficiency: 1
+        interactWorkEfficiency: 4
+      EXP: 0
+      level: 1
+      satiety: 0
+      health: 36
+      attackPower: 19
+      spellPower: 10
+      normalAttackDamageType: 0
+      armor: 12
+      spellResistance: 12
+      moveSpeed: 24
+      dodgeRate: 0
+      attackSpeed: 18
+      attackRange: 1
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 30
+      attackPowerGrowth: 5
+      spellPowerGrowth: 0
+      armorGrowth: 2
+      spellResistanceGrowth: 2
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 60
+    creatureCardType: 14
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 2
+        exploreWorkEfficiency: 1
+        interactWorkEfficiency: 4
+      EXP: 0
+      level: 1
+      satiety: 0
+      health: 48
+      attackPower: 40
+      spellPower: 10
+      normalAttackDamageType: 0
+      armor: 15
+      spellResistance: 15
+      moveSpeed: 24
+      dodgeRate: 0
+      attackSpeed: 24
+      attackRange: 1
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 40
+      attackPowerGrowth: 6
+      spellPowerGrowth: 0
+      armorGrowth: 3
+      spellResistanceGrowth: 3
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 20
+    creatureCardType: 15
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 3
+        exploreWorkEfficiency: 3
+        interactWorkEfficiency: 4
+      EXP: 0
+      level: 1
+      satiety: 2
+      health: 10
+      attackPower: 5
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 5
+      spellResistance: 5
+      moveSpeed: 13
+      dodgeRate: 0.1
+      attackSpeed: 15
+      attackRange: 5
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 8
+      attackPowerGrowth: 3
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0.04
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 35
+    creatureCardType: 16
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 3
+        exploreWorkEfficiency: 3
+        interactWorkEfficiency: 3
+      EXP: 0
+      level: 1
+      satiety: 3
+      health: 16
+      attackPower: 8
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 10
+      spellResistance: 10
+      moveSpeed: 18
+      dodgeRate: 0
+      attackSpeed: 12
+      attackRange: 1
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 14
+      attackPowerGrowth: 3
+      spellPowerGrowth: 0
+      armorGrowth: 2
+      spellResistanceGrowth: 2
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 35
+    creatureCardType: 17
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 2
+        exploreWorkEfficiency: 3
+        interactWorkEfficiency: 3
+      EXP: 0
+      level: 1
+      satiety: 4
+      health: 15
+      attackPower: 8
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 10
+      spellResistance: 10
+      moveSpeed: 12
+      dodgeRate: 0.05
+      attackSpeed: 12
+      attackRange: 1
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 15
+      attackPowerGrowth: 3
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0.02
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 60
+    creatureCardType: 18
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 3
+        exploreWorkEfficiency: 3
+        interactWorkEfficiency: 3
+      EXP: 0
+      level: 1
+      satiety: 4
+      health: 16
+      attackPower: 9
+      spellPower: 10
+      normalAttackDamageType: 1
+      armor: 20
+      spellResistance: 20
+      moveSpeed: 15
+      dodgeRate: 0
+      attackSpeed: 9
+      attackRange: 1
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 20
+      attackPowerGrowth: 5
+      spellPowerGrowth: 0
+      armorGrowth: 2
+      spellResistanceGrowth: 2
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 200
+    creatureCardType: 19
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 1
+        exploreWorkEfficiency: 1
+        interactWorkEfficiency: 1
+      EXP: 0
+      level: 1
+      satiety: 0
+      health: 4
+      attackPower: 2
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 0
+      spellResistance: 0
+      moveSpeed: 15
+      dodgeRate: 0.05
+      attackSpeed: 9
+      attackRange: 1
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 10
+      attackPowerGrowth: 3
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 200
+    creatureCardType: 20
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 1
+        exploreWorkEfficiency: 1
+        interactWorkEfficiency: 1
+      EXP: 0
+      level: 1
+      satiety: 0
+      health: 12
+      attackPower: 4
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 10
+      spellResistance: 0
+      moveSpeed: 15
+      dodgeRate: 0.05
+      attackSpeed: 12
+      attackRange: 1
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 12
+      attackPowerGrowth: 3
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 200
+    creatureCardType: 21
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 1
+        exploreWorkEfficiency: 1
+        interactWorkEfficiency: 1
+      EXP: 0
+      level: 1
+      satiety: 0
+      health: 10
+      attackPower: 3
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 20
+      spellResistance: 0
+      moveSpeed: 12
+      dodgeRate: 0
+      attackSpeed: 9
+      attackRange: 1
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 10
+      attackPowerGrowth: 2
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 200
+    creatureCardType: 22
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 1
+        exploreWorkEfficiency: 1
+        interactWorkEfficiency: 1
+      EXP: 0
+      level: 1
+      satiety: 0
+      health: 20
+      attackPower: 8
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 20
+      spellResistance: 0
+      moveSpeed: 10
+      dodgeRate: 0
+      attackSpeed: 9
+      attackRange: 1
+      dropItem: []
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 20
+      attackPowerGrowth: 3
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 200
+    creatureCardType: 23
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 1
+        exploreWorkEfficiency: 1
+        interactWorkEfficiency: 1
+      EXP: 0
+      level: 1
+      satiety: 0
+      health: 300
+      attackPower: 21
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 25
+      spellResistance: 0
+      moveSpeed: 100
+      dodgeRate: 0
+      attackSpeed: 18
+      attackRange: 10
       dropItem: []
     levelUpAttributes:
       satietyGrowth: 0
@@ -85,72 +725,177 @@ MonoBehaviour:
       attackRangeGrowth: 0
   resourceCardAttributes:
   - resourceCardType: 1
+    resourceClassification: 3
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 2
+    resourceClassification: 3
+    durability: 3
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 3
+    resourceClassification: 3
+    durability: 3
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 4
+    resourceClassification: 3
+    durability: 3
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 5
+    resourceClassification: 3
+    durability: 3
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 6
+    resourceClassification: 3
+    durability: 3
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 7
+    resourceClassification: 3
+    durability: 3
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 8
+    resourceClassification: 3
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 9
+    resourceClassification: 3
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 10
+    resourceClassification: 3
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 11
+    resourceClassification: 3
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 12
+    resourceClassification: 3
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 13
+    resourceClassification: 3
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 14
+    resourceClassification: 3
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 15
     resourceClassification: 4
     durability: 1
     satietyValue: 0
-    priceValue: 0
-  - resourceCardType: 3
-    resourceClassification: 0
+    priceValue: 1
+  - resourceCardType: 16
+    resourceClassification: 4
     durability: 1
     satietyValue: 0
-    priceValue: 0
-  - resourceCardType: 29
-    resourceClassification: 0
+    priceValue: 1
+  - resourceCardType: 17
+    resourceClassification: 4
     durability: 1
     satietyValue: 0
-    priceValue: 0
-  - resourceCardType: 28
-    resourceClassification: 0
+    priceValue: 1
+  - resourceCardType: 18
+    resourceClassification: 4
     durability: 1
     satietyValue: 0
-    priceValue: 0
+    priceValue: 1
   - resourceCardType: 19
-    resourceClassification: 0
+    resourceClassification: 4
     durability: 1
     satietyValue: 0
-    priceValue: 0
-  - resourceCardType: 25
-    resourceClassification: 0
+    priceValue: 1
+  - resourceCardType: 20
+    resourceClassification: 4
     durability: 1
     satietyValue: 0
-    priceValue: 0
-  - resourceCardType: 24
-    resourceClassification: 0
-    durability: 1
-    satietyValue: 0
-    priceValue: 0
-  - resourceCardType: 14
-    resourceClassification: 0
-    durability: 1
-    satietyValue: 0
-    priceValue: 0
-  - resourceCardType: 13
-    resourceClassification: 0
-    durability: 1
-    satietyValue: 0
-    priceValue: 0
-  - resourceCardType: 22
-    resourceClassification: 0
-    durability: 1
-    satietyValue: 0
-    priceValue: 0
-  - resourceCardType: 23
-    resourceClassification: 1
-    durability: 1
-    satietyValue: 2
-    priceValue: 0
+    priceValue: 1
   - resourceCardType: 21
+    resourceClassification: 4
+    durability: 1
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 22
+    resourceClassification: 4
+    durability: 1
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 23
+    resourceClassification: 4
+    durability: 1
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 24
+    resourceClassification: 4
+    durability: 1
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 25
+    resourceClassification: 4
+    durability: 1
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 26
+    resourceClassification: 4
+    durability: 1
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 27
+    resourceClassification: 4
+    durability: 1
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 28
+    resourceClassification: 4
+    durability: 1
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 29
+    resourceClassification: 4
+    durability: 1
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 30
+    resourceClassification: 4
+    durability: 1
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 31
+    resourceClassification: 4
+    durability: 2
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 32
     resourceClassification: 1
     durability: 1
-    satietyValue: 5
-    priceValue: 0
-  - resourceCardType: 26
-    resourceClassification: 0
-    durability: 1
-    satietyValue: 0
-    priceValue: 0
-  - resourceCardType: 27
-    resourceClassification: 0
-    durability: 1
-    satietyValue: 0
-    priceValue: 0
+    satietyValue: 1
+    priceValue: 1
+  - resourceCardType: 33
+    resourceClassification: 1
+    durability: 3
+    satietyValue: 1
+    priceValue: 1
+  - resourceCardType: 34
+    resourceClassification: 1
+    durability: 2
+    satietyValue: 1
+    priceValue: 1
+  - resourceCardType: 35
+    resourceClassification: 1
+    durability: 3
+    satietyValue: 1
+    priceValue: 1

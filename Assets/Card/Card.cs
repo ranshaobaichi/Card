@@ -212,7 +212,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         // if put on empty space, create a new slot
         if (endOnCard == false)
         {
-            Debug.Log($"Put on blank, creating new slot for {name}");
+            // Debug.Log($"Put on blank, creating new slot for {name}");
             CardSlot tmp = CardManager.Instance.CreateCardSlot(transform.position);
             CardSlot.ChangeCardsToSlot(cardSlot, tmp, GetFollowingCards(), null, false);
         }

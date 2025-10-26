@@ -27,9 +27,12 @@ public class SaveDataManager : MonoBehaviour
     }
 
     public static SaveDataManager Instance;
-    public readonly string SaveDataFileName = "saveData.json";
+    public static readonly string SaveDataFileName = "saveData.json";
+    public static readonly string InitialSaveDataFileName = "initData.json";
+    public static bool isNewGame;
+    public static SaveData currentSaveData;
 
-    public bool SaveDataExists() => System.IO.File.Exists(System.IO.Path.Combine(Application.persistentDataPath, "saveData.json"));
+    public bool SaveDataExists() => System.IO.File.Exists(System.IO.Path.Combine(Application.persistentDataPath, SaveDataFileName));
 
     private void Awake()
     {
@@ -43,43 +46,7 @@ public class SaveDataManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    public void Start()
-    {
-        SceneManager.BeforeSceneChanged += () =>
-        {
-            if (SceneManager.currentScene == SceneManager.ProductionScene)
-            {
-                SaveGame();
-            }
-        };
-    }
-
-    [ContextMenu("Debug Serialize One Attribute")]
-    public void DebugSerializeOneAttribute()
-    {
-        foreach (var kv in CardManager.Instance.allCards)
-        {
-            foreach (var card in kv.Value)
-            {
-                var cardDesc = card.cardDescription;
-                if (cardDesc.cardType == Category.CardType.Creatures)
-                {
-                    var attr = CardManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(card.cardID);
-                    Debug.Log($"Serialize Creature attr for {card.cardID}:\n{JsonUtility.ToJson(attr, true)}");
-                    return;
-                }
-                if (cardDesc.cardType == Category.CardType.Resources)
-                {
-                    var attr = CardManager.Instance.GetCardAttribute<CardAttributeDB.ResourceCardAttribute>(card.cardID);
-                    Debug.Log($"Serialize Resource attr for {card.cardID}:\n{JsonUtility.ToJson(attr, true)}");
-                    return;
-                }
-            }
-        }
-    }
-
-    [ContextMenu("Save Game")]
+    
     public void SaveGame()
     {
         Debug.Log("Game saved.");
@@ -147,19 +114,21 @@ public class SaveDataManager : MonoBehaviour
         string json = JsonUtility.ToJson(saveData, prettyPrint: true);
         System.IO.File.WriteAllText(System.IO.Path.Combine(Application.persistentDataPath, SaveDataFileName), json);
         Debug.Log($"Game saved to {System.IO.Path.Combine(Application.persistentDataPath, SaveDataFileName)}");
+        currentSaveData = saveData;
     }
 
-    public bool TryGetSaveData(out SaveData saveData)
+    public bool TryGetSaveData(string fileName, out SaveData saveData)
     {
         saveData = new SaveData();
-        Debug.Log("Loading save data from path: " + System.IO.Path.Combine(Application.persistentDataPath, SaveDataFileName));
-        if (!System.IO.File.Exists(System.IO.Path.Combine(Application.persistentDataPath, SaveDataFileName)))
+        string path = System.IO.Path.Combine(Application.persistentDataPath, fileName);
+        Debug.Log("Loading save data from path: " + path);
+        if (!System.IO.File.Exists(path))
         {
             Debug.LogWarning("No save data found, start a new game.");
             return false;
         }
 
-        string json = System.IO.File.ReadAllText(System.IO.Path.Combine(Application.persistentDataPath, SaveDataFileName));
+        string json = System.IO.File.ReadAllText(path);
         saveData = JsonUtility.FromJson<SaveData>(json);
         return true;
     }

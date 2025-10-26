@@ -4,6 +4,7 @@ using Category;
 using UnityEngine;
 using static CardAttributeDB;
 using Unity.VisualScripting;
+using System;
 
 public class CardManager : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class CardManager : MonoBehaviour
     public Canvas canvas;
     public Dictionary<CardType, List<Card>> allCards = new Dictionary<CardType, List<Card>>();
     public Dictionary<long, CardSlot> allCardSlots = new Dictionary<long, CardSlot>();
+    public event Action<Card> onCardCreated;
+    public event Action<Card> onCardDeleted;
 
     private void Awake()
     {
@@ -47,6 +50,13 @@ public class CardManager : MonoBehaviour
         }
 
         SceneManager.AfterSceneChanged += OnSceneChanged;
+        SceneManager.BeforeSceneChanged += () =>
+        {
+            if (SceneManager.currentScene == SceneManager.ProductionScene)
+            {
+                SaveDataManager.Instance.SaveGame();
+            }
+        };
 
         InitProductionScene();
     }
@@ -54,7 +64,9 @@ public class CardManager : MonoBehaviour
     private void OnSceneChanged()
     {
         // Clear all cards
-        allCards.Clear();
+        foreach (var cardList in allCards.Values)
+            cardList.Clear();
+        allCardSlots.Clear();
 
         // Clear battle cards
         if (SceneManager.currentScene != SceneManager.BattleScene)
@@ -64,8 +76,8 @@ public class CardManager : MonoBehaviour
         if (SceneManager.currentScene == SceneManager.ProductionScene)
         {
             cardSlotSet = GameObject.FindGameObjectWithTag("CardSlotSet").transform;
-            Debug.Log("Initializing Production Scene Cards...");
-            InitProductionScene();
+            Debug.Log("Loading Production Scene Cards...");
+            LoadProductionScene();
         }
     }
 
@@ -82,9 +94,17 @@ public class CardManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// init the production scene from save file
+    /// </summary>
     public void InitProductionScene()
     {
-        if (!SaveDataManager.Instance.TryGetSaveData(out SaveDataManager.SaveData saveData))
+        string fileName;
+        if (SaveDataManager.isNewGame)
+            fileName = SaveDataManager.InitialSaveDataFileName;
+        else
+            fileName = SaveDataManager.SaveDataFileName;
+        if (!SaveDataManager.Instance.TryGetSaveData(fileName, out SaveDataManager.SaveData saveData))
             return;
         Dictionary<long, Card> tmpCardsDict = new Dictionary<long, Card>();
 
@@ -121,6 +141,51 @@ public class CardManager : MonoBehaviour
                 }
             }
         }
+
+        // TEST: unlock all the recipes
+        unlockedCraftableRecipes = DataBaseManager.Instance.GetAllRecipes();
+
+        // Init MainUI
+        MainUIManager mainUIManager = FindObjectOfType<MainUIManager>();
+        mainUIManager.InitMainUI();
+    }
+
+    /// <summary>
+    /// 运行时方法，加载生产场景
+    /// </summary>
+    public void LoadProductionScene()
+    {
+        SaveDataManager.SaveData saveData = SaveDataManager.currentSaveData;
+        Dictionary<long, Card> tmpCardsDict = new Dictionary<long, Card>();
+
+        // Create all cards
+        foreach (var cardData in saveData.allCardData)
+        {
+            object attribute = cardData.cardDescription.cardType switch
+            {
+                CardType.Creatures => GetCardAttribute<CreatureCardAttribute>(cardData.cardID),
+                CardType.Resources => GetCardAttribute<ResourceCardAttribute>(cardData.cardID),
+                _ => null,
+            };
+            if (attribute == null) continue;
+            Card card = CreateCard(cardData.cardDescription, Vector2.zero, cardData.cardID, attribute);
+            tmpCardsDict[card.cardID] = card;
+        }
+
+        // Create all card slots and place cards into slots
+        foreach (var cardSlotData in saveData.allCardSlotData)
+        {
+            CardSlot cardSlot = CreateCardSlot(cardSlotData.position);
+            foreach (var cardID in cardSlotData.cardIDs)
+                if (tmpCardsDict.TryGetValue(cardID, out var card))
+                {
+                    CardSlot.ChangeCardToSlot(card.cardSlot, cardSlot, card, null, true);
+                }
+        }
+
+        // Init MainUI
+        MainUIManager mainUIManager = FindObjectOfType<MainUIManager>();
+        mainUIManager.InitMainUI();
     }
 
     #region 卡牌逻辑内容管理    
@@ -166,6 +231,8 @@ public class CardManager : MonoBehaviour
         // Add to manager
         allCards[newCard.cardDescription.cardType].Add(newCard);
         AddCardAttribute(newCard, attribute);
+
+        onCardCreated?.Invoke(newCard);
         return newCard;
     }
 
@@ -178,6 +245,8 @@ public class CardManager : MonoBehaviour
         RemoveCardAttribute(card);
         if (card.cardDescription.cardType == CardType.Events)
             StopTrackingUIEvent(card);
+
+        onCardDeleted?.Invoke(card);
         Destroy(card.gameObject);
     }
 
@@ -209,6 +278,8 @@ public class CardManager : MonoBehaviour
 
     # region 卡牌合成表管理
     List<CraftTableDB.Recipe> unlockedCraftableRecipes = new List<CraftTableDB.Recipe>();
+    public IReadOnlyList<CraftTableDB.Recipe> GetUnlockedCraftableRecipes()
+        => unlockedCraftableRecipes.AsReadOnly();
     public (List<Card>, CraftTableDB.Recipe)? GetRecipe(List<Card> inputCards)
         => DataBaseManager.Instance.craftTableDB.GetRecipe(inputCards, unlockedCraftableRecipes);
     # endregion
@@ -373,6 +444,11 @@ public class CardManager : MonoBehaviour
 
         Debug.LogWarning($"CardManager.GetCardAttribute<{typeof(T).Name}> unsupported type.");
         return null;
+    }
+    public bool TryGetCardAttribute<T>(long cardID, out T attribute) where T : class
+    {
+        attribute = GetCardAttribute<T>(cardID);
+        return attribute != null;
     }
     public T GetCardAttribute<T>(Card card) where T : class
         => card ? GetCardAttribute<T>(card.cardID) : null;

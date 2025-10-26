@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Category;
 using Category.Battle;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BattleWorldManager : MonoBehaviour
 {
@@ -22,6 +23,9 @@ public class BattleWorldManager : MonoBehaviour
     public event Action NormalActions;
     public event Action DamageActions;
 
+    // TEST
+    public Button nextSceneBtn;
+
     void Awake()
     {
         if (Instance == null)
@@ -32,6 +36,7 @@ public class BattleWorldManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        nextSceneBtn.onClick.AddListener(() => SceneManager.LoadScene(SceneManager.ProductionScene));
     }
 
     void OnEnable()

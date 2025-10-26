@@ -4,7 +4,20 @@ using UnityEngine;
 // 该脚本用于直接挂载在场景中的GameObject上，方便调用一些测试功能
 public class GlobalTestFunction : MonoBehaviour
 {
-    private void Start() => DontDestroyOnLoad(gameObject);
+    public static GlobalTestFunction Instance;
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
     // /// <summary>
     // /// 创建一个战斗世界对象
     // /// </summary>

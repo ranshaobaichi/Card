@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.UI;
 public class SettlementCardManager : MonoBehaviour
 {
     public static SettlementCardManager Instance;
     public GameObject settlementCardSlotPrefab;
+    public Button exitButton;
 
     [Header("Settlement Card Panels")]
     [Header("Food")]
@@ -44,8 +46,9 @@ public class SettlementCardManager : MonoBehaviour
         CreaturePanel.onEndDrag += EndDraggingCreatureCard;
         BattleCardPanel.onEndDrag += EndDraggingBattleCard;
 
+        exitButton = GameObject.FindWithTag("ExitButton")?.GetComponent<Button>();
+        exitButton.onClick.AddListener(() => SceneManager.LoadScene(SceneManager.BattleScene));
         DealWithSettlementData();
-
         BattlePopulationText.text = $"{0}/{maxBattleCreatures}";
     }
 

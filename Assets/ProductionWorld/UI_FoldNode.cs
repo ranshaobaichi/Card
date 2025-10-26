@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FoldNode : MonoBehaviour
+public class UI_FoldNode : MonoBehaviour
 {
     public Button foldButton;
-    public List<GameObject> foldableItems;
+    public List<GameObject> foldableItems = new List<GameObject>();
     public bool isFolded;
 
     public void Start()
     {
-        if (foldButton == null) throw new System.Exception("FoldNode: foldButton is null");
+        isFolded = true;
         foldButton.onClick.AddListener(ChangeFoldState);
     }
 

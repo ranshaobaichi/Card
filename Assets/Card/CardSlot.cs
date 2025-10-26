@@ -361,6 +361,7 @@ public class CardSlot : MonoBehaviour
         // workloadEfficiency = 1.0f; // Example value, should be set based on actual logic
         if (this == movingCardSlot) return false;
 
+        // Debug.Log($"Attempting to begin production in CardSlot {cardSlotID} with {cards.Count} cards.");
         // First check whether has a valid recipe
         var result = CardManager.Instance.GetRecipe(cards);
         if (result.HasValue)
@@ -373,7 +374,7 @@ public class CardSlot : MonoBehaviour
         }
         else
         {
-            // Debug.Log("No matching recipe found.");
+            // Debug.Log($"No matching recipe found for CardSlot {cardSlotID}.");
         }
         return false;
     }

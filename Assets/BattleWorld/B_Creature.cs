@@ -125,10 +125,10 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         switch (damageType)
         {
             case Category.Battle.DamageType.Physical:
-                actualDamage -= curAttribute.armor;
+                actualDamage = damage * (1 - curAttribute.armor / 100f);
                 break;
             case Category.Battle.DamageType.Spell:
-                actualDamage -= curAttribute.spellResistance;
+                actualDamage = damage * (1 - curAttribute.spellResistance / 100f);
                 break;
             case Category.Battle.DamageType.TrueDamage:
                 break;
@@ -138,9 +138,9 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
         // Take damage
         actualDamage = Mathf.Max(actualDamage, 0);
-        Debug.Log($"{transform.name} actual damage taken: {actualDamage}");
         curAttribute.health -= actualDamage;
         curAttribute.health = Mathf.FloorToInt(curAttribute.health);
+        Debug.Log($"{transform.name} actual damage taken: {actualDamage}, health after: {curAttribute.health}");
 
         if (curAttribute.health <= 0)
         {
