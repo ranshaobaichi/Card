@@ -13,6 +13,11 @@ public class TimeManager : MonoBehaviour
     private Button pauseButton, speedUpButton;
     private int currentSpeedUpLevel = 0;
     private int[] speedUpLevel = new int[] { 1, 2, 3, 5 };
+    public float curGameTime
+    {
+        get => timeProgressBar.currentTime;
+        set => timeProgressBar.StartProgressBar(productionStateDuration, ChangeState, value);
+    }
 
     //TEST
     private Text timescalelevelText;

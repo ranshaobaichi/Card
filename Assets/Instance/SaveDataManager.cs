@@ -22,6 +22,7 @@ public class SaveDataManager : MonoBehaviour
     {
         public long curCardID;
         public long curCardSlotID;
+        public float curGameTime;
         public List<CardData> allCardData;
         public List<CardSlotData> allCardSlotData;
     }
@@ -107,6 +108,7 @@ public class SaveDataManager : MonoBehaviour
         {
             curCardID = CardManager.Instance.CurCardID,
             curCardSlotID = CardManager.Instance.CurCardSlotID,
+            curGameTime = TimeManager.Instance.curGameTime,
             allCardData = allCardData,
             allCardSlotData = allCardSlotData,
         };
@@ -120,6 +122,16 @@ public class SaveDataManager : MonoBehaviour
     public bool TryGetSaveData(string fileName, out SaveData saveData)
     {
         saveData = new SaveData();
+        if (fileName == InitialSaveDataFileName)
+        {
+            TextAsset initialSaveData = Resources.Load<TextAsset>($"{InitialSaveDataFileName}");
+            if (initialSaveData != null)
+            {
+                saveData = JsonUtility.FromJson<SaveData>(initialSaveData.text);
+                return true;
+            }
+        }
+        
         string path = System.IO.Path.Combine(Application.persistentDataPath, fileName);
         Debug.Log("Loading save data from path: " + path);
         if (!System.IO.File.Exists(path))

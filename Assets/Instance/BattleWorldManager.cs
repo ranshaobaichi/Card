@@ -1,13 +1,22 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Category;
 using Category.Battle;
 using UnityEngine;
 using UnityEngine.UI;
 
+[Serializable]
+public struct EnemyWaveData
+{
+    public CreatureCardType creatureType;
+    public AxialCoordinate spawnCoord;
+}
 public class BattleWorldManager : MonoBehaviour
 {
     public static BattleWorldManager Instance;
+    public static readonly string EnemyWavesResourcePath = "EnemyWaves/";
+    public static readonly string EnemyWavesResourceName = "EnemyWave";
     public GameObject BattleCreaturePrefab;
     public GameObject EquipmentSlotPrefab;
     public GameObject PreparationAreaContent;
@@ -83,19 +92,22 @@ public class BattleWorldManager : MonoBehaviour
     /// </summary>
     /// <param name="lineUp"></param>
     /// <param name="testCreatureCardType"></param>
-    public void AddObj(LineUp lineUp, CreatureCardType testCreatureCardType)
+    public B_Creature AddObj(LineUp lineUp, CreatureCardType testCreatureCardType)
     {
         var creatureGO = Instantiate(BattleCreaturePrefab, PreparationAreaContent.transform.position, Quaternion.identity, PreparationAreaContent.transform);
         var creature = creatureGO.GetComponent<B_Creature>();
+        var image = creatureGO.GetComponent<Image>();
         if (lineUp == LineUp.Player)
         {
             playerCreatures.Add(creature);
             PlayerTick += creature.Tick;
+            image.color = Color.blue;
         }
         else
         {
             enemyCreatures.Add(creature);
             EnemyTick += creature.Tick;
+            image.color = Color.red;
         }
 
         Card.CardDescription cardDescription = new Card.CardDescription
@@ -107,6 +119,7 @@ public class BattleWorldManager : MonoBehaviour
         creature.creatureAttribute = attr;
         creature.curAttribute = (CardAttributeDB.CreatureCardAttribute.BasicAttributes)attr.basicAttributes.Clone();
         creature.lineUp = lineUp;
+        return creature;
     }
 
     public void RemoveObj(B_Creature creature)
@@ -139,8 +152,59 @@ public class BattleWorldManager : MonoBehaviour
         playerCreatures.Add(creature);
         PlayerTick += creature.Tick;
 
-        creature.creatureAttribute = attr;
-        creature.curAttribute = (CardAttributeDB.CreatureCardAttribute.BasicAttributes)attr.basicAttributes.Clone();
-        creature.lineUp = LineUp.Player;
+        creature.Init(cardID, LineUp.Player);
+    }
+
+    public bool LoadBattleWave(int waveIdx)
+    {
+        string path = EnemyWavesResourcePath + EnemyWavesResourceName + '_' + waveIdx;
+        TextAsset waveDataAsset = Resources.Load<TextAsset>(path);
+        if (waveDataAsset == null)
+        {
+            Debug.LogError($"LoadBattleWave: 未找到敌人波次资源: {path}");
+            return false;
+        }
+
+        string[] lines = waveDataAsset.text.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        foreach (var line in lines)
+        {
+            EnemyWaveData data = JsonUtility.FromJson<EnemyWaveData>(line);
+            var creatureGO = AddObj(LineUp.Enemy, data.creatureType);
+            HexNodeManager.MoveObject(creatureGO, null, HexNodeManager.Instance.Tiles[data.spawnCoord]);
+        }
+        return true;
+    }
+
+    public void SaveCurBattleWave(int waveIdx)
+    {
+#if UNITY_EDITOR
+        string json = "";
+        foreach (var enemy in enemyCreatures)
+        {
+            EnemyWaveData data = new EnemyWaveData
+            {
+                creatureType = enemy.creatureAttribute.creatureCardType,
+                spawnCoord = enemy.hexNode.coord
+            };
+            string enemyJson = JsonUtility.ToJson(data);
+            json += enemyJson + "\n";
+        }
+
+        string resourcesDir = Path.Combine(Application.dataPath, "Resources", "EnemyWaves");
+        if (!Directory.Exists(resourcesDir))
+            Directory.CreateDirectory(resourcesDir);
+
+        string filename = $"{EnemyWavesResourceName}_{waveIdx}";
+        if (!filename.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+            filename += ".json";
+
+        string fullPath = Path.Combine(resourcesDir, filename);
+        File.WriteAllText(fullPath, json);
+        UnityEditor.AssetDatabase.Refresh();
+
+        Debug.Log($"Saved enemy wave to: {fullPath}");
+#else
+        Debug.LogWarning("SaveCurBattleWave: 仅在编辑器下将文件写入 Assets/Resources。运行时请使用 Application.persistentDataPath。");
+#endif
     }
 }

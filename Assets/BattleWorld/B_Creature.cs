@@ -35,6 +35,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         var attr = CardManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(cardID);
         creatureAttribute = attr;
         curAttribute = (BasicAttributes)creatureAttribute.basicAttributes.Clone();
+        Debug.Log("Attack Range: " + creatureAttribute.basicAttributes.attackRange + " Basic is " + curAttribute.attackRange);
     }
 
     public void Tick()

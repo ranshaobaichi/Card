@@ -3,7 +3,6 @@ using Category.Production;
 using Category;
 using System.Collections.Generic;
 using System;
-using UnityEditor.EditorTools;
 
 [CreateAssetMenu(fileName = "CardAttributeDB", menuName = "ScriptableObjects/CardAttributeDB")]
 public class CardAttributeDB : ScriptableObject

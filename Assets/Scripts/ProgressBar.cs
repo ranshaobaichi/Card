@@ -6,7 +6,7 @@ public class ProgressBar : MonoBehaviour
 {
     public Image fillImage;
     
-    private float currentTime = 0f;
+    public float currentTime = 0f;
     private bool isRunning = false;
     private float duration = 1f;
 
@@ -20,10 +20,11 @@ public class ProgressBar : MonoBehaviour
         fillImage.fillAmount = 0f; // Initialize the fill amount to 0
     }
 
-    public void StartProgressBar(float totalTime, Action onComplete)
+    public void StartProgressBar(float totalTime, Action onComplete, float curTime = 0f)
     {
         // 设置总持续时间
         ResetProgress(true);
+        currentTime = curTime;
         duration = totalTime > 0 ? totalTime : 1f;
         OnProgressComplete += onComplete;
     }

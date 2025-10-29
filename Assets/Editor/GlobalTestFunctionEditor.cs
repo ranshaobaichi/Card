@@ -8,18 +8,33 @@ public class GlobalTestFunctionEditor : Editor
     SerializedProperty lineUpProp;
     SerializedProperty battleCreatureCardTypeProp;
     SerializedProperty cardDescProp;
+    SerializedProperty waveIndexToAddProp;
+    SerializedProperty waveIndexToLoadProp;
 
     void OnEnable()
     {
         lineUpProp = serializedObject.FindProperty("lineUp");
         battleCreatureCardTypeProp = serializedObject.FindProperty("creatureCardType");
         cardDescProp = serializedObject.FindProperty("cardDescription");
+        waveIndexToAddProp = serializedObject.FindProperty("waveIndexToAdd");
+        waveIndexToLoadProp = serializedObject.FindProperty("waveIndexToLoad");
     }
 
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
         var globalTestFunc = target as GlobalTestFunction;
+
+        ///
+        GUI.enabled = true;
+        EditorGUILayout.LabelField("生产世界卡牌", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(cardDescProp, new GUIContent("卡牌种类"));
+        GUI.enabled = EditorApplication.isPlaying && SceneManager.currentScene == SceneManager.ProductionScene;
+        if (GUILayout.Button("创建 生产世界 卡牌"))
+        {
+            globalTestFunc.CreateProductionWorldObj();
+        }
+        EditorGUILayout.Space();
 
         ///
         GUI.enabled = true;
@@ -35,12 +50,26 @@ public class GlobalTestFunctionEditor : Editor
 
         ///
         GUI.enabled = true;
-        EditorGUILayout.LabelField("生产世界卡牌", EditorStyles.boldLabel);
-        EditorGUILayout.PropertyField(cardDescProp, new GUIContent("卡牌种类"));
-        GUI.enabled = EditorApplication.isPlaying && SceneManager.currentScene == SceneManager.ProductionScene;
-        if (GUILayout.Button("创建 生产世界 卡牌"))
+        EditorGUILayout.LabelField("保存当前场上敌人信息作为配置", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(waveIndexToAddProp, new GUIContent("第几波次"));
+        GUI.enabled = EditorApplication.isPlaying && SceneManager.currentScene == SceneManager.BattleScene;
+        if (GUILayout.Button("创建 敌人波次"))
         {
-            globalTestFunc.CreateProductionWorldObj();
+            globalTestFunc.CreateEnemyWave();
+        }
+        EditorGUILayout.Space();
+
+        ///
+        GUI.enabled = true;
+        EditorGUILayout.LabelField("加载敌人波次配置", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(waveIndexToLoadProp, new GUIContent("第几波次"));
+        GUI.enabled = EditorApplication.isPlaying && SceneManager.currentScene == SceneManager.BattleScene;
+        if (GUILayout.Button("加载 敌人波次"))
+        {
+            if (!globalTestFunc.LoadEnemyWave())
+            {
+                Debug.LogError("加载敌人波次失败");
+            }
         }
         EditorGUILayout.Space();
 

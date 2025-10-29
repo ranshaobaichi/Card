@@ -148,6 +148,9 @@ public class CardManager : MonoBehaviour
         // Init MainUI
         MainUIManager mainUIManager = FindObjectOfType<MainUIManager>();
         mainUIManager.InitMainUI();
+
+        // Init timeManager
+        TimeManager.Instance.curGameTime = saveData.curGameTime;
     }
 
     /// <summary>

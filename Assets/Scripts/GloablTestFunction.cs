@@ -29,6 +29,24 @@ public class GlobalTestFunction : MonoBehaviour
     }
 
     /// <summary>
+    /// 创建一个敌人波次
+    /// </summary>
+    [SerializeField] public int waveIndexToAdd;
+    public void CreateEnemyWave()
+    {
+        FindAnyObjectByType<BattleWorldManager>().SaveCurBattleWave(waveIndexToAdd);
+    }
+
+    /// <summary>
+    /// 加载一个敌人波次
+    /// </summary>
+    [SerializeField] public int waveIndexToLoad;
+    public bool LoadEnemyWave()
+    {
+        return FindAnyObjectByType<BattleWorldManager>().LoadBattleWave(waveIndexToLoad);
+    }
+
+    /// <summary>
     /// 创建一个生产世界的卡牌
     /// </summary>
     [SerializeField] public Card.CardDescription cardDescription;
