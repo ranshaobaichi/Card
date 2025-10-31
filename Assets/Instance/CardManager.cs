@@ -399,6 +399,12 @@ public class CardManager : MonoBehaviour
                     var dbAttr = DataBaseManager.Instance.GetCardAttribute<ResourceCardAttribute>(card.cardDescription);
                     resourceCardAttributes[card.cardID] = dbAttr?.Clone() as ResourceCardAttribute;
                 }
+
+                if (DataBaseManager.Instance.IsEquipmentCard(card.cardDescription.resourceCardType))
+                {
+                    var equipmentAttr = DataBaseManager.Instance.GetEquipmentCardAttribute(card.cardDescription.resourceCardType);
+                    equipmentCardAttributes[card.cardID] = equipmentAttr?.Clone() as EquipmentCardAttribute;
+                }
                 break;
             case CardType.Events:
                 Debug.Log("Event Card has no attributes to add.");
@@ -445,6 +451,16 @@ public class CardManager : MonoBehaviour
             return v as T;
         }
 
+        if (typeof(T) == typeof(EquipmentCardAttribute))
+        {
+            if (!equipmentCardAttributes.TryGetValue(cardID, out var v))
+            {
+                Debug.LogWarning($"CardManager: No EquipmentCardAttribute for cardID={cardID}");
+                return null;
+            }
+            return v as T;
+        }
+
         Debug.LogWarning($"CardManager.GetCardAttribute<{typeof(T).Name}> unsupported type.");
         return null;
     }
@@ -460,6 +476,10 @@ public class CardManager : MonoBehaviour
     Dictionary<long, ResourceCardAttribute> resourceCardAttributes = new Dictionary<long, ResourceCardAttribute>();
     public IReadOnlyDictionary<long, ResourceCardAttribute> GetResourceCardAttributes()
         => resourceCardAttributes;
+    
+    Dictionary<long, CardAttributeDB.EquipmentCardAttribute> equipmentCardAttributes = new Dictionary<long, CardAttributeDB.EquipmentCardAttribute>();
+    public IReadOnlyDictionary<long, CardAttributeDB.EquipmentCardAttribute> GetEquipmentCardAttributes()
+        => equipmentCardAttributes;
     # endregion
 
     # region 生物卡

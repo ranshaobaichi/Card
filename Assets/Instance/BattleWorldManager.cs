@@ -19,6 +19,7 @@ public class BattleWorldManager : MonoBehaviour
     public static readonly string EnemyWavesResourceName = "EnemyWave";
     public GameObject BattleCreaturePrefab;
     public GameObject EquipmentSlotPrefab;
+    public GameObject EquipmentPrefab;
     public GameObject PreparationAreaContent;
     public GameObject EquipmentAreaContent;
     public RectTransform CreatureScrollView;
@@ -32,61 +33,8 @@ public class BattleWorldManager : MonoBehaviour
     public event Action NormalActions;
     public event Action DamageActions;
 
-    // TEST
+    #region TEST_FUNCTIONS_AND_DATA
     public Button nextSceneBtn;
-
-    void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-        nextSceneBtn.onClick.AddListener(() => SceneManager.LoadScene(SceneManager.ProductionScene));
-    }
-
-    void OnEnable()
-    {
-        foreach (var id in CardManager.Instance.battleSceneCreatureCardIDs)
-        {
-            Debug.Log($"BattleWorldManager adding battle object with card ID: {id}");
-            AddBattleObject(id);
-        }
-
-        foreach (var (id, attr) in CardManager.Instance.GetResourceCardAttributes())
-            if (attr.resourceClassification == ResourceCardClassification.Equipment)
-            {
-                var equipmentSlot = Instantiate(EquipmentSlotPrefab, EquipmentAreaContent.transform);
-                var equipment = equipmentSlot.GetComponentInChildren<B_Equipment>();
-                equipments.Add(equipment);
-            }
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            InvokeTick();
-        }
-    }
-
-    public void InvokeTick()
-    {
-        Debug.Log("BattleWorldManager Invoke Tick");
-        PlayerTick?.Invoke();
-        EnemyTick?.Invoke();
-
-        NormalActions?.Invoke();
-        DamageActions?.Invoke();
-
-        NormalActions = null;
-        DamageActions = null;
-        Debug.Log("BattleWorldManager Tick End");
-    }
-
     /// <summary>
     /// TEST FUNCTION, create a tmp battle creature which will not be saved
     /// </summary>
@@ -122,6 +70,74 @@ public class BattleWorldManager : MonoBehaviour
         return creature;
     }
 
+    public B_Equipment AddEquipment(ResourceCardType equipmentCardType)
+    {
+        if (!DataBaseManager.Instance.IsEquipmentCard(equipmentCardType))
+        {
+            Debug.LogWarning($"BattleWorldManager: ResourceCardType {equipmentCardType} is not an equipment card.");
+            return null;
+        }
+        var equipmentSlot = Instantiate(EquipmentSlotPrefab, EquipmentAreaContent.transform);
+        var equipment = Instantiate(EquipmentPrefab, equipmentSlot.transform).GetComponent<B_Equipment>();
+        var attr = DataBaseManager.Instance.GetEquipmentCardAttribute(equipmentCardType);
+        equipment.equipmentAttribute = attr;
+        equipment.cardID = -1;
+        equipments.Add(equipment);
+        equipment.equipmentSlot = equipmentSlot;
+        return equipment;
+    }
+    #endregion
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        nextSceneBtn.onClick.AddListener(() => SceneManager.LoadScene(SceneManager.ProductionScene));
+    }
+
+    void OnEnable()
+    {
+        foreach (var id in CardManager.Instance.battleSceneCreatureCardIDs)
+        {
+            Debug.Log($"BattleWorldManager adding battle object with card ID: {id}");
+            AddBattleObject(id);
+        }
+
+        foreach (var (id, attr) in CardManager.Instance.GetResourceCardAttributes())
+            if (attr.resourceClassification == ResourceCardClassification.Equipment)
+            {
+                AddBattleEquipment(id);
+            }
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            InvokeTick();
+        }
+    }
+
+    public void InvokeTick()
+    {
+        Debug.Log("BattleWorldManager Invoke Tick");
+        PlayerTick?.Invoke();
+        EnemyTick?.Invoke();
+
+        NormalActions?.Invoke();
+        DamageActions?.Invoke();
+
+        NormalActions = null;
+        DamageActions = null;
+        Debug.Log("BattleWorldManager Tick End");
+    }
+
     public void RemoveObj(B_Creature creature)
     {
         if (creature.lineUp == LineUp.Player)
@@ -153,6 +169,26 @@ public class BattleWorldManager : MonoBehaviour
         PlayerTick += creature.Tick;
 
         creature.Init(cardID, LineUp.Player);
+    }
+
+    public B_Equipment AddBattleEquipment(long cardID)
+    {
+        var equipmentSlot = Instantiate(EquipmentSlotPrefab, EquipmentAreaContent.transform);
+        var equipment = Instantiate(EquipmentPrefab, equipmentSlot.transform).GetComponent<B_Equipment>();
+        equipment.Init(cardID, equipmentSlot);
+        equipments.Add(equipment);
+        return equipment;
+    }
+
+    /// <summary>
+    /// Add a equipment to battle equipment area, which has been added to equipment list
+    /// </summary>
+    /// <param name="equipment"></param>
+    public void AddBattleEquipment(B_Equipment equipment)
+    {
+        var equipmentSlot = Instantiate(EquipmentSlotPrefab, EquipmentAreaContent.transform);
+        equipment.transform.SetParent(equipmentSlot.transform, false);
+        equipment.equipmentSlot = equipmentSlot;
     }
 
     public bool LoadBattleWave(int waveIdx)

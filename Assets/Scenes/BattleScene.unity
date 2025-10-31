@@ -5371,6 +5371,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BattleCreaturePrefab: {fileID: 1199791827373344116, guid: 05c4834bafe4b344d803997c251f6591, type: 3}
   EquipmentSlotPrefab: {fileID: 6221691911723569928, guid: ca4b1615680ffce4cb0c4ada5ac467d4, type: 3}
+  EquipmentPrefab: {fileID: 6756289515493849289, guid: 97054cd9281b1f44296eb87f92e83f33, type: 3}
   PreparationAreaContent: {fileID: 1271133595}
   EquipmentAreaContent: {fileID: 728484167}
   CreatureScrollView: {fileID: 553212414}
@@ -9330,7 +9331,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -10844,7 +10845,7 @@ GameObject:
   - component: {fileID: 2113928559}
   m_Layer: 5
   m_Name: Viewport
-  m_TagString: Untagged
+  m_TagString: EquipmentArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

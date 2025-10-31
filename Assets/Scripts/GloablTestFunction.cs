@@ -29,6 +29,15 @@ public class GlobalTestFunction : MonoBehaviour
     }
 
     /// <summary>
+    /// 创建一个战斗装备对象
+    /// </summary>
+    [SerializeField] public EquipmentCardType equipmentCardType;
+    public void CreateBattleEquipmentObj()
+    {
+        FindAnyObjectByType<BattleWorldManager>().AddEquipment(equipmentCardType);
+    }
+
+    /// <summary>
     /// 创建一个敌人波次
     /// </summary>
     [SerializeField] public int waveIndexToAdd;

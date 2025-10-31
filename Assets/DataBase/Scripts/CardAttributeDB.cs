@@ -143,10 +143,57 @@ public class CardAttributeDB : ScriptableObject
             };
         }
     }
+
+    [Serializable]
+    public class EquipmentCardAttribute : System.ICloneable
+    {
+        public struct EquipmentBasicAttributesBonus : System.ICloneable
+        {
+            public float health; // 生命值
+            public float attackPower; // 攻击力
+            public float spellPower; // 法术强度
+            public Category.Battle.DamageType normalAttackDamageType; // 普通攻击伤害类型
+            public float armor; // 护甲值
+            public float spellResistance; // 魔法抗性
+            public int moveSpeed; // 移动速度
+            public float dodgeRate; // 闪避率
+            public int attackSpeed; // 攻击速度
+            public int attackRange; // 攻击距离
+
+            public object Clone()
+            {
+                return new EquipmentBasicAttributesBonus
+                {
+                    health = this.health,
+                    attackPower = this.attackPower,
+                    spellPower = this.spellPower,
+                    normalAttackDamageType = this.normalAttackDamageType,
+                    armor = this.armor,
+                    spellResistance = this.spellResistance,
+                    moveSpeed = this.moveSpeed,
+                    dodgeRate = this.dodgeRate,
+                    attackSpeed = this.attackSpeed,
+                    attackRange = this.attackRange
+                };
+            }
+            // public string attackEffect; // 攻击特效
+        }
+        public ResourceCardType equipmentCardType;
+        public EquipmentBasicAttributesBonus basicAttributesBonus;
+        public object Clone()
+        {
+            return new EquipmentCardAttribute
+            {
+                equipmentCardType = this.equipmentCardType,
+                basicAttributesBonus = (EquipmentBasicAttributesBonus)this.basicAttributesBonus.Clone()
+            };
+        }
+    }
+
     #endregion
 
-    # region 实际存储数据列表
-    
+    #region 实际存储数据列表
+
     [Header("不同工作类型的效率值设置")]
     [Header("依次为：None, Frenzy, Fast, Normal, Slow, VerySlow")]
     public List<float> workEfficiencyValues = new List<float>
@@ -161,12 +208,15 @@ public class CardAttributeDB : ScriptableObject
     // public List<Sprite> creatureCardIcons;
     // public List<Sprite> resourceCardIcons;
     // public List<Sprite> eventCardIcons;
+    [Header("装备卡属性列表")]
+    public List<EquipmentCardAttribute> equipmentCardAttributes;
     #endregion
 
     # region 辅助字典
     public Dictionary<WorkEfficiencyType, float> workEfficiencyValuesDict = null;
     public Dictionary<CreatureCardType, CreatureCardAttribute> creatureCardAttributesDict = null;
     public Dictionary<ResourceCardType, ResourceCardAttribute> resourceCardAttributesDict = null;
+    public Dictionary<ResourceCardType, EquipmentCardAttribute> equipmentCardAttributesDict = null;
     public Dictionary<CardType, Dictionary<int, Sprite>> cardIcons = new Dictionary<CardType, Dictionary<int, Sprite>>();
     # endregion
 
@@ -194,6 +244,15 @@ public class CardAttributeDB : ScriptableObject
         foreach (var attr in resourceCardAttributes)
         {
             resourceCardAttributesDict[attr.resourceCardType] = attr;
+        }
+    }
+
+    private void InitializeEquipmentCardAttributesDict()
+    {
+        equipmentCardAttributesDict = new Dictionary<ResourceCardType, EquipmentCardAttribute>();
+        foreach (var attr in equipmentCardAttributes)
+        {
+            equipmentCardAttributesDict[attr.equipmentCardType] = attr;
         }
     }
 
@@ -245,6 +304,7 @@ public class CardAttributeDB : ScriptableObject
         InitializeCreatureCardAttributesDict();
         InitializeResourceCardAttributesDict();
         // InitializeCardIcons();
+        InitializeEquipmentCardAttributesDict();
     }
     public T GetCardAttribute<T>(Card.CardDescription cardDescription)
     {
@@ -270,6 +330,26 @@ public class CardAttributeDB : ScriptableObject
         return default;
     }
 
+    public bool IsEquipmentCard(ResourceCardType resourceCardType)
+    {
+        return resourceCardAttributesDict.TryGetValue(resourceCardType, out var resourceAttr) &&
+               resourceAttr.resourceClassification == ResourceCardClassification.Equipment;
+    }
+    public EquipmentCardAttribute GetEquipmentCardAttribute(ResourceCardType equipmentCardType)
+    {
+        if (!IsEquipmentCard(equipmentCardType))
+        {
+            Debug.LogWarning($"CardAttributeDB: ResourceCardType {equipmentCardType} is not an equipment card.");
+            return null;
+        }
+        if (equipmentCardAttributesDict.TryGetValue(equipmentCardType, out var equipmentAttr))
+        {
+            return equipmentAttr;
+        }
+        Debug.LogWarning($"CardAttributeDB: No attributes found for EquipmentCardType {equipmentCardType}");
+        return null;
+    }
+
     public float GetWorkEfficiencyValue(WorkEfficiencyType workEfficiencyType)
     {
         return workEfficiencyValuesDict.ContainsKey(workEfficiencyType) ?
@@ -277,19 +357,17 @@ public class CardAttributeDB : ScriptableObject
             0.0f;
     }
 
-    public bool TryGetCardIcon(Card.CardDescription cardDescription, out Sprite icon)
-    {
-        icon = null;
-        return cardIcons.TryGetValue(cardDescription.cardType, out var typeDict) && typeDict.TryGetValue(
-            cardDescription.cardType switch
-            {
-                CardType.Creatures => (int)cardDescription.creatureCardType,
-                CardType.Resources => (int)cardDescription.resourceCardType,
-                CardType.Events => (int)cardDescription.eventCardType,
-                _ => -1,
-            }, out icon);
-    }
-
-
+    // public bool TryGetCardIcon(Card.CardDescription cardDescription, out Sprite icon)
+    // {
+    //     icon = null;
+    //     return cardIcons.TryGetValue(cardDescription.cardType, out var typeDict) && typeDict.TryGetValue(
+    //         cardDescription.cardType switch
+    //         {
+    //             CardType.Creatures => (int)cardDescription.creatureCardType,
+    //             CardType.Resources => (int)cardDescription.resourceCardType,
+    //             CardType.Events => (int)cardDescription.eventCardType,
+    //             _ => -1,
+    //         }, out icon);
+    // }
     #endregion
 }

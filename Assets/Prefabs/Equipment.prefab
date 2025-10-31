@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6221691911723569928
+--- !u!1 &6756289515493849289
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,24 +8,24 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7788537143523607621}
-  - component: {fileID: 6199496425570282749}
-  - component: {fileID: 5127456914415082857}
-  - component: {fileID: 8477585145015012620}
+  - component: {fileID: 7109964544382412712}
+  - component: {fileID: 9025959209108073413}
+  - component: {fileID: 9169772848863338485}
+  - component: {fileID: 7466750581099935330}
   m_Layer: 5
-  m_Name: EquipmentSlot
+  m_Name: Equipment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &7788537143523607621
+--- !u!224 &7109964544382412712
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6221691911723569928}
+  m_GameObject: {fileID: 6756289515493849289}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -36,37 +36,37 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 88, y: 88}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &6199496425570282749
+--- !u!222 &9025959209108073413
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6221691911723569928}
+  m_GameObject: {fileID: 6756289515493849289}
   m_CullTransparentMesh: 1
---- !u!114 &5127456914415082857
+--- !u!114 &9169772848863338485
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6221691911723569928}
+  m_GameObject: {fileID: 6756289515493849289}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.735849, g: 0.735849, b: 0.735849, a: 0.42745098}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f2aad89a3f9717c439ce995a09dca9a6, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -76,27 +76,39 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8477585145015012620
+--- !u!114 &7466750581099935330
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6221691911723569928}
+  m_GameObject: {fileID: 6756289515493849289}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Script: {fileID: 11500000, guid: c73422fcfb5a1b440897ac8c14b6691e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 4
-  m_StartCorner: 0
-  m_StartAxis: 0
-  m_CellSize: {x: 80, y: 80}
-  m_Spacing: {x: 0, y: 0}
-  m_Constraint: 0
-  m_ConstraintCount: 2
+  image: {fileID: 9169772848863338485}
+  equipmentAttribute:
+    equipmentCardType: 0
+    basicAttributesBonus:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 0
+        exploreWorkEfficiency: 0
+        interactWorkEfficiency: 0
+      EXP: 0
+      level: 0
+      satiety: 0
+      health: 0
+      attackPower: 0
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 0
+      spellResistance: 0
+      moveSpeed: 0
+      dodgeRate: 0
+      attackSpeed: 0
+      attackRange: 0
+      dropItem: []
+  equipmentSlot: {fileID: 0}
+  ownerCreature: {fileID: 0}

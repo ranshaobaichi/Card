@@ -45,9 +45,12 @@ public class DataBaseManager : MonoBehaviour
     //     => cardAttributeDB.GetDurability(cardType);
     // public int GetSatietyValue(ResourceCardType cardType)
     //     => cardAttributeDB.GetSatietyValue(cardType);
-
     public T GetCardAttribute<T>(Card.CardDescription cardDescription) where T : class
         => cardAttributeDB.GetCardAttribute<T>(cardDescription);
+    public CardAttributeDB.EquipmentCardAttribute GetEquipmentCardAttribute(ResourceCardType equipmentCardType)
+        => cardAttributeDB.GetEquipmentCardAttribute(equipmentCardType);
+    public bool IsEquipmentCard(ResourceCardType resourceCardType)
+        => cardAttributeDB.IsEquipmentCard(resourceCardType);
 
     #endregion
 
@@ -57,5 +60,4 @@ public class DataBaseManager : MonoBehaviour
         => eventCardUIDB.TryGetEventCardUIPrefab(eventCardType, out prefab);
 
     #endregion
-
 }

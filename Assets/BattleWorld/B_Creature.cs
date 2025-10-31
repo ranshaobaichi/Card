@@ -11,6 +11,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
     // 引用
     public HexNode hexNode;
+    public Transform equiptmentSlot;
 
     // 属性
     public long cardID;
@@ -19,6 +20,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     [HideInInspector] public CardAttributeDB.CreatureCardAttribute creatureAttribute;
     public BasicAttributes curAttribute;
     public LineUp lineUp;
+    public B_Equipment equipment;
 
     private Vector2 oriPosition;
     private GameObject oriParent;
@@ -179,6 +181,16 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             creatureAttribute.basicAttributes.attackRange += creatureAttribute.levelUpAttributes.attackRangeGrowth;
             Debug.Log($"{transform.name} leveled up to level {creatureAttribute.basicAttributes.level}!");
         }
+    }
+
+    public void RemoveEquipment()
+    {
+        equipment = null;
+    }
+
+    public void Equip(B_Equipment equipment)
+    {
+        this.equipment = equipment;
     }
 
     # region DragAndDrop

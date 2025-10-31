@@ -10,6 +10,7 @@ public class GlobalTestFunctionEditor : Editor
     SerializedProperty cardDescProp;
     SerializedProperty waveIndexToAddProp;
     SerializedProperty waveIndexToLoadProp;
+    SerializedProperty equipmentCardTypeProp;
 
     void OnEnable()
     {
@@ -18,6 +19,7 @@ public class GlobalTestFunctionEditor : Editor
         cardDescProp = serializedObject.FindProperty("cardDescription");
         waveIndexToAddProp = serializedObject.FindProperty("waveIndexToAdd");
         waveIndexToLoadProp = serializedObject.FindProperty("waveIndexToLoad");
+        equipmentCardTypeProp = serializedObject.FindProperty("equipmentCardType");
     }
 
     public override void OnInspectorGUI()
@@ -45,6 +47,17 @@ public class GlobalTestFunctionEditor : Editor
         if (GUILayout.Button("创建 战斗世界 对象"))
         {
             globalTestFunc.CreateBattleWorldObj();
+        }
+        EditorGUILayout.Space();
+
+        ///
+        GUI.enabled = true;
+        EditorGUILayout.LabelField("战斗世界装备卡牌", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(equipmentCardTypeProp, new GUIContent("装备卡牌类型"));
+        GUI.enabled = EditorApplication.isPlaying && SceneManager.currentScene == SceneManager.BattleScene;
+        if (GUILayout.Button("创建 战斗世界 装备"))
+        {
+            globalTestFunc.CreateBattleEquipmentObj();
         }
         EditorGUILayout.Space();
 
