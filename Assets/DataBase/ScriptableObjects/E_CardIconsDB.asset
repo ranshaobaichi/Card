@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fc856697d0b9d44b8b9736e10262007, type: 3}
+  m_Name: E_CardIconsDB
+  m_EditorClassIdentifier: 
+  cardIconAttributes:
+  - cardType: 2
+    resourceCardClassification: 0
+    type: {fileID: 21300000, guid: 57aa6dcc695d68c46b78d28c357ddae8, type: 3}
+    background: {fileID: 21300000, guid: c00d48641269eb9468011f5c8e5e744e, type: 3}
+    top: {fileID: 21300000, guid: 526340993a3ae964bb0cd0082258388e, type: 3}
+    illustration: {fileID: 0}
+    bottom: {fileID: 21300000, guid: a7614537c9af52046b4cc49ee7592616, type: 3}
+    side: {fileID: 21300000, guid: af945f8978bf72c4890341e6e208e2aa, type: 3}
+  - cardType: 3
+    resourceCardClassification: 0
+    type: {fileID: 21300000, guid: 8a2b2af461580be4881d920d95e730a2, type: 3}
+    background: {fileID: 21300000, guid: dd935ae8f066bbb4fb868af82f5e1326, type: 3}
+    top: {fileID: 21300000, guid: 0bfc37f373c2f1847aff740a68749802, type: 3}
+    illustration: {fileID: 0}
+    bottom: {fileID: 21300000, guid: c4ac722eae2edce468ab40c3dc72f6f2, type: 3}
+    side: {fileID: 21300000, guid: 54ad9477fb9841740af2c3d0e0b5e7e9, type: 3}
+  - cardType: 1
+    resourceCardClassification: 1
+    type: {fileID: 21300000, guid: 3e1366b8b014e1548a7307b52126f4da, type: 3}
+    background: {fileID: 21300000, guid: cf231e368acf1fb449c4e96c0c8a1961, type: 3}
+    top: {fileID: 21300000, guid: 2beb068028485da4f9d35cff0db2f6fa, type: 3}
+    illustration: {fileID: 0}
+    bottom: {fileID: 21300000, guid: 7d1bb2af3a0dcd94da16b8e81fd667d0, type: 3}
+    side: {fileID: 21300000, guid: 0e8bb9d837742d1478c4fa93ab658b5b, type: 3}
+  - cardType: 1
+    resourceCardClassification: 4
+    type: {fileID: 21300000, guid: 3e1366b8b014e1548a7307b52126f4da, type: 3}
+    background: {fileID: 21300000, guid: cf231e368acf1fb449c4e96c0c8a1961, type: 3}
+    top: {fileID: 21300000, guid: 2beb068028485da4f9d35cff0db2f6fa, type: 3}
+    illustration: {fileID: 0}
+    bottom: {fileID: 21300000, guid: cea4d39f9f8ba244bbef6bbb77071b36, type: 3}
+    side: {fileID: 21300000, guid: 0e8bb9d837742d1478c4fa93ab658b5b, type: 3}
+  - cardType: 1
+    resourceCardClassification: 3
+    type: {fileID: 21300000, guid: c447d8e91e999e2448014dd2ba7422f8, type: 3}
+    background: {fileID: 21300000, guid: 6b08f9440c05ba745a8f40fcaaa60e6b, type: 3}
+    top: {fileID: 21300000, guid: 40c5a5fb758a3ac44bf249e689370683, type: 3}
+    illustration: {fileID: 0}
+    bottom: {fileID: 21300000, guid: 8e71e3a9f9d267949b7ea4a165cefacc, type: 3}
+    side: {fileID: 21300000, guid: e6a72cff600bb004f841206599692b7b, type: 3}
+  - cardType: 1
+    resourceCardClassification: 2
+    type: {fileID: 21300000, guid: a2b3e5093888074499a8cc37d7283cad, type: 3}
+    background: {fileID: 21300000, guid: 285ac1054dc1f55458b5794a5b946e27, type: 3}
+    top: {fileID: 21300000, guid: e86548cb40f02cc42a5218ae975bb0b5, type: 3}
+    illustration: {fileID: 0}
+    bottom: {fileID: 21300000, guid: df89137f3057eb5419afe782b9ab868f, type: 3}
+    side: {fileID: 21300000, guid: 9257f11516cabf54094b5e93bc337793, type: 3}

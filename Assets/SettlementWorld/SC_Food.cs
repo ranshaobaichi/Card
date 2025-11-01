@@ -1,7 +1,6 @@
-using System.Reflection;
-using Unity.VisualScripting;
 using static CardAttributeDB;
 using UnityEngine;
+using UnityEngine.UI;
 
 class SC_Food : SettlementCard
 {
@@ -10,8 +9,11 @@ class SC_Food : SettlementCard
     public override void InitCard(long cardID)
     {
         this.cardID = cardID;
+        satietyText.transform.parent.gameObject.SetActive(false);
         resourceAttribute = CardManager.Instance.GetCardAttribute<ResourceCardAttribute>(cardID);
-        text.text = $"{satietyValue}";
+        foodValueText.text = $"{satietyValue}";
+        nameText.text = resourceAttribute.resourceCardType.ToString();
+        SetCardImage();
     }
     public bool TryConsumeFood(int amount)
     {
@@ -22,7 +24,7 @@ class SC_Food : SettlementCard
         }
         // Reduce the satiety value
         resourceAttribute.satietyValue -= amount;
-        text.text = $"{resourceAttribute.satietyValue}";
+        nameText.text = $"{resourceAttribute.satietyValue}";
         if (resourceAttribute.satietyValue <= 0)
         {
             // Handle food depletion (e.g., remove card from panel)

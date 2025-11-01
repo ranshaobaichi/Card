@@ -61,6 +61,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     [Header("卡牌设置")]
     public CardDescription cardDescription;
     public Card preCardBeforeDrag;
+    public Text foodText;
     [Tooltip("是否可以被拖动")] public bool canBeDragged;
     [Tooltip("是否可以被放置")] public bool canBePlaced;
     [Tooltip("是否可以放置在其他卡牌上")] public bool canPlaceOnCard;
@@ -84,6 +85,10 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     }
     public long cardID;
     protected bool isMoving;
+
+    [Header("卡牌图像列表 - 顺序为：类型、背景、顶部装饰、立绘、底部装饰、侧边装饰")]
+    public List<Image> cardImages;
+
 
     public void SetCardType(CardDescription description) => cardDescription = description;
     public string GetCardTypeString() => cardDescription.ToString();

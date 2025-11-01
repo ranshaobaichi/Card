@@ -154,11 +154,20 @@ namespace Category
 
         [Serializable]
         public enum DamageType
-
         {
             Physical,
             Spell,
             TrueDamage
+        }
+
+        [Serializable]
+        public enum Trait
+        {
+            Trait1,
+            Trait2,
+            Trait3,
+            Trait4,
+            Trait5,
         }
     }
 }

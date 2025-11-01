@@ -13,10 +13,11 @@ public class CardManager : MonoBehaviour
     public GameObject cardSlotPrefab;
     public Transform cardSlotSet;
     public Canvas canvas;
+    public CardIconsDB cardIconsDB;
     public Dictionary<CardType, List<Card>> allCards = new Dictionary<CardType, List<Card>>();
     public Dictionary<long, CardSlot> allCardSlots = new Dictionary<long, CardSlot>();
-    public event Action<Card> onCardCreated;
-    public event Action<Card> onCardDeleted;
+    [HideInInspector] public event Action<Card> onCardCreated;
+    [HideInInspector] public event Action<Card> onCardDeleted;
 
     private void Awake()
     {
@@ -39,14 +40,6 @@ public class CardManager : MonoBehaviour
         {
             if (cardType == CardType.None) continue;
             allCards[cardType] = new List<Card>();
-        }
-
-        // TEST FUNCTION: 添加场上已有卡牌到管理器
-        foreach (var card in FindObjectsByType<Card>(sortMode: FindObjectsSortMode.None))
-        {
-            allCards[card.cardDescription.cardType].Add(card);
-            card.cardID = GetCardIdentityID();
-            AddCardAttribute(card);
         }
 
         SceneManager.AfterSceneChanged += OnSceneChanged;
@@ -111,6 +104,9 @@ public class CardManager : MonoBehaviour
         // Set all identity IDs
         CurCardID = saveData.curCardID;
         CurCardSlotID = saveData.curCardSlotID;
+
+        // Init CardIconsDB
+        cardIconsDB.Initialize();
 
         // first create all cards
         foreach (var cardData in saveData.allCardData)
@@ -234,6 +230,29 @@ public class CardManager : MonoBehaviour
         // Add to manager
         allCards[newCard.cardDescription.cardType].Add(newCard);
         AddCardAttribute(newCard, attribute);
+
+        // Set the card images
+        ResourceCardClassification resourceClassification = cardDescription.cardType == CardType.Resources ? GetCardAttribute<ResourceCardAttribute>(cardID).resourceClassification : ResourceCardClassification.None;
+        var succ = TryGetCardIconAttribute(cardDescription.cardType, out var cardIconAttrribute, resourceClassification);
+        if (succ)
+        {
+            newCard.cardImages[0].sprite = cardIconAttrribute.type;
+            newCard.cardImages[1].sprite = cardIconAttrribute.background;
+            newCard.cardImages[2].sprite = cardIconAttrribute.top;
+            newCard.cardImages[3].sprite = cardIconAttrribute.illustration;
+            newCard.cardImages[4].sprite = cardIconAttrribute.bottom;
+            newCard.cardImages[5].sprite = cardIconAttrribute.side;
+            if (resourceClassification == ResourceCardClassification.Food)
+            {
+                newCard.foodText.text = GetCardAttribute<ResourceCardAttribute>(cardID).satietyValue.ToString();
+            }
+        }
+        else
+        {
+            Debug.LogError($"Card icon attribute not found for card ID {cardID} of type {cardDescription}");
+        }
+        
+
 
         onCardCreated?.Invoke(newCard);
         return newCard;
@@ -473,11 +492,11 @@ public class CardManager : MonoBehaviour
         => card ? GetCardAttribute<T>(card.cardID) : null;
 
     #region 资源卡
-    Dictionary<long, ResourceCardAttribute> resourceCardAttributes = new Dictionary<long, ResourceCardAttribute>();
+    private Dictionary<long, ResourceCardAttribute> resourceCardAttributes = new Dictionary<long, ResourceCardAttribute>();
     public IReadOnlyDictionary<long, ResourceCardAttribute> GetResourceCardAttributes()
         => resourceCardAttributes;
     
-    Dictionary<long, CardAttributeDB.EquipmentCardAttribute> equipmentCardAttributes = new Dictionary<long, CardAttributeDB.EquipmentCardAttribute>();
+    private Dictionary<long, CardAttributeDB.EquipmentCardAttribute> equipmentCardAttributes = new Dictionary<long, CardAttributeDB.EquipmentCardAttribute>();
     public IReadOnlyDictionary<long, CardAttributeDB.EquipmentCardAttribute> GetEquipmentCardAttributes()
         => equipmentCardAttributes;
     # endregion
@@ -505,9 +524,14 @@ public class CardManager : MonoBehaviour
     #region 事件卡
     #endregion
 
+    #region 卡牌图标
+    public bool TryGetCardIconAttribute(CardType cardType, out CardIconsDB.CardIconAttribute attribute, ResourceCardClassification resourceCardClassification = ResourceCardClassification.None)
+        => cardIconsDB.TryGetCardIconAttribute(cardType, out attribute, resourceCardClassification);
+    #endregion
+
     #endregion
 
     # region 战斗场景数据
-    public List<long> battleSceneCreatureCardIDs = new List<long>();
+    [HideInInspector] public List<long> battleSceneCreatureCardIDs = new List<long>();
     # endregion
 }

@@ -31,7 +31,7 @@ public class GlobalTestFunction : MonoBehaviour
     /// <summary>
     /// 创建一个战斗装备对象
     /// </summary>
-    [SerializeField] public EquipmentCardType equipmentCardType;
+    [SerializeField] public ResourceCardType equipmentCardType;
     public void CreateBattleEquipmentObj()
     {
         FindAnyObjectByType<BattleWorldManager>().AddEquipment(equipmentCardType);

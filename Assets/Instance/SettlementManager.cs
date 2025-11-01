@@ -79,7 +79,6 @@ public class SettlementCardManager : MonoBehaviour
         return RectTransformUtility.RectangleContainsScreenPoint(rect, Input.mousePosition, cam);
     }
 
-
     public void EndDraggingCreatureCard()
     {
         SC_Creature creatureCard = draggingCard as SC_Creature;

@@ -3,6 +3,7 @@ using Category.Production;
 using Category;
 using System.Collections.Generic;
 using System;
+using Category.Battle;
 
 [CreateAssetMenu(fileName = "CardAttributeDB", menuName = "ScriptableObjects/CardAttributeDB")]
 public class CardAttributeDB : ScriptableObject
@@ -50,6 +51,7 @@ public class CardAttributeDB : ScriptableObject
             // public string attackEffect; // 攻击特效
             // public List<string> skills; // 技能
             public List<DropCard> dropItem; // 掉落物
+            public List<Trait> traits; // 羁绊
             public object Clone()
             {
                 return new BasicAttributes
@@ -68,7 +70,8 @@ public class CardAttributeDB : ScriptableObject
                     dodgeRate = this.dodgeRate,
                     attackSpeed = this.attackSpeed,
                     attackRange = this.attackRange,
-                    dropItem = new List<DropCard>(this.dropItem)
+                    dropItem = new List<DropCard>(this.dropItem),
+                    traits = new List<Trait>(this.traits)
                 };
             }
         }

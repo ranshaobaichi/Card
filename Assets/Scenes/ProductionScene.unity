@@ -5452,6 +5452,7 @@ MonoBehaviour:
   cardSlotPrefab: {fileID: 863495346659058865, guid: a6710db8f3c334d459cc800f7576a81b, type: 3}
   cardSlotSet: {fileID: 1939459570}
   canvas: {fileID: 590917606}
+  cardIconsDB: {fileID: 11400000, guid: 0147f83c5a2d2e0479f8d2cfc1c3242b, type: 2}
   isDragging: 0
   draggingCard: {fileID: 0}
   eventUIParent: {fileID: 538339484}
