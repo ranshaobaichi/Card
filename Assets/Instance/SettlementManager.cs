@@ -131,7 +131,7 @@ public class SettlementCardManager : MonoBehaviour
         if (hoveredCard is SC_Creature creatureCard && creatureCard.satiety >= 0)
         {
             // Handle food card being dragged over creature card
-            Debug.Log($"Food card {foodCard.cardSlot.name} hovered over creature card {creatureCard.cardSlot.name}.");
+            // Debug.Log($"Food card {foodCard.cardSlot.name} hovered over creature card {creatureCard.cardSlot.name}.");
             int actualConsumeSatiety = Mathf.Min(foodCard.satietyValue, creatureCard.satiety);
             if (foodCard.TryConsumeFood(actualConsumeSatiety))
             {

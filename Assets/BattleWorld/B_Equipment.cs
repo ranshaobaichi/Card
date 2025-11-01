@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Category;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -6,6 +8,9 @@ using static CardAttributeDB;
 public class B_Equipment : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     public Image image;
+    [Header("卡牌图像列表 - 顺序为：类型、背景、顶部装饰、立绘、底部装饰、侧边装饰")]
+    public List<Image> cardImages = new List<Image>();
+    public Text nameText;
     public EquipmentCardAttribute equipmentAttribute;
     public GameObject equipmentSlot;
     public B_Creature ownerCreature;
@@ -17,6 +22,24 @@ public class B_Equipment : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
         this.equipmentSlot = equipmentSlot;
         var attr = CardManager.Instance.GetCardAttribute<EquipmentCardAttribute>(cardID);
         equipmentAttribute = attr;
+
+        // Set the card images
+        var succ = CardManager.Instance.TryGetCardIconAttribute(CardType.Resources, out var cardIconAttrribute, ResourceCardClassification.Equipment);
+        if (succ)
+        {
+            nameText.text = equipmentAttribute.equipmentCardType.ToString();
+            cardImages[0].sprite = cardIconAttrribute.type;
+            cardImages[1].sprite = cardIconAttrribute.background;
+            cardImages[2].sprite = cardIconAttrribute.top;
+            cardImages[3].sprite = cardIconAttrribute.illustration;
+            cardImages[4].sprite = cardIconAttrribute.bottom;
+            cardImages[5].sprite = cardIconAttrribute.side;
+        }
+        else
+        {
+            Debug.LogError($"Card icon attribute not found for card ID {cardID} of type {CardType.Creatures}.");
+        }
+
     }
 
     public void OnBeginDrag(PointerEventData eventData)

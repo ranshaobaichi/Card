@@ -29,7 +29,7 @@ public class SaveDataManager : MonoBehaviour
 
     public static SaveDataManager Instance;
     public static readonly string SaveDataFileName = "saveData.json";
-    public static readonly string InitialSaveDataFileName = "initData.json";
+    public static readonly string InitialSaveDataFileName = "initData";
     public static bool isNewGame;
     public static SaveData currentSaveData;
 
@@ -122,6 +122,7 @@ public class SaveDataManager : MonoBehaviour
     public bool TryGetSaveData(string fileName, out SaveData saveData)
     {
         saveData = new SaveData();
+        Debug.Log("Trying to load save data from file: " + fileName);
         if (fileName == InitialSaveDataFileName)
         {
             TextAsset initialSaveData = Resources.Load<TextAsset>($"{InitialSaveDataFileName}");
@@ -129,6 +130,11 @@ public class SaveDataManager : MonoBehaviour
             {
                 saveData = JsonUtility.FromJson<SaveData>(initialSaveData.text);
                 return true;
+            }
+            else
+            {
+                Debug.LogWarning("Initial save data resource not found.");
+                return false;
             }
         }
         

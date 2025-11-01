@@ -13,6 +13,7 @@ class SC_Food : SettlementCard
         resourceAttribute = CardManager.Instance.GetCardAttribute<ResourceCardAttribute>(cardID);
         foodValueText.text = $"{satietyValue}";
         nameText.text = resourceAttribute.resourceCardType.ToString();
+        Debug.Log("food type is " + resourceAttribute.resourceCardType.ToString());
         SetCardImage();
     }
     public bool TryConsumeFood(int amount)
@@ -24,7 +25,7 @@ class SC_Food : SettlementCard
         }
         // Reduce the satiety value
         resourceAttribute.satietyValue -= amount;
-        nameText.text = $"{resourceAttribute.satietyValue}";
+        foodValueText.text = $"{resourceAttribute.satietyValue}";
         if (resourceAttribute.satietyValue <= 0)
         {
             // Handle food depletion (e.g., remove card from panel)

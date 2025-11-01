@@ -1,13 +1,16 @@
 using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static CardAttributeDB.CreatureCardAttribute;
 using Category.Battle;
+using System.Collections.Generic;
+using static CardAttributeDB.CreatureCardAttribute;
+using Category;
 
 public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     // 组件
     private Image image;
+    public Text nameText;
 
     // 引用
     public HexNode hexNode;
@@ -37,7 +40,9 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         var attr = CardManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(cardID);
         creatureAttribute = attr;
         curAttribute = (BasicAttributes)creatureAttribute.basicAttributes.Clone();
-        Debug.Log("Attack Range: " + creatureAttribute.basicAttributes.attackRange + " Basic is " + curAttribute.attackRange);
+
+        nameText.text = creatureAttribute.creatureCardType.ToString();
+        // Debug.Log("Attack Range: " + creatureAttribute.basicAttributes.attackRange + " Basic is " + curAttribute.attackRange);
     }
 
     public void Tick()

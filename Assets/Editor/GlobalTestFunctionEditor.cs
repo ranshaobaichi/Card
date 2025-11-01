@@ -40,6 +40,16 @@ public class GlobalTestFunctionEditor : Editor
 
         ///
         GUI.enabled = true;
+        EditorGUILayout.LabelField("清除所有卡牌", EditorStyles.boldLabel);
+        GUI.enabled = EditorApplication.isPlaying && SceneManager.currentScene == SceneManager.ProductionScene;
+        if (GUILayout.Button("清除所有卡牌"))
+        {
+            globalTestFunc.ClearAllCards();
+        }
+        EditorGUILayout.Space();
+
+        ///
+        GUI.enabled = true;
         EditorGUILayout.LabelField("战斗世界卡牌", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(lineUpProp, new GUIContent("队伍"));
         EditorGUILayout.PropertyField(battleCreatureCardTypeProp, new GUIContent("生物卡牌类型"));

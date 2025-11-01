@@ -1,6 +1,7 @@
 {
     "curCardID": 6,
-    "curCardSlotID": 19,
+    "curCardSlotID": 11,
+    "curGameTime": 0,
     "allCardData": [
         {
             "cardID": 1,
@@ -10,7 +11,7 @@
                 "creatureCardType": 0,
                 "eventCardType": 0
             },
-            "attribute": "{\"resourceCardType\":0,\"resourceClassification\":3,\"durability\":999,\"satietyValue\":0,\"priceValue\":0}"
+            "attribute": "{\"resourceCardType\":1,\"resourceClassification\":3,\"durability\":999,\"satietyValue\":0,\"priceValue\":1}"
         },
         {
             "cardID": 2,
@@ -20,7 +21,7 @@
                 "creatureCardType": 0,
                 "eventCardType": 0
             },
-            "attribute": "{\"resourceCardType\":0,\"resourceClassification\":1,\"durability\":1,\"satietyValue\":1,\"priceValue\":0}"
+            "attribute": "{\"resourceCardType\":32,\"resourceClassification\":1,\"durability\":1,\"satietyValue\":1,\"priceValue\":1}"
         },
         {
             "cardID": 3,
@@ -30,7 +31,7 @@
                 "creatureCardType": 0,
                 "eventCardType": 0
             },
-            "attribute": "{\"resourceCardType\":0,\"resourceClassification\":1,\"durability\":1,\"satietyValue\":1,\"priceValue\":0}"
+            "attribute": "{\"resourceCardType\":32,\"resourceClassification\":1,\"durability\":1,\"satietyValue\":1,\"priceValue\":1}"
         },
         {
             "cardID": 4,
@@ -40,7 +41,7 @@
                 "creatureCardType": 2,
                 "eventCardType": 0
             },
-            "attribute": "{\"levelUpExpIncreasePercent\":0,\"creatureCardType\":2,\"basicAttributes\":{\"workEfficiencyAttributes\":{\"craftWorkEfficiency\":4,\"exploreWorkEfficiency\":3,\"interactWorkEfficiency\":3},\"EXP\":0,\"level\":1,\"satiety\":2,\"health\":10.0,\"attackPower\":3.0,\"spellPower\":0.0,\"normalAttackDamageType\":0,\"armor\":5.0,\"spellResistance\":5.0,\"moveSpeed\":15,\"dodgeRate\":0.05000000074505806,\"attackSpeed\":9,\"attackRange\":9,\"dropItem\":[]},\"levelUpAttributes\":{\"satietyGrowth\":0,\"healthGrowth\":8.0,\"attackPowerGrowth\":2.0,\"spellPowerGrowth\":0.0,\"armorGrowth\":0.0,\"spellResistanceGrowth\":0.0,\"moveSpeedGrowth\":0,\"dodgeRateGrowth\":0.019999999552965165,\"attackSpeedGrowth\":0,\"attackRangeGrowth\":0}}"
+            "attribute": "{\"levelUpExpIncreasePercent\":20,\"creatureCardType\":2,\"basicAttributes\":{\"workEfficiencyAttributes\":{\"craftWorkEfficiency\":4,\"exploreWorkEfficiency\":3,\"interactWorkEfficiency\":3},\"EXP\":0,\"level\":1,\"satiety\":2,\"health\":10.0,\"attackPower\":3.0,\"spellPower\":0.0,\"normalAttackDamageType\":0,\"armor\":5.0,\"spellResistance\":5.0,\"moveSpeed\":15,\"dodgeRate\":0.05000000074505806,\"attackSpeed\":9,\"attackRange\":1,\"dropItem\":[],\"traits\":[]},\"levelUpAttributes\":{\"satietyGrowth\":0,\"healthGrowth\":8.0,\"attackPowerGrowth\":2.0,\"spellPowerGrowth\":0.0,\"armorGrowth\":0.0,\"spellResistanceGrowth\":0.0,\"moveSpeedGrowth\":0,\"dodgeRateGrowth\":0.019999999552965165,\"attackSpeedGrowth\":0,\"attackRangeGrowth\":0}}"
         },
         {
             "cardID": 5,
@@ -50,35 +51,17 @@
                 "creatureCardType": 6,
                 "eventCardType": 0
             },
-            "attribute": "{\"levelUpExpIncreasePercent\":0,\"creatureCardType\":6,\"basicAttributes\":{\"workEfficiencyAttributes\":{\"craftWorkEfficiency\":3,\"exploreWorkEfficiency\":2,\"interactWorkEfficiency\":3},\"EXP\":0,\"level\":1,\"satiety\":3,\"health\":12.0,\"attackPower\":5.0,\"spellPower\":0.0,\"normalAttackDamageType\":0,\"armor\":15.0,\"spellResistance\":0.0,\"moveSpeed\":15,\"dodgeRate\":0.05000000074505806,\"attackSpeed\":15,\"attackRange\":1,\"dropItem\":[]},\"levelUpAttributes\":{\"satietyGrowth\":0,\"healthGrowth\":9.0,\"attackPowerGrowth\":2.0,\"spellPowerGrowth\":0.0,\"armorGrowth\":0.0,\"spellResistanceGrowth\":0.0,\"moveSpeedGrowth\":0,\"dodgeRateGrowth\":0.019999999552965165,\"attackSpeedGrowth\":0,\"attackRangeGrowth\":0}}"
+            "attribute": "{\"levelUpExpIncreasePercent\":20,\"creatureCardType\":6,\"basicAttributes\":{\"workEfficiencyAttributes\":{\"craftWorkEfficiency\":3,\"exploreWorkEfficiency\":2,\"interactWorkEfficiency\":3},\"EXP\":0,\"level\":1,\"satiety\":3,\"health\":12.0,\"attackPower\":5.0,\"spellPower\":0.0,\"normalAttackDamageType\":0,\"armor\":15.0,\"spellResistance\":0.0,\"moveSpeed\":15,\"dodgeRate\":0.05000000074505806,\"attackSpeed\":15,\"attackRange\":1,\"dropItem\":[],\"traits\":[]},\"levelUpAttributes\":{\"satietyGrowth\":0,\"healthGrowth\":9.0,\"attackPowerGrowth\":2.0,\"spellPowerGrowth\":0.0,\"armorGrowth\":0.0,\"spellResistanceGrowth\":0.0,\"moveSpeedGrowth\":0,\"dodgeRateGrowth\":0.019999999552965165,\"attackSpeedGrowth\":0,\"attackRangeGrowth\":0}}"
         }
     ],
     "allCardSlotData": [
         {
             "cardIDs": [
-                4
-            ],
-            "position": {
-                "x": 1167.0562744140625,
-                "y": 648.4895629882813
-            }
-        },
-        {
-            "cardIDs": [
                 2
             ],
             "position": {
-                "x": 678.5543212890625,
-                "y": 326.6666259765625
-            }
-        },
-        {
-            "cardIDs": [
-                5
-            ],
-            "position": {
-                "x": 995.98388671875,
-                "y": 329.2369079589844
+                "x": 953.3868408203125,
+                "y": 405.0
             }
         },
         {
@@ -86,8 +69,26 @@
                 3
             ],
             "position": {
-                "x": 813.8037719726563,
-                "y": 636.5822143554688
+                "x": 1240.861328125,
+                "y": 413.71142578125
+            }
+        },
+        {
+            "cardIDs": [
+                4
+            ],
+            "position": {
+                "x": 938.1419677734375,
+                "y": 805.7220458984375
+            }
+        },
+        {
+            "cardIDs": [
+                5
+            ],
+            "position": {
+                "x": 1245.217041015625,
+                "y": 825.322509765625
             }
         },
         {
@@ -95,8 +96,8 @@
                 1
             ],
             "position": {
-                "x": 490.98126220703127,
-                "y": 640.55126953125
+                "x": 618.0,
+                "y": 826.8555297851563
             }
         }
     ]

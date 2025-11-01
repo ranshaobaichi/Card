@@ -37,7 +37,7 @@ public abstract class SettlementCard : MonoBehaviour, IDragHandler, IBeginDragHa
     {
         cardImage = GetComponent<Image>();
         canvas = GameObject.FindWithTag("Canvas").GetComponent<Canvas>();
-        nameText = GameObject.FindWithTag("NameText").GetComponent<Text>();
+        nameText = transform.Find("NameText").GetComponent<Text>();
         satietyText = transform.Find("Satiety").GetComponentInChildren<Text>();
         foodValueText = transform.Find("Images").GetComponentInChildren<Text>();
 
@@ -81,8 +81,6 @@ public abstract class SettlementCard : MonoBehaviour, IDragHandler, IBeginDragHa
             cardImages[3].sprite = cardIconAttrribute.top;
             cardImages[4].sprite = cardIconAttrribute.bottom;
             cardImages[5].sprite = cardIconAttrribute.type;
-            Debug.Log($"Attribute: {cardIconAttrribute.cardType}, {cardIconAttrribute.resourceCardClassification}");
-            Debug.Log($"background: {cardIconAttrribute.background}, side: {cardIconAttrribute.side}, illustration: {cardIconAttrribute.illustration}, top: {cardIconAttrribute.top}, bottom: {cardIconAttrribute.bottom}, type: {cardIconAttrribute.type}");
         }
         else
         {

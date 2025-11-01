@@ -271,6 +271,16 @@ public class CardManager : MonoBehaviour
         onCardDeleted?.Invoke(card);
         Destroy(card.gameObject);
     }
+    public void DeleteAllCards()
+    {
+        foreach (var cardList in allCards.Values)
+        {
+            foreach (var card in new List<Card>(cardList))
+            {
+                DeleteCard(card);
+            }
+        }
+    }
 
     public CardSlot CreateCardSlot(Vector2 position)
     {
@@ -412,11 +422,15 @@ public class CardManager : MonoBehaviour
                 break;
             case CardType.Resources:
                 if (attribute != null && attribute is ResourceCardAttribute rca)
+                {
                     resourceCardAttributes[card.cardID] = rca.Clone() as ResourceCardAttribute;
+                    Debug.Log("Added resource card type is " + rca.resourceCardType.ToString());
+                }
                 else
                 {
                     var dbAttr = DataBaseManager.Instance.GetCardAttribute<ResourceCardAttribute>(card.cardDescription);
                     resourceCardAttributes[card.cardID] = dbAttr?.Clone() as ResourceCardAttribute;
+                    Debug.Log("Added resource card type is " + dbAttr.resourceCardType.ToString());
                 }
 
                 if (DataBaseManager.Instance.IsEquipmentCard(card.cardDescription.resourceCardType))

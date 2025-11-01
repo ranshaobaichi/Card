@@ -114,6 +114,7 @@ public class CardAttributeDB : ScriptableObject
         {
             return new CreatureCardAttribute
             {
+                levelUpExpIncreasePercent = this.levelUpExpIncreasePercent,
                 creatureCardType = this.creatureCardType,
                 basicAttributes = (BasicAttributes)this.basicAttributes.Clone(),
                 levelUpAttributes = (LevelUpAttributes)this.levelUpAttributes.Clone()
@@ -140,9 +141,11 @@ public class CardAttributeDB : ScriptableObject
         {
             return new ResourceCardAttribute
             {
+                resourceCardType = this.resourceCardType,
                 resourceClassification = this.resourceClassification,
                 durability = this.durability,
-                satietyValue = this.satietyValue
+                satietyValue = this.satietyValue,
+                priceValue = this.priceValue
             };
         }
     }

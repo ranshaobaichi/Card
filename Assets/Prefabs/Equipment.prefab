@@ -28,15 +28,15 @@ RectTransform:
   m_GameObject: {fileID: 6756289515493849289}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 80, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9025959209108073413
 CanvasRenderer:
@@ -89,26 +89,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 9169772848863338485}
+  cardImages: []
+  nameText: {fileID: 0}
   equipmentAttribute:
     equipmentCardType: 0
-    basicAttributesBonus:
-      workEfficiencyAttributes:
-        craftWorkEfficiency: 0
-        exploreWorkEfficiency: 0
-        interactWorkEfficiency: 0
-      EXP: 0
-      level: 0
-      satiety: 0
-      health: 0
-      attackPower: 0
-      spellPower: 0
-      normalAttackDamageType: 0
-      armor: 0
-      spellResistance: 0
-      moveSpeed: 0
-      dodgeRate: 0
-      attackSpeed: 0
-      attackRange: 0
-      dropItem: []
   equipmentSlot: {fileID: 0}
   ownerCreature: {fileID: 0}
+  cardID: 0

@@ -38,7 +38,7 @@ class SC_Creature : SettlementCard
     {
         satiety -= amount;
         satietyText.text = $"{satiety}";
-        Debug.Log($"Creature card {cardSlot.name} consumed {amount} satiety. Remaining satiety: {satiety}");
+        // Debug.Log($"Creature card {cardSlot.name} consumed {amount} satiety. Remaining satiety: {satiety}");
     }
 
 }

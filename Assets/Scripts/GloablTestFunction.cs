@@ -67,6 +67,14 @@ public class GlobalTestFunction : MonoBehaviour
     }
 
     /// <summary>
+    /// 清除所有卡牌
+    /// </summary>
+    public void ClearAllCards()
+    {
+        FindAnyObjectByType<CardManager>().DeleteAllCards();
+    }
+
+    /// <summary>
     /// 切换游戏阶段
     /// </summary>
     public void ChangeGameState()
