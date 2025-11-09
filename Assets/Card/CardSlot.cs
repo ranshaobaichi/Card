@@ -394,6 +394,11 @@ public class CardSlot : MonoBehaviour
                                     CardManager.Instance.GetWorkEfficiencyValue(Category.Production.WorkEfficiencyType.Normal);
 
         StartProgressBar(currentRecipe.workload / workloadEfficiency, OnEndProduct);
+        CardManager.Instance.DisplayTooltip(
+            $"开始生产配方：{currentRecipe.recipeName}\n" +
+            $"预计工作时间：{(currentRecipe.workload / workloadEfficiency):F2} 秒\n",
+            TooltipText.TooltipMode.Normal);
+
         Debug.Log($"Starting production for recipe: {currentRecipe.recipeName} with workload efficiency: {workloadEfficiency}, workload: {currentRecipe.workload}");
     }
 

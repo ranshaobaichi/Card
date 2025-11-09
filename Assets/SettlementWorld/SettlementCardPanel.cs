@@ -45,6 +45,11 @@ public class SettlementCardPanel : MonoBehaviour
     {
         SettlementCardManager.Instance.hoveredCard = null;
     }
+
+    private void OnCardClicked(SettlementCard card)
+    {
+        SettlementCardManager.Instance.OnCardClicked(card);
+    }
     # endregion
 
     private void Update()
@@ -92,6 +97,7 @@ public class SettlementCardPanel : MonoBehaviour
         newCard.EndDragEvent += EndDrag;
         newCard.PointerEnterEvent += OnCardHovered;
         newCard.PointerExitEvent += OnCardUnhovered;
+        newCard.PointerClickEvent += OnCardClicked;
 
         return newCard;
     }

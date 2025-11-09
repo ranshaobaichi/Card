@@ -17,21 +17,37 @@ public class BattleWorldManager : MonoBehaviour
     public static BattleWorldManager Instance;
     public static readonly string EnemyWavesResourcePath = "EnemyWaves/";
     public static readonly string EnemyWavesResourceName = "EnemyWave";
+    public static bool InBattle = false;
+    [Header("Battle World Prefabs")]
     public GameObject BattleCreaturePrefab;
     public GameObject EquipmentSlotPrefab;
     public GameObject EquipmentPrefab;
+    public GameObject tooltipPrefab;
+    public GameObject attributeDisplayPrefab;
+
+    [Header("Battle World Contents")]
     public GameObject PreparationAreaContent;
     public GameObject EquipmentAreaContent;
     public RectTransform CreatureScrollView;
     public Transform DraggingSlot;
+    public GameObject TraitGameobject;
+    public Button StartBattleButton;
+    [Header("Battle World References")]
     public List<B_Creature> playerCreatures = new List<B_Creature>();
     public List<B_Creature> enemyCreatures = new List<B_Creature>();
     public List<B_Equipment> equipments = new List<B_Equipment>();
-    // Tick 事件
+    [Header("Traits")]
+    // (Trait, count), if count == 0, the trait is inactive but has relevant creatures on the field
+    public Dictionary<Trait, ITraitHolder> traitObjDict = new Dictionary<Trait, ITraitHolder>();
+    public List<(Trait, int)> activeTraits = new List<(Trait, int)>();
+
+    // Tick Events
     public event Action PlayerTick;
     public event Action EnemyTick;
     public event Action NormalActions;
     public event Action DamageActions;
+    public event Action OnBattleStart;
+    public event Action OnBattleEnd;
 
     #region TEST_FUNCTIONS_AND_DATA
     public Button nextSceneBtn;
@@ -64,7 +80,6 @@ public class BattleWorldManager : MonoBehaviour
             creatureCardType = testCreatureCardType
         };
         var attr = DataBaseManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(cardDescription);
-        creature.creatureAttribute = attr;
         creature.curAttribute = (CardAttributeDB.CreatureCardAttribute.BasicAttributes)attr.basicAttributes.Clone();
         creature.lineUp = lineUp;
         return creature;
@@ -114,30 +129,46 @@ public class BattleWorldManager : MonoBehaviour
             {
                 AddBattleEquipment(id);
             }
+
+        foreach (var trait in TraitGameobject.GetComponentsInChildren<B_Trait>())
+        {
+            if (trait is ITraitHolder traitHolder)
+            {
+                traitObjDict[trait.traitType] = traitHolder;
+                OnBattleStart += traitHolder.OnBattleStart;
+            }
+        }
+
+        StartBattleButton.onClick.AddListener(() =>
+        {
+            InBattle = true;
+            foreach (var creature in playerCreatures)
+            {
+                creature.curAttribute = creature.actAttribute;
+            }
+            foreach (var creature in enemyCreatures)
+            {
+                creature.curAttribute = creature.actAttribute;
+            }
+            OnBattleStart?.Invoke();
+        });
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (InBattle && Input.GetKeyDown(KeyCode.Space))
         {
             InvokeTick();
         }
     }
 
-    public void InvokeTick()
+    public void InstantiateLog(string logContent, TooltipText.TooltipMode mode = TooltipText.TooltipMode.Normal)
     {
-        Debug.Log("BattleWorldManager Invoke Tick");
-        PlayerTick?.Invoke();
-        EnemyTick?.Invoke();
-
-        NormalActions?.Invoke();
-        DamageActions?.Invoke();
-
-        NormalActions = null;
-        DamageActions = null;
-        Debug.Log("BattleWorldManager Tick End");
+        Instantiate(tooltipPrefab, GetComponentInParent<Canvas>().transform).GetComponent<TooltipText>()
+            .SetTooltipText(logContent, mode);
     }
 
+    # region BATTLEWORLD OBJS APIS
     public void RemoveObj(B_Creature creature)
     {
         if (creature.lineUp == LineUp.Player)
@@ -179,7 +210,6 @@ public class BattleWorldManager : MonoBehaviour
         equipments.Add(equipment);
         return equipment;
     }
-
     /// <summary>
     /// Add a equipment to battle equipment area, which has been added to equipment list
     /// </summary>
@@ -219,7 +249,7 @@ public class BattleWorldManager : MonoBehaviour
         {
             EnemyWaveData data = new EnemyWaveData
             {
-                creatureType = enemy.creatureAttribute.creatureCardType,
+                creatureType = CardManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(enemy.cardID).creatureCardType,
                 spawnCoord = enemy.hexNode.coord
             };
             string enemyJson = JsonUtility.ToJson(data);
@@ -243,4 +273,45 @@ public class BattleWorldManager : MonoBehaviour
         Debug.LogWarning("SaveCurBattleWave: 仅在编辑器下将文件写入 Assets/Resources。运行时请使用 Application.persistentDataPath。");
 #endif
     }
+
+    #endregion
+
+    #region Life cycle Methods
+    private void InvokeTick()
+    {
+        Debug.Log("BattleWorldManager Invoke Tick");
+        PlayerTick?.Invoke();
+        EnemyTick?.Invoke();
+
+        NormalActions?.Invoke();
+        DamageActions?.Invoke();
+
+        NormalActions = null;
+        DamageActions = null;
+        Debug.Log("BattleWorldManager Tick End");
+    }
+
+
+    public void OnCardClicked(B_Creature card)
+    {
+        CreatureAttributeDisplay panel = Instantiate(attributeDisplayPrefab, GetComponentInParent<Canvas>().transform).GetComponent<CreatureAttributeDisplay>();
+        panel.UpdateAttributes(CardManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(card.cardID), basicAttributes: card.actAttribute);
+    }
+    #endregion
+
+    #region Trait APIS
+    public void UpdateActiveTraits()
+    {
+        activeTraits.Clear();
+        // TODO: update activeTraits
+        throw new NotImplementedException();
+
+        // set currentTraitCreatureCount for each trait object
+        foreach (var (trait, count) in activeTraits)
+        {
+            B_Trait traitObj = traitObjDict[trait] as B_Trait;
+            traitObj.currentTraitCreatureCount = count;
+        }
+    }
+    #endregion
 }

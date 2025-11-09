@@ -6,7 +6,16 @@ public class TimeManager : MonoBehaviour
 {
     public static TimeManager Instance;
     public float productionStateDuration = 60f;
-    private GameTimeState gameTimeState;
+    private GameTimeState gameTimeState
+    {
+        get => SceneManager.currentScene switch 
+        {
+            SceneManager.ProductionScene => GameTimeState.ProduceState,
+            SceneManager.SettlementScene => GameTimeState.SettlementState,
+            SceneManager.BattleScene => GameTimeState.BattleState,
+            _ => throw new System.NotImplementedException(),
+        };
+    }
     public ProgressBar timeProgressBar;
     public float speedUpScale = 2f;
     private bool isPaused = false;
@@ -51,7 +60,6 @@ public class TimeManager : MonoBehaviour
 
     void Start()
     {
-        gameTimeState = GameTimeState.ProduceState;
         timeProgressBar.StartProgressBar(productionStateDuration, ChangeState);
         SceneManager.AfterSceneChanged += OnChangeScene;
         SceneManager.BeforeSceneChanged += BeforeChangeScene;
@@ -86,7 +94,6 @@ public class TimeManager : MonoBehaviour
         };
 
         Debug.Log($"State changed from {gameTimeState} to {nextState}");
-        gameTimeState = nextState;
 
         switch (nextState)
         {
@@ -101,7 +108,7 @@ public class TimeManager : MonoBehaviour
                 SceneManager.LoadScene(SceneManager.SettlementScene);
                 break;
             case GameTimeState.BattleState:
-                SceneManager.LoadScene(SceneManager.BattleScene);
+                FindAnyObjectByType<SettlementCardManager>()?.ChangeToNextStage();
                 break;
             default:
                 break;

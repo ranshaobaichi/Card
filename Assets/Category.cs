@@ -163,11 +163,25 @@ namespace Category
         [Serializable]
         public enum Trait
         {
-            Trait1,
-            Trait2,
-            Trait3,
-            Trait4,
-            Trait5,
+            精魂,
+            部落,
+            装甲魔兽,
+            刺客,
+            线列步兵,
+            破阵者,
+            施法者,
+            猎手,
+            冲击骑兵,
+        }
+
+        [Serializable]
+        public enum AttackEffetct
+        {
+            AdditionalTrueDamage,
+            Rebound,
+            AdditionalAttackEffect,
+            AdditionalMaxHealthPercentageDamage,
+            HealAlly,
         }
     }
 }

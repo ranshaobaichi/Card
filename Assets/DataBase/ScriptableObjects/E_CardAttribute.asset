@@ -19,7 +19,7 @@ MonoBehaviour:
   - 75
   - 50
   creatureCardAttributes:
-  - levelUpExpIncreasePercent: 20
+  - levelUpExpIncreasePercent: 999
     creatureCardType: 2
     basicAttributes:
       workEfficiencyAttributes:
@@ -40,6 +40,7 @@ MonoBehaviour:
       attackSpeed: 9
       attackRange: 1
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 8
@@ -72,6 +73,7 @@ MonoBehaviour:
       attackSpeed: 9
       attackRange: 1
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 6
@@ -104,6 +106,7 @@ MonoBehaviour:
       attackSpeed: 9
       attackRange: 1
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 6
@@ -136,6 +139,7 @@ MonoBehaviour:
       attackSpeed: 9
       attackRange: 1
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 12
@@ -168,6 +172,7 @@ MonoBehaviour:
       attackSpeed: 15
       attackRange: 1
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 9
@@ -200,6 +205,7 @@ MonoBehaviour:
       attackSpeed: 9
       attackRange: 1
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 14
@@ -232,6 +238,7 @@ MonoBehaviour:
       attackSpeed: 12
       attackRange: 1
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 14
@@ -264,6 +271,7 @@ MonoBehaviour:
       attackSpeed: 12
       attackRange: 4
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 14
@@ -296,6 +304,7 @@ MonoBehaviour:
       attackSpeed: 18
       attackRange: 1
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 20
@@ -328,6 +337,7 @@ MonoBehaviour:
       attackSpeed: 12
       attackRange: 1
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 6
@@ -360,6 +370,7 @@ MonoBehaviour:
       attackSpeed: 9
       attackRange: 1
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 24
@@ -392,6 +403,7 @@ MonoBehaviour:
       attackSpeed: 18
       attackRange: 1
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 30
@@ -424,6 +436,7 @@ MonoBehaviour:
       attackSpeed: 24
       attackRange: 1
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 40
@@ -456,6 +469,7 @@ MonoBehaviour:
       attackSpeed: 15
       attackRange: 5
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 8
@@ -488,6 +502,7 @@ MonoBehaviour:
       attackSpeed: 12
       attackRange: 1
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 14
@@ -520,6 +535,7 @@ MonoBehaviour:
       attackSpeed: 12
       attackRange: 1
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 15
@@ -552,6 +568,7 @@ MonoBehaviour:
       attackSpeed: 9
       attackRange: 1
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 20
@@ -584,6 +601,7 @@ MonoBehaviour:
       attackSpeed: 9
       attackRange: 1
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 10
@@ -616,6 +634,7 @@ MonoBehaviour:
       attackSpeed: 12
       attackRange: 1
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 12
@@ -648,6 +667,7 @@ MonoBehaviour:
       attackSpeed: 9
       attackRange: 1
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 10
@@ -680,6 +700,7 @@ MonoBehaviour:
       attackSpeed: 9
       attackRange: 1
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 20
@@ -712,6 +733,7 @@ MonoBehaviour:
       attackSpeed: 18
       attackRange: 10
       dropItem: []
+      traits: 
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 0
@@ -899,3 +921,4 @@ MonoBehaviour:
     durability: 3
     satietyValue: 1
     priceValue: 1
+  equipmentCardAttributes: []

@@ -26,12 +26,6 @@ class SC_Food : SettlementCard
         // Reduce the satiety value
         resourceAttribute.satietyValue -= amount;
         foodValueText.text = $"{resourceAttribute.satietyValue}";
-        if (resourceAttribute.satietyValue <= 0)
-        {
-            // Handle food depletion (e.g., remove card from panel)
-            Debug.Log($"Food card {cardSlot.name} is depleted and will be removed.");
-            SettlementCardManager.Instance.FoodPanel.DeleteCard(this, true);
-        }
         return true;
     }
 }

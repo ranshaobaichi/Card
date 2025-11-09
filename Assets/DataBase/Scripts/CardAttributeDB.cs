@@ -41,7 +41,7 @@ public class CardAttributeDB : ScriptableObject
             public float health; // 生命值
             public float attackPower; // 攻击力
             public float spellPower; // 法术强度
-            public Category.Battle.DamageType normalAttackDamageType; // 普通攻击伤害类型
+            public DamageType normalAttackDamageType; // 普通攻击伤害类型
             public float armor; // 护甲值
             public float spellResistance; // 魔法抗性
             public int moveSpeed; // 移动速度
@@ -123,6 +123,10 @@ public class CardAttributeDB : ScriptableObject
 
         public static int maxLevel; // 最大等级
         public int levelUpExpIncreasePercent; // 每次升级所需经验提高的百分比
+        public int levelUpExpNeeded
+        {
+            get => (1 + basicAttributes.level) * levelUpExpIncreasePercent;
+        }
         public CreatureCardType creatureCardType;
         public BasicAttributes basicAttributes = new BasicAttributes();
         public LevelUpAttributes levelUpAttributes = new LevelUpAttributes();

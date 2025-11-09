@@ -331,7 +331,16 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         // {
         //     CardManager.Instance.PopUpEventUI(eventCard);
         // }
-        if (cardDescription.cardType == CardType.Events)
-            CardManager.Instance.PopUpEventUI(this);
+        switch (cardDescription.cardType)
+        {
+            case CardType.Creatures:
+                CardManager.Instance.DisplayCreatureAttribute(this);
+                break;
+            case CardType.Events:
+                CardManager.Instance.PopUpEventUI(this);
+                break;
+            default:
+                break;
+        }
     }
 }

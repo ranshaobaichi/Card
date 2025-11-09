@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static CardAttributeDB;
 
-public abstract class SettlementCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+public abstract class SettlementCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     protected Canvas canvas;
     protected Image cardImage;
@@ -19,11 +19,9 @@ public abstract class SettlementCard : MonoBehaviour, IDragHandler, IBeginDragHa
     // Events for pointer interactions
     [HideInInspector] public event Action<SettlementCard> PointerEnterEvent;
     [HideInInspector] public event Action<SettlementCard> PointerExitEvent;
-    // [HideInInspector] public event Action<SettlementCard, bool> PointerUpEvent;
-    // [HideInInspector] public event Action<SettlementCard> PointerDownEvent;
     [HideInInspector] public event Action<SettlementCard> BeginDragEvent;
     [HideInInspector] public event Action<SettlementCard> EndDragEvent;
-    // [HideInInspector] public event Action<SettlementCard, bool> SelectEvent;
+    [HideInInspector] public event Action<SettlementCard> PointerClickEvent;
     protected List<Image> cardImages = new List<Image>();
 
     [Header("Card Data")]
@@ -117,5 +115,10 @@ public abstract class SettlementCard : MonoBehaviour, IDragHandler, IBeginDragHa
     {
         PointerExitEvent?.Invoke(this);
     }
-    # endregion
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        PointerClickEvent?.Invoke(this);
+    }
+    #endregion
 }

@@ -1,10 +1,13 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 public class SettlementCardManager : MonoBehaviour
 {
     public static SettlementCardManager Instance;
     public GameObject settlementCardSlotPrefab;
+    public GameObject tooltipPrefab;
+    public GameObject attributeDisplayPrefab;
     public Button exitButton;
 
     [Header("Settlement Card Panels")]
@@ -25,6 +28,11 @@ public class SettlementCardManager : MonoBehaviour
     public SettlementCard draggingCard;
     public SettlementCard hoveredCard;
 
+    [Header("TooltipCanvas")]
+    public Canvas tooltipCanvas;
+    public Text tooltipHeaderText, tooltipContentText;
+    public Button tooltipCloseButton, tooltipConfirmButton;
+
     void Awake()
     {
         if (Instance == null)
@@ -44,8 +52,11 @@ public class SettlementCardManager : MonoBehaviour
         CreaturePanel.onEndDrag += EndDraggingCreatureCard;
         BattleCardPanel.onEndDrag += EndDraggingBattleCard;
 
+        tooltipCloseButton.onClick.AddListener(() => tooltipCanvas.gameObject.SetActive(false));
+        tooltipConfirmButton.onClick.AddListener(() => ExitSettlementScene());
         exitButton = GameObject.FindWithTag("ExitButton")?.GetComponent<Button>();
-        exitButton.onClick.AddListener(() => SceneManager.LoadScene(SceneManager.BattleScene));
+        exitButton.onClick.AddListener(() => ChangeToNextStage());
+
         DealWithSettlementData();
         BattlePopulationText.text = $"{0}/{maxBattleCreatures}";
     }
@@ -56,6 +67,50 @@ public class SettlementCardManager : MonoBehaviour
         FoodPanel.onEndDrag -= EndDraggingFoodCard;
         CreaturePanel.onEndDrag -= EndDraggingCreatureCard;
         BattleCardPanel.onEndDrag -= EndDraggingBattleCard;
+
+        exitButton.onClick.RemoveListener(() => ChangeToNextStage());
+        tooltipCloseButton.onClick.RemoveListener(() => tooltipCanvas.gameObject.SetActive(false));
+        tooltipConfirmButton.onClick.RemoveListener(() => ExitSettlementScene());
+    }
+
+    public void ChangeToNextStage()
+    {
+        DisplayTooltipPanel();
+    }
+
+    private void DisplayTooltipPanel()
+    {
+        tooltipCanvas.gameObject.SetActive(true);
+        List<string> cardsNotFull = new List<string>();
+        foreach (SettlementCard card in CreaturePanel.cards)
+            if (card is SC_Creature creatureCard && creatureCard.satiety > 0)
+                cardsNotFull.Add(creatureCard.nameText.text);
+
+        if (cardsNotFull.Count > 0)
+        {
+            tooltipHeaderText.text = "以下生物卡尚未吃饱,即将死去：";
+            tooltipContentText.text = string.Join("\n", cardsNotFull);
+        }
+        else
+        {
+            tooltipHeaderText.text = "所有生物卡都吃饱了！";
+        }
+    }
+
+    private void ExitSettlementScene()
+    {
+        List<SC_Creature> cardsNotFull = new List<SC_Creature>();
+        foreach (SettlementCard card in CreaturePanel.cards)
+            if (card is SC_Creature creatureCard && creatureCard.satiety > 0)
+                cardsNotFull.Add(creatureCard);
+
+        foreach (SC_Creature creatureCard in cardsNotFull)
+        {
+            Debug.Log($"Creature card {creatureCard.nameText.text} is not fully satiated (Satiety: {creatureCard.satiety}). It will be removed.");
+            CreaturePanel.DeleteCard(creatureCard, true);
+        }
+
+        SceneManager.LoadScene(SceneManager.BattleScene);
     }
 
     public void DealWithSettlementData()
@@ -87,9 +142,17 @@ public class SettlementCardManager : MonoBehaviour
         {
             if (BattleCardPanel.cards.Count >= maxBattleCreatures)
             {
-                Debug.Log("Battle panel is full. Cannot add more creature cards.");
+                Instantiate(tooltipPrefab, GetComponentInParent<Canvas>().transform).GetComponent<TooltipText>()
+                    .SetTooltipText("战斗面板已满，无法添加更多生物卡！", TooltipText.TooltipMode.Warning);
                 return;
             }
+            if (creatureCard.satiety > 0)
+            {
+                Instantiate(tooltipPrefab, GetComponentInParent<Canvas>().transform).GetComponent<TooltipText>()
+                    .SetTooltipText("生物卡未吃饱，无法进入战斗面板！", TooltipText.TooltipMode.Warning);
+                return;
+            }
+
             // Handle creature card being dragged over battle panel
             // Debug.Log($"Creature card {creatureCard.cardSlot.name} hovered over battle panel.");
             BattleCardPanel.AddCard<SC_Battle>(creatureCard.cardID);
@@ -125,7 +188,7 @@ public class SettlementCardManager : MonoBehaviour
     }
 
     public void EndDraggingFoodCard()
-    {            
+    {
         SC_Food foodCard = draggingCard as SC_Food;
         draggingCard = null;
         if (hoveredCard is SC_Creature creatureCard && creatureCard.satiety >= 0)
@@ -137,8 +200,23 @@ public class SettlementCardManager : MonoBehaviour
             {
                 creatureCard.EatingFood(actualConsumeSatiety);
                 creatureCardSatietyDict[creatureCard.cardID] = creatureCard.satiety;
+                if (foodCard.satietyValue <= 0)
+                {
+                    // Handle food depletion (e.g., remove card from panel)
+                    Debug.Log($"Food card {foodCard.cardSlot.name} is depleted and will be removed.");
+                    FoodPanel.DeleteCard(foodCard, true);
+                }
             }
         }
     }
-    
+
+    public void OnCardClicked(SettlementCard card)
+    {
+        if (card is SC_Creature|| card is SC_Battle)
+        {
+            CardAttributeDB.CreatureCardAttribute attr = CardManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(card.cardID);
+            CreatureAttributeDisplay panel = Instantiate(attributeDisplayPrefab, GetComponentInParent<Canvas>().transform).GetComponent<CreatureAttributeDisplay>();
+            panel.UpdateAttributes(attr);
+        }
+    }
 }

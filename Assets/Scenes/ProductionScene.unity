@@ -5450,6 +5450,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardPrefab: {fileID: 6615154043505108549, guid: a9ae7891dab24a84e951d2b3efced243, type: 3}
   cardSlotPrefab: {fileID: 863495346659058865, guid: a6710db8f3c334d459cc800f7576a81b, type: 3}
+  tooltipPrefab: {fileID: 3209149192200626572, guid: 47ddd4b62d8139547b9a2fd78fd47863, type: 3}
+  attributeDisplayPrefab: {fileID: 6751558881966426460, guid: 98467485b0354cc4db902269511c698b, type: 3}
   cardSlotSet: {fileID: 1939459570}
   canvas: {fileID: 590917606}
   cardIconsDB: {fileID: 11400000, guid: 0147f83c5a2d2e0479f8d2cfc1c3242b, type: 2}

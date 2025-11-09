@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using static CardAttributeDB.CreatureCardAttribute;
 using Category;
 
-public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
+public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
 {
     // 组件
     private Image image;
@@ -14,15 +14,44 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
     // 引用
     public HexNode hexNode;
+    public bool inBattle => hexNode != null;
     public Transform equiptmentSlot;
 
     // 属性
     public long cardID;
     // private readonly bool OnBattle => hexNode != null;
     public int cd;
-    [HideInInspector] public CardAttributeDB.CreatureCardAttribute creatureAttribute;
-    public BasicAttributes curAttribute;
+    public BasicAttributes curAttribute; // the attr that apply before traits and buffs
+                                         // will be replaced with actActtribute when the game is running 
+    private BasicAttributes _actAttribute;
+    public BasicAttributes actAttribute // the attr that apply after equipment and buffs
+    {
+        get
+        {
+            if (!BattleWorldManager.InBattle)
+            {
+                BasicAttributes totalAttr = (BasicAttributes)curAttribute.Clone();
+                if (equipment != null)
+                {
+                    CardAttributeDB.EquipmentCardAttribute.EquipmentBasicAttributesBonus equipmentCardAttribute = equipment.equipmentAttribute.basicAttributesBonus;
+                    totalAttr.health += equipmentCardAttribute.health;
+                    totalAttr.attackPower += equipmentCardAttribute.attackPower;
+                    totalAttr.spellPower += equipmentCardAttribute.spellPower;
+                    totalAttr.armor += equipmentCardAttribute.armor;
+                    totalAttr.spellResistance += equipmentCardAttribute.spellResistance;
+                    totalAttr.moveSpeed += equipmentCardAttribute.moveSpeed;
+                    totalAttr.dodgeRate += equipmentCardAttribute.dodgeRate;
+                    totalAttr.attackSpeed += equipmentCardAttribute.attackSpeed;
+                    totalAttr.attackRange += equipmentCardAttribute.attackRange;
+
+                }
+                _actAttribute = totalAttr;
+            }
+            return _actAttribute;
+        }
+    }
     public LineUp lineUp;
+    public List<AttackEffetct> attackEffetcts = new List<AttackEffetct>();
     public B_Equipment equipment;
 
     private Vector2 oriPosition;
@@ -38,11 +67,10 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         this.cardID = cardID;
         this.lineUp = lineUp;
         var attr = CardManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(cardID);
-        creatureAttribute = attr;
-        curAttribute = (BasicAttributes)creatureAttribute.basicAttributes.Clone();
+        curAttribute = (BasicAttributes)attr.basicAttributes.Clone();
 
-        nameText.text = creatureAttribute.creatureCardType.ToString();
-        // Debug.Log("Attack Range: " + creatureAttribute.basicAttributes.attackRange + " Basic is " + curAttribute.attackRange);
+        nameText.text = attr.creatureCardType.ToString();
+        // Debug.Log("Attack Range: " + attr.basicAttributes.attackRange + " Basic is " + curAttribute.attackRange);
     }
 
     public void Tick()
@@ -73,7 +101,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             if (curAttribute.attackSpeed == 0)
             {
                 BattleWorldManager.Instance.DamageActions += () => Attack(closestOpponents);
-                curAttribute.attackSpeed = creatureAttribute.basicAttributes.attackSpeed;
+                curAttribute.attackSpeed = actAttribute.attackSpeed;
             }
             else
             {
@@ -92,7 +120,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
                     HexNodeManager.ReserveObject(this, path[1]);
                     BattleWorldManager.Instance.NormalActions += () => MoveTo(path[1]);
                 }
-                curAttribute.moveSpeed = creatureAttribute.basicAttributes.moveSpeed;
+                curAttribute.moveSpeed = actAttribute.moveSpeed;
             }
             else
             {
@@ -167,6 +195,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
     public void GainEXP(int exp)
     {
+        CardAttributeDB.CreatureCardAttribute creatureAttribute = CardManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(cardID);
         creatureAttribute.basicAttributes.EXP += exp;
         int experience = (1 + creatureAttribute.basicAttributes.level) * creatureAttribute.levelUpExpIncreasePercent;
         if (creatureAttribute.basicAttributes.EXP >= experience)
@@ -206,6 +235,11 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (inBattle) 
+        {
+            BattleWorldManager.Instance.InstantiateLog("战斗中不能挪动物体!", TooltipText.TooltipMode.Warning);
+            return;
+        }
         image.raycastTarget = false;
         oriPosition = transform.position;
         oriParent = transform.parent.gameObject;
@@ -240,13 +274,20 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
                 transform.SetParent(BattleWorldManager.Instance.PreparationAreaContent.transform, false);
             }
         }
-        
+
         if (!succPut)
         {
             transform.SetParent(oriParent.transform, false);
             transform.position = oriPosition;
         }
+        
+        BattleWorldManager.Instance.UpdateActiveTraits();
         image.raycastTarget = true;
     }
-    # endregion
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        BattleWorldManager.Instance.OnCardClicked(this);
+    }
+    #endregion
 }

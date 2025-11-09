@@ -11,6 +11,9 @@ public class CardManager : MonoBehaviour
     public static CardManager Instance;
     public GameObject cardPrefab;
     public GameObject cardSlotPrefab;
+    public GameObject tooltipPrefab;
+    public GameObject attributeDisplayPrefab;
+
     public Transform cardSlotSet;
     public Canvas canvas;
     public CardIconsDB cardIconsDB;
@@ -304,6 +307,26 @@ public class CardManager : MonoBehaviour
         }
 
         Destroy(cardSlot.gameObject);
+    }
+
+    public void DisplayTooltip(string message, TooltipText.TooltipMode mode = TooltipText.TooltipMode.Normal)
+    {
+        Instantiate(tooltipPrefab, canvas.transform).GetComponent<TooltipText>()
+            .SetTooltipText(message, mode);
+    }
+
+    public void DisplayCreatureAttribute(Card card)
+    {
+        var creatureAttribute = GetCardAttribute<CreatureCardAttribute>(card);
+        if (creatureAttribute != null)
+        {
+            CreatureAttributeDisplay panel = Instantiate(attributeDisplayPrefab, canvas.transform).GetComponent<CreatureAttributeDisplay>();
+            panel.UpdateAttributes(creatureAttribute);
+        }
+        else
+        {
+            Debug.LogError($"No CreatureCardAttribute found for card ID {card.cardID} when displaying attributes.");
+        }
     }
 
     #endregion

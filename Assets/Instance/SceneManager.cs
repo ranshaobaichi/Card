@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class SceneManager : MonoBehaviour
 {
-    public static string ProductionScene = "ProductionScene";
-    public static string BattleScene = "BattleScene";
-    public static string SettlementScene = "SettlementScene";
-    public static string StartScene = "StartScene";
+    public const string ProductionScene = "ProductionScene";
+    public const string BattleScene = "BattleScene";
+    public const string SettlementScene = "SettlementScene";
+    public const string StartScene = "StartScene";
     public static string currentScene = "";
     public static SceneManager Instance;
 
@@ -40,6 +40,11 @@ public class SceneManager : MonoBehaviour
     void Start()
     {
         currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        BeforeSceneChanged += (() =>
+        {
+            TooltipText.ClearAllTooltips();
+            CreatureAttributeDisplay.ClearAllDisplays();
+        });
     }
 
     private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
@@ -51,6 +56,7 @@ public class SceneManager : MonoBehaviour
     public static void LoadScene(string sceneName)
     {
         BeforeSceneChanged?.Invoke();
+        
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
     }
     

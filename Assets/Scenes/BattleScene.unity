@@ -2987,6 +2987,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 954251397}
+  - {fileID: 1989792196}
   - {fileID: 2146586314}
   - {fileID: 341342925}
   - {fileID: 758575042}
@@ -5351,12 +5353,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 954251396}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 850.1437, y: 539.575, z: 5.303279}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -109.85632, y: -0.4249878, z: 5.303279}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 526355948}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &954251398
 MonoBehaviour:
@@ -5373,10 +5375,14 @@ MonoBehaviour:
   BattleCreaturePrefab: {fileID: 1199791827373344116, guid: 05c4834bafe4b344d803997c251f6591, type: 3}
   EquipmentSlotPrefab: {fileID: 6221691911723569928, guid: ca4b1615680ffce4cb0c4ada5ac467d4, type: 3}
   EquipmentPrefab: {fileID: 6756289515493849289, guid: 97054cd9281b1f44296eb87f92e83f33, type: 3}
+  tooltipPrefab: {fileID: 3209149192200626572, guid: 47ddd4b62d8139547b9a2fd78fd47863, type: 3}
+  attributeDisplayPrefab: {fileID: 6751558881966426460, guid: 98467485b0354cc4db902269511c698b, type: 3}
   PreparationAreaContent: {fileID: 1271133595}
   EquipmentAreaContent: {fileID: 728484167}
   CreatureScrollView: {fileID: 553212414}
   DraggingSlot: {fileID: 359275177}
+  TraitGameobject: {fileID: 1989792195}
+  StartBattleButton: {fileID: 592954038}
   playerCreatures: []
   enemyCreatures: []
   equipments: []
@@ -9900,6 +9906,185 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4680129130369466437, guid: 1c0e9cc17ec4d2742bd01f894a7d74d2, type: 3}
   m_PrefabInstance: {fileID: 1987327198}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1989792195
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1989792196}
+  - component: {fileID: 1989792205}
+  - component: {fileID: 1989792204}
+  - component: {fileID: 1989792203}
+  - component: {fileID: 1989792202}
+  - component: {fileID: 1989792201}
+  - component: {fileID: 1989792200}
+  - component: {fileID: 1989792199}
+  - component: {fileID: 1989792198}
+  - component: {fileID: 1989792197}
+  m_Layer: 5
+  m_Name: Trait
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1989792196
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1989792195}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 526355948}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1989792197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1989792195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac7717f406f5a7f49be1e33655adbbf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  traitType: 1
+  currentTraitCreatureCount: 0
+  levelThresholds: 
+--- !u!114 &1989792198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1989792195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c545b1221a279f844944c27f5f8adc2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  traitType: 0
+  currentTraitCreatureCount: 0
+  levelThresholds: 
+--- !u!114 &1989792199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1989792195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce88ac4b10045bc468dd4c8d9dbbebe9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  traitType: 6
+  currentTraitCreatureCount: 0
+  levelThresholds: 
+--- !u!114 &1989792200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1989792195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9556b9449eb6b7498900d21dea46304, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  traitType: 4
+  currentTraitCreatureCount: 0
+  levelThresholds: 
+--- !u!114 &1989792201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1989792195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 574fcdf6f740c994598eedf3716d5dac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  traitType: 7
+  currentTraitCreatureCount: 0
+  levelThresholds: 
+--- !u!114 &1989792202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1989792195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e6fd7dc9105a4c46925b354e5296eb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  traitType: 5
+  currentTraitCreatureCount: 0
+  levelThresholds: 
+--- !u!114 &1989792203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1989792195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84cfb3f4d492f994cac091564c7fe579, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  traitType: 8
+  currentTraitCreatureCount: 0
+  levelThresholds: 
+--- !u!114 &1989792204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1989792195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89d1fcf022791d241a1b6463169ac579, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  traitType: 3
+  currentTraitCreatureCount: 0
+  levelThresholds: 
+--- !u!114 &1989792205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1989792195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 508b15a9db2d50f4785a263a6e163feb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  traitType: 2
+  currentTraitCreatureCount: 0
+  levelThresholds: 
 --- !u!1 &2005397538
 GameObject:
   m_ObjectHideFlags: 0
@@ -11115,4 +11300,3 @@ SceneRoots:
   - {fileID: 526355948}
   - {fileID: 318874226}
   - {fileID: 149098031}
-  - {fileID: 954251397}
