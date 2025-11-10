@@ -37,7 +37,7 @@ public abstract class B_Trait : MonoBehaviour
             for (int i = levelThresholds.Count - 1; i >= 0; i--)
             {
                 if (currentTraitCreatureCount >= levelThresholds[i])
-                    return Mathf.Max(i, MaxLevel);
+                    return Math.Max(i, MaxLevel);
             }
             return 0;
         }
@@ -57,8 +57,8 @@ public abstract class B_Trait : MonoBehaviour
     public int GetCreatureCountNeededForNextLevel()
     {
         int curLevel = level;
-        int nextThreshold = levelThresholds[Mathf.Max(curLevel + 1, MaxLevel)];
-        int need = Mathf.Abs(nextThreshold - currentTraitCreatureCount);
+        int nextThreshold = levelThresholds[Math.Max(curLevel + 1, MaxLevel)];
+        int need = Math.Abs(nextThreshold - currentTraitCreatureCount);
         return need;
     }
 }
