@@ -21,6 +21,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public long cardID;
     // private readonly bool OnBattle => hexNode != null;
     public int cd;
+    public CardAttributeDB.CreatureCardAttribute creatureCardAttribute; // readonly attribute from CardAttributeDB
     public BasicAttributes curAttribute; // the attr that apply before traits and buffs
                                          // will be replaced with actActtribute when the game is running 
     private BasicAttributes _actAttribute;
@@ -47,7 +48,13 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
                 }
                 _actAttribute = totalAttr;
             }
+            
             return _actAttribute;
+        }
+
+        set
+        {
+            _actAttribute = value;
         }
     }
     public LineUp lineUp;
@@ -68,6 +75,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         this.lineUp = lineUp;
         var attr = CardManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(cardID);
         curAttribute = (BasicAttributes)attr.basicAttributes.Clone();
+        _actAttribute = (BasicAttributes)curAttribute.Clone();
 
         nameText.text = attr.creatureCardType.ToString();
         // Debug.Log("Attack Range: " + attr.basicAttributes.attackRange + " Basic is " + curAttribute.attackRange);
@@ -134,13 +142,34 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         float damage = curAttribute.attackPower;
         Category.Battle.DamageType damageType = curAttribute.normalAttackDamageType;
         Debug.Log($"{transform.name} attacks {target.transform.name} for {damage} damage of type {damageType}");
-        if (target.TakeDamage(damage, damageType, true))
+        float oriDamage = damage;
+        attackEffetcts.ForEach(effect =>
         {
-            // Add attack effects here
-        }
+            switch (effect)
+            {
+                case AttackEffetct.TrueDamagePercentageOfAttackPower:
+                    float percentage = BattleWorldManager.Instance.GetTraitObjDict(lineUp)[Trait.部落] is T_Tribe tribeTrait ? tribeTrait.TrueDamagePercentageOfAttackPower : 0f;
+                    float trueDamage = oriDamage * percentage;
+                    trueDamage = Mathf.Round(trueDamage * 100f) / 100f;
+                    target.TakeDamage(trueDamage, DamageType.TrueDamage, true);
+                    break;
+                case AttackEffetct.ProbabilityDoubleDamage:
+                    float probability = BattleWorldManager.Instance.GetTraitObjDict(lineUp)[Trait.刺客] is T_Assassin assassinTrait ? assassinTrait.doubleDamageProbability : 0f;
+                    // TODO
+                    break;
+                case AttackEffetct.PhysicalDamagePercentageOftargetHealth:
+                    // TODO
+                    break;
+                default:
+                    throw new System.NotImplementedException();
+                    break;
+            }
+        });
+
+        target.TakeDamage(damage, damageType, true);
     }
 
-    public bool TakeDamage(float damage, Category.Battle.DamageType damageType, bool isNormalAttack)
+    public bool TakeDamage(float damage, DamageType damageType, bool isNormalAttack)
     {
         // first check whether can dodge
         if (isNormalAttack)

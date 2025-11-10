@@ -87,7 +87,7 @@ public class CreatureAttributeDisplay : MonoBehaviour, IDragHandler, IBeginDragH
             $"{basicAttributes.EXP} / {creatureAttribute.levelUpExpNeeded}" :
             "∞";
         levelText.text = basicAttributes.level.ToString();
-        healthText.text = basicAttributes.health.ToString();
+        healthText.text = basicAttributes.health.ToString(format: "F0");
         attackPowerText.text = basicAttributes.attackPower.ToString();
         spellPowerText.text = basicAttributes.spellPower.ToString();
         normalAttackDamageTypeText.text = basicAttributes.normalAttackDamageType switch

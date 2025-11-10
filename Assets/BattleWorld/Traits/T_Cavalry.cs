@@ -3,14 +3,18 @@ using Category.Battle;
 
 public class T_Cavalry : B_Trait, ITraitHolder
 {
-    public void ApplyAttackEffect(List<AttackEffetct> attackEffetcts)
+    public override int MaxLevel => throw new System.NotImplementedException();
+
+    public override List<int> levelThresholds => throw new System.NotImplementedException();
+
+    public void ModifyAttributes(CardAttributeDB.CreatureCardAttribute.BasicAttributes baseAttributes, B_Creature creature = null)
     {
-        return;
+        throw new System.NotImplementedException();
     }
 
-    public void ApplyAttribute(CardAttributeDB.CreatureCardAttribute.BasicAttributes baseAttributes)
+    public void OnBattleEnd()
     {
-        return;
+        throw new System.NotImplementedException();
     }
 
     public void OnBattleStart()

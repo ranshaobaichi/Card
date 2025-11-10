@@ -177,11 +177,9 @@ namespace Category
         [Serializable]
         public enum AttackEffetct
         {
-            AdditionalTrueDamage,
-            Rebound,
-            AdditionalAttackEffect,
-            AdditionalMaxHealthPercentageDamage,
-            HealAlly,
+            TrueDamagePercentageOfAttackPower,
+            PhysicalDamagePercentageOftargetHealth,
+            ProbabilityDoubleDamage,
         }
     }
 }

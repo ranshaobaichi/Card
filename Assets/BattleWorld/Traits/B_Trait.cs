@@ -7,9 +7,24 @@ using static CardAttributeDB.CreatureCardAttribute;
 
 public interface ITraitHolder
 {
-    public void ApplyAttribute(BasicAttributes baseAttributes);
-    public void ApplyAttackEffect(List<AttackEffetct> attackEffetcts);
+    /// <summary>
+    /// Called at the start of the battle
+    /// Should use ModifyAttributes to modify creature attributes
+    /// Should add attack effects if needed
+    /// </summary>
     public void OnBattleStart();
+    /// <summary>
+    /// Deal with the pernament effects bounsed by this trait after battle ends
+    /// </summary>
+    public void OnBattleEnd();
+    /// <summary>
+    /// Modify the base attributes of the creature and modify in place
+    /// Do Not modify the attack effects here, add them in OnBattleStart instead
+    /// </summary>
+    /// <param name="baseAttributes">
+    /// which need to be modified
+    /// </param>
+    public void ModifyAttributes(BasicAttributes baseAttributes, B_Creature creature = null);
 }
 
 public abstract class B_Trait : MonoBehaviour
@@ -23,8 +38,11 @@ public abstract class B_Trait : MonoBehaviour
             throw new NotImplementedException();
         }
     }
+    abstract public int MaxLevel { get; }
     public int currentTraitCreatureCount;
-    public List<int> levelThresholds; // the number of creatures required to reach each level
+    public LineUp lineUp;
+    abstract public List<int> levelThresholds { get; } // the number of creatures required to reach each level
+    protected List<B_Creature> inBattleCreatures => BattleWorldManager.Instance.GetInBattleCreatures(lineUp);
 
     /// <summary>
     /// Get the number of creatures needed to reach the next level of this trait

@@ -1,20 +1,45 @@
+using System.Collections;
 using System.Collections.Generic;
 using Category.Battle;
+using UnityEngine;
 
 public class T_ArmoredWarcraft : B_Trait, ITraitHolder
 {
-    public void ApplyAttackEffect(List<AttackEffetct> attackEffetcts)
+    public override int MaxLevel => 3;
+    public override List<int> levelThresholds => new List<int> { 2, 4, 6 };
+    private List<int> ArmorSpellResistanceBonusPerLevel = new List<int> { 0, 5, 10, 15 };
+    private int bonusIntervaslSeconds = 5;
+    void Start() => traitType = Trait.装甲魔兽;
+
+    public void ModifyAttributes(CardAttributeDB.CreatureCardAttribute.BasicAttributes baseAttributes, B_Creature creature = null)
     {
-        throw new System.NotImplementedException();
     }
 
-    public void ApplyAttribute(CardAttributeDB.CreatureCardAttribute.BasicAttributes baseAttributes)
+    public void OnBattleEnd()
     {
-        throw new System.NotImplementedException();
+        StopAllCoroutines();
     }
 
     public void OnBattleStart()
     {
-        throw new System.NotImplementedException();
+        StartCoroutine(AddArmorAndSpellResistanceBuffs());
+    }
+
+    private IEnumerator AddArmorAndSpellResistanceBuffs()
+    {
+        while (BattleWorldManager.InBattle)
+        {
+            yield return new WaitForSeconds(bonusIntervaslSeconds);
+            int level = this.level;
+            if (level > 0)
+            {
+                int bonus = ArmorSpellResistanceBonusPerLevel[level];
+                foreach (var creature in inBattleCreatures)
+                {
+                    creature.curAttribute.armor += bonus;
+                    creature.curAttribute.spellResistance += bonus;
+                }
+            }
+        }
     }
 }

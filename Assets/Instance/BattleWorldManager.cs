@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Category;
@@ -18,6 +19,8 @@ public class BattleWorldManager : MonoBehaviour
     public static readonly string EnemyWavesResourcePath = "EnemyWaves/";
     public static readonly string EnemyWavesResourceName = "EnemyWave";
     public static bool InBattle = false;
+    public bool mannualTickControl = false;
+    public static float TickInterval = 1.0f;
     [Header("Battle World Prefabs")]
     public GameObject BattleCreaturePrefab;
     public GameObject EquipmentSlotPrefab;
@@ -30,16 +33,20 @@ public class BattleWorldManager : MonoBehaviour
     public GameObject EquipmentAreaContent;
     public RectTransform CreatureScrollView;
     public Transform DraggingSlot;
-    public GameObject TraitGameobject;
+    public GameObject PlayerTraitGameobject;
+    public GameObject EnemyTraitGameobject;
     public Button StartBattleButton;
     [Header("Battle World References")]
     public List<B_Creature> playerCreatures = new List<B_Creature>();
     public List<B_Creature> enemyCreatures = new List<B_Creature>();
     public List<B_Equipment> equipments = new List<B_Equipment>();
+    public List<B_Creature> InBattleCreatures => playerCreatures.FindAll(c => c.inBattle);
     [Header("Traits")]
     // (Trait, count), if count == 0, the trait is inactive but has relevant creatures on the field
-    public Dictionary<Trait, ITraitHolder> traitObjDict = new Dictionary<Trait, ITraitHolder>();
-    public List<(Trait, int)> activeTraits = new List<(Trait, int)>();
+    public Dictionary<Trait, B_Trait> playerTraitObjDict = new Dictionary<Trait, B_Trait>();
+    public List<(Trait, int)> playerActiveTraits = new List<(Trait, int)>();
+    public Dictionary<Trait, B_Trait> enemyTraitObjDict = new Dictionary<Trait, B_Trait>();
+    public List<(Trait, int)> enemyActiveTraits = new List<(Trait, int)>();
 
     // Tick Events
     public event Action PlayerTick;
@@ -48,6 +55,7 @@ public class BattleWorldManager : MonoBehaviour
     public event Action DamageActions;
     public event Action OnBattleStart;
     public event Action OnBattleEnd;
+    public event Action<B_Creature> OnCreatureDead;
 
     #region TEST_FUNCTIONS_AND_DATA
     public Button nextSceneBtn;
@@ -80,6 +88,7 @@ public class BattleWorldManager : MonoBehaviour
             creatureCardType = testCreatureCardType
         };
         var attr = DataBaseManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(cardDescription);
+        creature.creatureCardAttribute = attr;
         creature.curAttribute = (CardAttributeDB.CreatureCardAttribute.BasicAttributes)attr.basicAttributes.Clone();
         creature.lineUp = lineUp;
         return creature;
@@ -118,30 +127,51 @@ public class BattleWorldManager : MonoBehaviour
 
     void OnEnable()
     {
+        // initialize battle objects from CardManager
         foreach (var id in CardManager.Instance.battleSceneCreatureCardIDs)
         {
             Debug.Log($"BattleWorldManager adding battle object with card ID: {id}");
             AddBattleObject(id);
         }
 
+        // initialize equipments from CardManager
         foreach (var (id, attr) in CardManager.Instance.GetResourceCardAttributes())
             if (attr.resourceClassification == ResourceCardClassification.Equipment)
             {
                 AddBattleEquipment(id);
             }
 
-        foreach (var trait in TraitGameobject.GetComponentsInChildren<B_Trait>())
+        // initialize trait objects
+        foreach (var trait in PlayerTraitGameobject.GetComponentsInChildren<B_Trait>())
         {
+            trait.lineUp = LineUp.Player;
+            playerTraitObjDict[trait.traitType] = trait;
             if (trait is ITraitHolder traitHolder)
             {
-                traitObjDict[trait.traitType] = traitHolder;
                 OnBattleStart += traitHolder.OnBattleStart;
+                OnBattleEnd += traitHolder.OnBattleEnd;
+            }
+        }
+        foreach (var trait in EnemyTraitGameobject.GetComponentsInChildren<B_Trait>())
+        {
+            trait.lineUp = LineUp.Enemy;
+            enemyTraitObjDict[trait.traitType] = trait;
+            if (trait is ITraitHolder traitHolder)
+            {
+                OnBattleStart += traitHolder.OnBattleStart;
+                OnBattleEnd += traitHolder.OnBattleEnd;
             }
         }
 
         StartBattleButton.onClick.AddListener(() =>
         {
             InBattle = true;
+            
+            // make sure the OnBattleStart event is invoked before all creatures set their curAttribute
+            // because some traits may modify the attributes at the start of battle
+            OnBattleStart?.Invoke();
+
+
             foreach (var creature in playerCreatures)
             {
                 creature.curAttribute = creature.actAttribute;
@@ -150,7 +180,10 @@ public class BattleWorldManager : MonoBehaviour
             {
                 creature.curAttribute = creature.actAttribute;
             }
-            OnBattleStart?.Invoke();
+            if (!mannualTickControl)
+            {
+                StartCoroutine(ReapeatTick());
+            }
         });
     }
 
@@ -162,6 +195,15 @@ public class BattleWorldManager : MonoBehaviour
         }
     }
 
+    private IEnumerator ReapeatTick()
+    {
+        while (InBattle)
+        {
+            InvokeTick();
+            yield return new WaitForSeconds(TickInterval);
+        }
+    }
+
     public void InstantiateLog(string logContent, TooltipText.TooltipMode mode = TooltipText.TooltipMode.Normal)
     {
         Instantiate(tooltipPrefab, GetComponentInParent<Canvas>().transform).GetComponent<TooltipText>()
@@ -169,6 +211,10 @@ public class BattleWorldManager : MonoBehaviour
     }
 
     # region BATTLEWORLD OBJS APIS
+    public List<B_Creature> GetCreatures(LineUp lineUp) =>
+        lineUp == LineUp.Player ? playerCreatures : enemyCreatures;
+    public List<B_Creature> GetInBattleCreatures(LineUp lineUp) =>
+        lineUp == LineUp.Player ? InBattleCreatures : enemyCreatures; 
     public void RemoveObj(B_Creature creature)
     {
         if (creature.lineUp == LineUp.Player)
@@ -187,6 +233,7 @@ public class BattleWorldManager : MonoBehaviour
         {
             HexNodeManager.MoveObject(creature, hexNode, null);
         }
+        OnCreatureDead?.Invoke(creature);
         Destroy(creature.gameObject);
     }
 
@@ -196,6 +243,7 @@ public class BattleWorldManager : MonoBehaviour
         var creatureGO = Instantiate(BattleCreaturePrefab, PreparationAreaContent.transform.position, Quaternion.identity, PreparationAreaContent.transform);
 
         var creature = creatureGO.GetComponent<B_Creature>();
+        creature.creatureCardAttribute = attr;
         playerCreatures.Add(creature);
         PlayerTick += creature.Tick;
 
@@ -291,25 +339,37 @@ public class BattleWorldManager : MonoBehaviour
         Debug.Log("BattleWorldManager Tick End");
     }
 
-
     public void OnCardClicked(B_Creature card)
     {
         CreatureAttributeDisplay panel = Instantiate(attributeDisplayPrefab, GetComponentInParent<Canvas>().transform).GetComponent<CreatureAttributeDisplay>();
-        panel.UpdateAttributes(CardManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(card.cardID), basicAttributes: card.actAttribute);
+        panel.UpdateAttributes(card.creatureCardAttribute, basicAttributes: card.actAttribute);
+    }
+
+    public void EndBattle()
+    {
+        OnBattleEnd?.Invoke();
     }
     #endregion
 
     #region Trait APIS
+    public Dictionary<Trait, B_Trait> GetTraitObjDict(LineUp lineUp)
+        => lineUp == LineUp.Player ? playerTraitObjDict : enemyTraitObjDict;
     public void UpdateActiveTraits()
     {
-        activeTraits.Clear();
+        playerActiveTraits.Clear();
+        enemyActiveTraits.Clear();
         // TODO: update activeTraits
         throw new NotImplementedException();
 
         // set currentTraitCreatureCount for each trait object
-        foreach (var (trait, count) in activeTraits)
+        foreach (var (trait, count) in playerActiveTraits)
         {
-            B_Trait traitObj = traitObjDict[trait] as B_Trait;
+            B_Trait traitObj = playerTraitObjDict[trait] as B_Trait;
+            traitObj.currentTraitCreatureCount = count;
+        }
+        foreach (var (trait, count) in enemyActiveTraits)
+        {
+            B_Trait traitObj = enemyTraitObjDict[trait] as B_Trait;
             traitObj.currentTraitCreatureCount = count;
         }
     }
