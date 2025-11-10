@@ -44,9 +44,8 @@ public class BattleWorldManager : MonoBehaviour
     [Header("Traits")]
     // (Trait, count), if count == 0, the trait is inactive but has relevant creatures on the field
     public Dictionary<Trait, B_Trait> playerTraitObjDict = new Dictionary<Trait, B_Trait>();
-    public List<(Trait, int)> playerActiveTraits = new List<(Trait, int)>();
     public Dictionary<Trait, B_Trait> enemyTraitObjDict = new Dictionary<Trait, B_Trait>();
-    public List<(Trait, int)> enemyActiveTraits = new List<(Trait, int)>();
+
 
     // Tick Events
     public event Action PlayerTick;
@@ -166,7 +165,7 @@ public class BattleWorldManager : MonoBehaviour
         StartBattleButton.onClick.AddListener(() =>
         {
             InBattle = true;
-            
+
             // make sure the OnBattleStart event is invoked before all creatures set their curAttribute
             // because some traits may modify the attributes at the start of battle
             OnBattleStart?.Invoke();
@@ -214,7 +213,7 @@ public class BattleWorldManager : MonoBehaviour
     public List<B_Creature> GetCreatures(LineUp lineUp) =>
         lineUp == LineUp.Player ? playerCreatures : enemyCreatures;
     public List<B_Creature> GetInBattleCreatures(LineUp lineUp) =>
-        lineUp == LineUp.Player ? InBattleCreatures : enemyCreatures; 
+        lineUp == LineUp.Player ? InBattleCreatures : enemyCreatures;
     public void RemoveObj(B_Creature creature)
     {
         if (creature.lineUp == LineUp.Player)
@@ -356,10 +355,35 @@ public class BattleWorldManager : MonoBehaviour
         => lineUp == LineUp.Player ? playerTraitObjDict : enemyTraitObjDict;
     public void UpdateActiveTraits()
     {
-        playerActiveTraits.Clear();
-        enemyActiveTraits.Clear();
-        // TODO: update activeTraits
-        throw new NotImplementedException();
+        List<(Trait, int)> playerActiveTraits = new List<(Trait, int)>();
+        List<(Trait, int)> enemyActiveTraits = new List<(Trait, int)>();
+
+        foreach (var pt in playerTraitObjDict)
+        {
+            var trait = pt.Key;
+            int count = 0;
+            foreach (var creature in playerCreatures)
+            {
+                if (creature == null) continue;
+
+                if (creature.actAttribute != null && creature.actAttribute.traits.Contains(trait))
+                    count++;
+            }
+            playerActiveTraits.Add((trait, count));
+        }
+
+        foreach (var et in enemyTraitObjDict)
+        {
+            var trait = et.Key;
+            int count = 0;
+            foreach (var creature in enemyCreatures)
+            {
+                if (creature == null) continue;
+                if (creature.actAttribute != null && creature.actAttribute.traits.Contains(trait))
+                    count++;
+            }
+            enemyActiveTraits.Add((trait, count));
+        }
 
         // set currentTraitCreatureCount for each trait object
         foreach (var (trait, count) in playerActiveTraits)
