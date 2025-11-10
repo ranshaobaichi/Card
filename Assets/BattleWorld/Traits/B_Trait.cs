@@ -58,7 +58,7 @@ public abstract class B_Trait : MonoBehaviour
     {
         int curLevel = level;
         int nextThreshold = levelThresholds[Mathf.Max(curLevel + 1, MaxLevel)];
-        int need = nextThreshold - currentTraitCreatureCount;
-        return Mathf.Abs(need);
+        int need = Mathf.Abs(nextThreshold - currentTraitCreatureCount);
+        return need;
     }
 }
