@@ -358,32 +358,40 @@ public class BattleWorldManager : MonoBehaviour
         List<(Trait, int)> playerActiveTraits = new List<(Trait, int)>();
         List<(Trait, int)> enemyActiveTraits = new List<(Trait, int)>();
 
-        foreach (var pt in playerTraitObjDict)
+        foreach (var creature in playerCreatures)
         {
-            var trait = pt.Key;
-            int count = 0;
-            foreach (var creature in playerCreatures)
+            if (creature == null) continue;
+
+            foreach (var trait in creature.actAttribute.traits)
             {
-                if (creature == null) continue;
-
-                if (creature.actAttribute != null && creature.actAttribute.traits.Contains(trait))
-                    count++;
+                if (playerActiveTraits.Exists(t => t.Item1 == trait))
+                {
+                    t.Item2++;
+                }
+                else
+                {
+                    playerActiveTraits.Add((trait, 1));
+                }
             }
-            playerActiveTraits.Add((trait, count));
         }
-
-        foreach (var et in enemyTraitObjDict)
+    
+        foreach (var creature in enemyCreatures)
         {
-            var trait = et.Key;
-            int count = 0;
-            foreach (var creature in enemyCreatures)
+            if (creature == null) continue;
+
+            foreach (var trait in creature.actAttribute.traits)
             {
-                if (creature == null) continue;
-                if (creature.actAttribute != null && creature.actAttribute.traits.Contains(trait))
-                    count++;
+                if (enemyActiveTraits.Exists(t => t.Item1 == trait))
+                {
+                    t.Item2++;
+                }
+                else
+                {
+                    enemyActiveTraits.Add((trait, 1));
+                }
             }
-            enemyActiveTraits.Add((trait, count));
         }
+        
 
         // set currentTraitCreatureCount for each trait object
         foreach (var (trait, count) in playerActiveTraits)
