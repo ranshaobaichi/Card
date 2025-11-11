@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class T_Soul : B_Trait, ITraitHolder
 {
-    override public int MaxLevel => 5;
-    override public List<int> levelThresholds => new List<int> { 1, 3, 5, 7, 9 }; // thresholds for levels 0 to 5
     public int deathCount = 0;
     [Header("Bouns Attributes")]
     public List<float> healthBonusPerLevel = new List<float> { 0, 0.01f, 0.02f, 0.04f, 0.06f, 0.06f }; // the health bonus provided at each level

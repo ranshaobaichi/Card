@@ -163,15 +163,15 @@ namespace Category
         [Serializable]
         public enum Trait
         {
-            精魂,
-            部落,
-            装甲魔兽,
-            刺客,
-            线列步兵,
-            破阵者,
-            施法者,
-            猎手,
-            冲击骑兵,
+            精魂 = 0,
+            部落 = 1,
+            装甲魔兽 = 2,
+            刺客 = 3,
+            线列步兵 = 4,
+            破阵者 = 5,
+            施法者 = 6,
+            猎手 = 7,
+            冲击骑兵 = 8,
         }
 
         [Serializable]
@@ -180,6 +180,7 @@ namespace Category
             TrueDamagePercentageOfAttackPower,
             PhysicalDamagePercentageOftargetHealth,
             ProbabilityDoubleDamage,
+            BounceAttack,
         }
     }
 }

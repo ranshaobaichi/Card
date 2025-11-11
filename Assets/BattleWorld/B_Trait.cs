@@ -37,16 +37,19 @@ public abstract class B_Trait : MonoBehaviour
             for (int i = levelThresholds.Count - 1; i >= 0; i--)
             {
                 if (currentTraitCreatureCount >= levelThresholds[i])
-                    return Math.Max(i, MaxLevel);
+                    return i + 1;
             }
             return 0;
         }
     }
-    abstract public int MaxLevel { get; }
+    public int MaxLevel { get => BattleWorldManager.Instance.traitAttributesDict[traitType].maxLevel; }
     public int currentTraitCreatureCount;
     public LineUp lineUp;
-    abstract public List<int> levelThresholds { get; } // the number of creatures required to reach each level
+    public List<int> levelThresholds { get => BattleWorldManager.Instance.traitAttributesDict[traitType].levelThresholds; } // the number of creatures required to reach each level
     protected List<B_Creature> inBattleCreatures => BattleWorldManager.Instance.GetInBattleCreatures(lineUp);
+    protected Dictionary<Trait, B_Trait> activeTraitDict => lineUp == LineUp.Player ?
+        BattleWorldManager.Instance.playerTraitObjDict :
+        BattleWorldManager.Instance.enemyTraitObjDict;
 
     /// <summary>
     /// Get the number of creatures needed to reach the next level of this trait

@@ -6035,6 +6035,7 @@ MonoBehaviour:
   craftTableDB: {fileID: 11400000, guid: 8a5bcd2e137e13443b764f9a23720a12, type: 2}
   cardAttributeDB: {fileID: 11400000, guid: 2f736eb8c5441b4489ad68188b52cb83, type: 2}
   eventCardUIDB: {fileID: 0}
+  traitDB: {fileID: 11400000, guid: 2e38cb0a9a9cedf45ac23b0ddfc45b3e, type: 2}
 --- !u!4 &1859616075
 Transform:
   m_ObjectHideFlags: 0

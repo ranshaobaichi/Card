@@ -315,6 +315,7 @@ public class CardAttributeDB : ScriptableObject
         InitializeResourceCardAttributesDict();
         // InitializeCardIcons();
         InitializeEquipmentCardAttributesDict();
+        
     }
     public T GetCardAttribute<T>(Card.CardDescription cardDescription)
     {

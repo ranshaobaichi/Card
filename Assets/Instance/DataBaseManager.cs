@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Category.Production;
 using Category;
+using System.Collections.ObjectModel;
 
 public class DataBaseManager : MonoBehaviour
 {
@@ -11,12 +12,14 @@ public class DataBaseManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
         cardAttributeDB.Initialize();
+        traitDB.InitializeTraitDict();
     }
 
     #region 合成表管理
@@ -59,5 +62,11 @@ public class DataBaseManager : MonoBehaviour
     public bool TryGetEventCardUIPrefab(EventCardType eventCardType, out GameObject prefab)
         => eventCardUIDB.TryGetEventCardUIPrefab(eventCardType, out prefab);
 
+    #endregion
+
+    #region 羁绊管理
+    public TraitDB traitDB;
+    public ReadOnlyDictionary<Category.Battle.Trait, TraitDB.TraitAttribute> GetAllTraitAttributes()
+        => traitDB.GetAllTraitAttributes();
     #endregion
 }

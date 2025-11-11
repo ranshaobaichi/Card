@@ -88,8 +88,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5779feca5149c2b419dff3f3af47878f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backgroundImage: {fileID: 0}
   fillImage: {fileID: 1713133977311171591}
+  currentTime: 0
 --- !u!1 &863495346659058865
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,7 +139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ae3a676bfdee5d4bacdef769f1539cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isMovingCardSlot: 0
-  maxCardCount: 3
+  maxCardCount: 5
   cards: []
   progressBar: {fileID: 1404627432513242204}
+  cardSlotID: 0

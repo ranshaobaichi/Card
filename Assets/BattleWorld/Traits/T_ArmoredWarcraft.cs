@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class T_ArmoredWarcraft : B_Trait, ITraitHolder
 {
-    public override int MaxLevel => 3;
-    public override List<int> levelThresholds => new List<int> { 2, 4, 6 };
     private List<int> ArmorSpellResistanceBonusPerLevel = new List<int> { 0, 5, 10, 15 };
     private int bonusIntervaslSeconds = 5;
     void Start() => traitType = Trait.装甲魔兽;
@@ -27,7 +25,7 @@ public class T_ArmoredWarcraft : B_Trait, ITraitHolder
 
     private IEnumerator AddArmorAndSpellResistanceBuffs()
     {
-        while (BattleWorldManager.InBattle)
+        while (BattleWorldManager.Instance.InBattle)
         {
             yield return new WaitForSeconds(bonusIntervaslSeconds);
             int level = this.level;

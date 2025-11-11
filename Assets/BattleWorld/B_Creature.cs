@@ -4,7 +4,6 @@ using UnityEngine.EventSystems;
 using Category.Battle;
 using System.Collections.Generic;
 using static CardAttributeDB.CreatureCardAttribute;
-using Category;
 
 public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
 {
@@ -29,7 +28,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     {
         get
         {
-            if (!BattleWorldManager.InBattle)
+            if (!BattleWorldManager.Instance.InBattle)
             {
                 BasicAttributes totalAttr = (BasicAttributes)curAttribute.Clone();
                 if (equipment != null)
@@ -44,7 +43,14 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
                     totalAttr.dodgeRate += equipmentCardAttribute.dodgeRate;
                     totalAttr.attackSpeed += equipmentCardAttribute.attackSpeed;
                     totalAttr.attackRange += equipmentCardAttribute.attackRange;
-
+                }
+                foreach ((Trait trait, B_Trait traitObj) in BattleWorldManager.Instance.GetTraitObjDict(lineUp))
+                {
+                    if (traitObj.currentTraitCreatureCount > 0 && traitObj is ITraitHolder traitHolder)
+                    {
+                        Debug.Log($"Modifying attributes for trait {trait}");
+                        traitHolder.ModifyAttributes(totalAttr, this);
+                    }
                 }
                 _actAttribute = totalAttr;
             }
@@ -63,7 +69,8 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
     private Vector2 oriPosition;
     private GameObject oriParent;
-
+    private bool isDragging = false;
+    
     void Awake()
     {
         image = GetComponent<Image>();
@@ -140,33 +147,89 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public void Attack(B_Creature target)
     {
         float damage = curAttribute.attackPower;
-        Category.Battle.DamageType damageType = curAttribute.normalAttackDamageType;
-        Debug.Log($"{transform.name} attacks {target.transform.name} for {damage} damage of type {damageType}");
-        float oriDamage = damage;
+        DamageType damageType = curAttribute.normalAttackDamageType;
+        List<(DamageType damageType, float damage, B_Creature target)> damageList = new List<(DamageType damageType, float damage, B_Creature target)>
+        {
+            (damageType, damage, target)
+        };
         attackEffetcts.ForEach(effect =>
         {
             switch (effect)
             {
                 case AttackEffetct.TrueDamagePercentageOfAttackPower:
                     float percentage = BattleWorldManager.Instance.GetTraitObjDict(lineUp)[Trait.部落] is T_Tribe tribeTrait ? tribeTrait.TrueDamagePercentageOfAttackPower : 0f;
-                    float trueDamage = oriDamage * percentage;
+                    float trueDamage = damageList[0].damage * percentage;
                     trueDamage = Mathf.Round(trueDamage * 100f) / 100f;
-                    target.TakeDamage(trueDamage, DamageType.TrueDamage, true);
+                    damageList.Add((DamageType.TrueDamage, trueDamage, target));
                     break;
                 case AttackEffetct.ProbabilityDoubleDamage:
                     float probability = BattleWorldManager.Instance.GetTraitObjDict(lineUp)[Trait.刺客] is T_Assassin assassinTrait ? assassinTrait.doubleDamageProbability : 0f;
-                    // TODO
+                    float roll = Random.Range(0f, 1f);
+                    roll = Mathf.Round(Random.Range(0f, 1f) * 100f) / 100f;
+                    if (roll <= probability)
+                    {
+                        damageList[0] = (damageList[0].damageType, damageList[0].damage * 2, damageList[0].target);
+                        Debug.Log($"{transform.name} triggered double damage!");
+                    }
                     break;
                 case AttackEffetct.PhysicalDamagePercentageOftargetHealth:
-                    // TODO
+                    if (damageType == DamageType.Physical)
+                    {
+                        float healthPercentage = BattleWorldManager.Instance.GetTraitObjDict(lineUp)[Trait.破阵者] is T_Destroyer destroyerTrait ? destroyerTrait.percentageOftargetHealth : 0f;
+                        float extraDamage = target.actAttribute.health * healthPercentage;
+                        extraDamage = Mathf.Round(extraDamage * 100f) / 100f;
+                        damageList.Add((DamageType.Physical, extraDamage, target));
+                        Debug.Log($"{transform.name} dealt extra {extraDamage} physical damage based on target's health!");
+                    }
+                    break;
+                case AttackEffetct.BounceAttack:
+                    T_Hunter hunterTrait = BattleWorldManager.Instance.GetTraitObjDict(lineUp)[Trait.猎手] as T_Hunter;
+                    int bounceCount = hunterTrait.bounceTargetCount;
+                    float damageDecrease = hunterTrait.bounceDamageDecrease;
+                    // random select bounce targets
+                    List<B_Creature> possibleTargets = new List<B_Creature>();
+                    var opponents = lineUp == LineUp.Player ?
+                        BattleWorldManager.Instance.GetInBattleCreatures(LineUp.Enemy) :
+                        BattleWorldManager.Instance.GetInBattleCreatures(LineUp.Player);
+                    if (opponents.Count <= bounceCount)
+                    {
+                        possibleTargets = opponents;
+                    }
+                    else
+                    {
+                        List<int> l = new List<int>();
+                        for (int i = 0; i < opponents.Count; i++) l.Add(i);
+                        // Fisher-Yates shuffle (using UnityEngine.Random)
+                        for (int i = l.Count - 1; i > 0; i--)
+                        {
+                            int j = Random.Range(0, i + 1);
+                            int tmp = l[i];
+                            l[i] = l[j];
+                            l[j] = tmp;
+                        }
+                        // pick bounceCount distinct random targets
+                        possibleTargets = new List<B_Creature>();
+                        for (int i = 0; i < bounceCount && i < l.Count; i++)
+                        {
+                            possibleTargets.Add(opponents[l[i]]);
+                        }
+                    }
+
+                    float damageForBounce = damageList[0].damage * (1 - damageDecrease);
+                    foreach (var bounceTarget in possibleTargets)
+                    {
+                        damageList.Add((curAttribute.normalAttackDamageType, damageForBounce, bounceTarget));
+                    }
                     break;
                 default:
                     throw new System.NotImplementedException();
-                    break;
             }
         });
 
-        target.TakeDamage(damage, damageType, true);
+        foreach (var (dt, d, t) in damageList)
+        {
+            t.TakeDamage(d, dt, true);
+        }
     }
 
     public bool TakeDamage(float damage, DamageType damageType, bool isNormalAttack)
@@ -259,13 +322,22 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     # region DragAndDrop
     public void OnDrag(PointerEventData eventData)
     {
+        // 只有在真正开始拖拽（OnBeginDrag 允许）时才响应 OnDrag
+        if (!isDragging) return;
         transform.position = Input.mousePosition;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (inBattle) 
+        // 如果不允许拖拽则直接返回并确保标记为未拖拽
+        if (lineUp == LineUp.Enemy && !BattleWorldManager.Instance.canDragEnemy)
         {
+            isDragging = false;
+            return;
+        }
+        if (BattleWorldManager.Instance.InBattle)
+        {
+            isDragging = false;
             BattleWorldManager.Instance.InstantiateLog("战斗中不能挪动物体!", TooltipText.TooltipMode.Warning);
             return;
         }
@@ -273,10 +345,14 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         oriPosition = transform.position;
         oriParent = transform.parent.gameObject;
         transform.SetParent(BattleWorldManager.Instance.DraggingSlot, false);
+        isDragging = true;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        // 如果没有处于拖拽状态则不做处理
+        if (!isDragging) return;
+        isDragging = false;
         bool IsPointerOverRect(RectTransform rect)
         {
             if (rect == null) return false;
@@ -284,7 +360,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             var cam = (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay) ? canvas.worldCamera : null;
             return RectTransformUtility.RectangleContainsScreenPoint(rect, Input.mousePosition, cam);
         }
-
+        
         bool succPut = false;
         if (eventData.pointerCurrentRaycast.gameObject != null)
         {
@@ -301,6 +377,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
                 Debug.Log("Dropped on Preparation Area");
                 succPut = true;
                 transform.SetParent(BattleWorldManager.Instance.PreparationAreaContent.transform, false);
+                HexNodeManager.MoveObject(this, hexNode, null);
             }
         }
 
@@ -310,7 +387,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             transform.position = oriPosition;
         }
         
-        BattleWorldManager.Instance.UpdateActiveTraits();
+        BattleWorldManager.Instance.UpdateActiveTraits(lineUp);
         image.raycastTarget = true;
     }
 

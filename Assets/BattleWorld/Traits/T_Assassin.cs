@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class T_Assassin : B_Trait, ITraitHolder
 {
-    public override int MaxLevel => 5;
-    public override List<int> levelThresholds => new List<int> {1, 3, 5, 7, 9};
     private List<float> damageBonusPerLevel = new List<float> {0f, 0.1f, 0.16f, 0.25f, 0.4f, 1.0f};
     private List<float> probabilityDoubleDamagePerLevel = new List<float> {0f, 0.10f, 0.18f, 0.35f, 0.5f, 0.8f};
     public float doubleDamageProbability => probabilityDoubleDamagePerLevel[level];

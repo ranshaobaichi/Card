@@ -185,6 +185,25 @@ public class CardManager : MonoBehaviour
                 }
         }
 
+        // Create reward cards
+        if (battleReward.Count > 0)
+        {
+            CardSlot rewardSlot = null;
+            foreach (var cardDesc in battleReward)
+            {
+                Card card = CreateCard(cardDesc);
+                if (rewardSlot == null)
+                {
+                    rewardSlot = CreateCardSlot(card.transform.position);
+                }
+                else
+                {
+                    CardSlot.ChangeCardToSlot(card.cardSlot, rewardSlot, card, null, true);
+                }
+            }
+            battleReward.Clear();
+        }
+
         // Init MainUI
         MainUIManager mainUIManager = FindObjectOfType<MainUIManager>();
         mainUIManager.InitMainUI();
@@ -570,5 +589,6 @@ public class CardManager : MonoBehaviour
 
     # region 战斗场景数据
     [HideInInspector] public List<long> battleSceneCreatureCardIDs = new List<long>();
+    [HideInInspector] public List<Card.CardDescription> battleReward = new List<Card.CardDescription>();
     # endregion
 }

@@ -40,7 +40,7 @@ MonoBehaviour:
       attackSpeed: 9
       attackRange: 1
       dropItem: []
-      traits: 
+      traits: 00000000
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 8
@@ -73,7 +73,7 @@ MonoBehaviour:
       attackSpeed: 9
       attackRange: 1
       dropItem: []
-      traits: 
+      traits: 01000000
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 6

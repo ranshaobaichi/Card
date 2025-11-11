@@ -51,6 +51,18 @@ public class CreatureAttributeDisplay : MonoBehaviour, IDragHandler, IBeginDragH
         exitBtn.onClick.AddListener(() => Destroy(this.gameObject));
     }
 
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            var rect = transform as RectTransform;
+            var canvas = rect.GetComponentInParent<Canvas>();
+            var cam = (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay) ? canvas.worldCamera : null;
+            bool isPointerOver = RectTransformUtility.RectangleContainsScreenPoint(rect, Input.mousePosition, cam);
+            if (!isPointerOver) Destroy(this.gameObject);
+        }
+    }
+
     public void UpdateAttributes(CardAttributeDB.CreatureCardAttribute creatureAttribute, CardAttributeDB.CreatureCardAttribute.BasicAttributes basicAttributes = null)
     {
         if (preDisplayPanel != null)
@@ -81,7 +93,10 @@ public class CreatureAttributeDisplay : MonoBehaviour, IDragHandler, IBeginDragH
         }
 
         // Set the attributes display
-        basicAttributes ??= creatureAttribute.basicAttributes;
+        if (basicAttributes == null)
+        {
+            basicAttributes = creatureAttribute.basicAttributes;
+        }
         nameText.text = creatureAttribute.creatureCardType.ToString();
         EXPText.text = creatureAttribute.levelUpExpNeeded < 500 ?
             $"{basicAttributes.EXP} / {creatureAttribute.levelUpExpNeeded}" :

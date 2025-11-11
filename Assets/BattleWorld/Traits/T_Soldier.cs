@@ -3,8 +3,6 @@ using Category.Battle;
 
 public class T_Soldier : B_Trait, ITraitHolder
 {
-    public override int MaxLevel => 4;
-    public override List<int> levelThresholds => new List<int> { 2, 4, 6, 8 };
     private List<float> healthBonus = new List<float> { 0f, 7f, 14f, 30f, 55f };
     private List<float> belowAttackBonus = new List<float> { 0f, 2f, 5f, 8f, 12f };
     void Start() => traitType = Trait.线列步兵;

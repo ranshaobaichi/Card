@@ -7,6 +7,7 @@ using System.Text;
 using System.Linq;
 using Category; 
 using Category.Production;
+using Category.Battle;
 
 public class CardAttributeDBCsvImporter : EditorWindow
 {
@@ -146,7 +147,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
             errorList.Clear();
 
             int successCount = 0;
-            int valNums = 25;
+            int valNums = 26;
 
             // 从第二行开始处理数据
             for (int i = 1; i < lines.Length; i++)
@@ -180,6 +181,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
                     attribute.basicAttributes = new CardAttributeDB.CreatureCardAttribute.BasicAttributes();
                     attribute.basicAttributes.workEfficiencyAttributes =
                         new CardAttributeDB.CreatureCardAttribute.BasicAttributes.WorkEfficiencyAttributes();
+                    attribute.basicAttributes.traits = new List<Trait>();
                     attribute.levelUpAttributes = new CardAttributeDB.CreatureCardAttribute.LevelUpAttributes();
 
                     attribute.creatureCardType = creatureType;
@@ -361,6 +363,27 @@ public class CardAttributeDBCsvImporter : EditorWindow
                         {
                             errorList.Add($"第{i + 1}行: 无效的 '{values[columnIndices["LevelUpEXPIncreasePercent"]]}' 经验值提升百分比");
                         }
+                    }
+
+                    if (columnIndices.ContainsKey("Traits") && values.Length > columnIndices["Traits"])
+                    {
+                        string[] traitIDs = values[columnIndices["Traits"]].Split('*');
+                        bool flag = false;
+                        foreach (var traitID in traitIDs)
+                        {
+                            if (Enum.TryParse<Trait>(traitID, out Trait trait))
+                            {
+                                attribute.basicAttributes.traits.Add(trait);
+                                flag &= true;
+                            }
+                            else
+                            {
+                                errorList.Add($"第{i + 1}行: 无效的特性 '{traitID}'");
+                                flag = false;
+                            }
+                        }
+                        if (flag)
+                            valCount++;
                     }
 
                     // 添加到字典
