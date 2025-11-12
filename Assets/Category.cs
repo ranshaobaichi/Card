@@ -95,12 +95,11 @@ namespace Category
     public enum EventCardType
     {
         None,
-        蜘蛛巡逻队,
-        蜘蛛巢穴,
+        地下城废墟,
         失落的魔像,
-        新生的精灵,
-        鹰身女妖的造访,
-        精魂躁动的源头,
+        群山的客人,
+        名副其实的猎人,
+        稀薄的古老血脉
     }
     #endregion
 

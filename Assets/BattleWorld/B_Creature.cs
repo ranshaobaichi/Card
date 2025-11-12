@@ -54,10 +54,12 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
                 }
                 _actAttribute = totalAttr;
             }
-            
+            if (_actAttribute == null)
+            {
+                Debug.LogError($"actAttribute is null for {transform.name}");
+            }
             return _actAttribute;
         }
-
         set
         {
             _actAttribute = value;
@@ -267,7 +269,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         // Take damage
         actualDamage = Mathf.Max(actualDamage, 0);
         curAttribute.health -= actualDamage;
-        curAttribute.health = Mathf.FloorToInt(curAttribute.health);
+        curAttribute.health = Mathf.Round(curAttribute.health * 100f) / 100f;
         Debug.Log($"{transform.name} actual damage taken: {actualDamage}, health after: {curAttribute.health}");
 
         if (curAttribute.health <= 0)
@@ -283,30 +285,6 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public void MoveTo(HexNode targetNode)
     {
         HexNodeManager.MoveObject(this, hexNode, targetNode);
-    }
-
-    public void GainEXP(int exp)
-    {
-        CardAttributeDB.CreatureCardAttribute creatureAttribute = CardManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(cardID);
-        creatureAttribute.basicAttributes.EXP += exp;
-        int experience = (1 + creatureAttribute.basicAttributes.level) * creatureAttribute.levelUpExpIncreasePercent;
-        if (creatureAttribute.basicAttributes.EXP >= experience)
-        {
-            creatureAttribute.basicAttributes.level += 1;
-            creatureAttribute.basicAttributes.EXP -= experience;
-            // Increase other attributes on level up
-            creatureAttribute.basicAttributes.satiety += creatureAttribute.levelUpAttributes.satietyGrowth;
-            creatureAttribute.basicAttributes.health += creatureAttribute.levelUpAttributes.healthGrowth;
-            creatureAttribute.basicAttributes.attackPower += creatureAttribute.levelUpAttributes.attackPowerGrowth;
-            creatureAttribute.basicAttributes.spellPower += creatureAttribute.levelUpAttributes.spellPowerGrowth;
-            creatureAttribute.basicAttributes.armor += creatureAttribute.levelUpAttributes.armorGrowth;
-            creatureAttribute.basicAttributes.spellResistance += creatureAttribute.levelUpAttributes.spellResistanceGrowth;
-            creatureAttribute.basicAttributes.moveSpeed -= creatureAttribute.levelUpAttributes.moveSpeedGrowth;
-            creatureAttribute.basicAttributes.dodgeRate += creatureAttribute.levelUpAttributes.dodgeRateGrowth;
-            creatureAttribute.basicAttributes.attackSpeed -= creatureAttribute.levelUpAttributes.attackSpeedGrowth;
-            creatureAttribute.basicAttributes.attackRange += creatureAttribute.levelUpAttributes.attackRangeGrowth;
-            Debug.Log($"{transform.name} leveled up to level {creatureAttribute.basicAttributes.level}!");
-        }
     }
 
     public void RemoveEquipment()

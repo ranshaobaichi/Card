@@ -24,11 +24,11 @@ public class T_Soul : B_Trait, ITraitHolder
         BattleWorldManager.Instance.OnCreatureDead -= AddDeathCount;
         if (lineUp == LineUp.Enemy) return;
 
-        foreach (var creature in inBattleCreatures)
+        foreach (var creatureID in BattleWorldManager.Instance.playerDeployedCreatureIDs)
         {
-            if (creature.curAttribute.traits.Contains(traitType))
+            CardAttributeDB.CreatureCardAttribute attr = CardManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(creatureID);
+            if (attr != null && attr.basicAttributes.traits.Contains(traitType))
             {
-                var attr = creature.creatureCardAttribute;
                 // health bonus
                 float healthBonus = healthBonusPerLevel[level] * deathCount * attr.basicAttributes.health;
                 healthBonus = Mathf.Round(healthBonus * 100f) / 100f;
@@ -41,7 +41,7 @@ public class T_Soul : B_Trait, ITraitHolder
                 ModifyAttributes(attr.basicAttributes);
                 // exp bonus
                 int expGain = (level == MaxLevel && deathCount >= 6) ? expBonus : 0;
-                creature.GainEXP(expGain);
+                CardManager.Instance.GainEXP(creatureID, expGain);
             }
         }
     }

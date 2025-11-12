@@ -10,7 +10,7 @@ public class T_Mage : B_Trait, ITraitHolder
 
     public void ModifyAttributes(CardAttributeDB.CreatureCardAttribute.BasicAttributes baseAttributes, B_Creature creature = null)
     {
-        if (creature.actAttribute.traits.Contains(traitType))
+        if (baseAttributes.traits.Contains(traitType))
         {
             float bonus1 = spellDamageBonusPerLevel[level];
             float bonus2 = spellBonusPerSoulPerLevel[level] * activeTraitDict[Trait.精魂].currentTraitCreatureCount;
@@ -22,7 +22,7 @@ public class T_Mage : B_Trait, ITraitHolder
 
     public void OnBattleEnd()
     {
-        throw new System.NotImplementedException();
+
     }
 
     public void OnBattleStart()

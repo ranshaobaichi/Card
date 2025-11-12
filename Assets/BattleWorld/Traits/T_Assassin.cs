@@ -12,7 +12,17 @@ public class T_Assassin : B_Trait, ITraitHolder
 
     public void ModifyAttributes(CardAttributeDB.CreatureCardAttribute.BasicAttributes baseAttributes, B_Creature creature = null)
     {
-        if (creature.actAttribute.traits.Contains(traitType))
+        if (baseAttributes == null)
+        {
+            Debug.LogError("BaseAttributes is null in T_Assassin ModifyAttributes");
+            return;
+        }
+        if (baseAttributes.traits == null)
+        {
+            Debug.LogError("BaseAttributes.traits is null in T_Assassin ModifyAttributes");
+            return;
+        }
+        if (baseAttributes.traits.Contains(traitType))
         {
             float bonus = damageBonusPerLevel[level];
             float attackPower = baseAttributes.attackPower;
@@ -29,9 +39,9 @@ public class T_Assassin : B_Trait, ITraitHolder
     {
         foreach (var creature in inBattleCreatures)
         {
-            ModifyAttributes(creature.actAttribute);
             if (creature.actAttribute.traits.Contains(traitType) && level > 0)
             {
+                ModifyAttributes(creature.actAttribute, creature);
                 creature.attackEffetcts.Add(AttackEffetct.ProbabilityDoubleDamage);
             }
         }

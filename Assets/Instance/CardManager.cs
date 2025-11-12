@@ -71,6 +71,7 @@ public class CardManager : MonoBehaviour
         // Reinitialize the allCards dictionary
         if (SceneManager.currentScene == SceneManager.ProductionScene)
         {
+            canvas = GameObject.FindGameObjectWithTag("Canvas").GetComponent<Canvas>();
             cardSlotSet = GameObject.FindGameObjectWithTag("CardSlotSet").transform;
             Debug.Log("Loading Production Scene Cards...");
             LoadProductionScene();
@@ -186,6 +187,7 @@ public class CardManager : MonoBehaviour
         }
 
         // Create reward cards
+        Debug.Log("Creating Battle Reward Cards...");
         if (battleReward.Count > 0)
         {
             CardSlot rewardSlot = null;
@@ -264,9 +266,14 @@ public class CardManager : MonoBehaviour
             newCard.cardImages[3].sprite = cardIconAttrribute.illustration;
             newCard.cardImages[4].sprite = cardIconAttrribute.bottom;
             newCard.cardImages[5].sprite = cardIconAttrribute.side;
+            newCard.nameText.text = cardDescription.ToString();
             if (resourceClassification == ResourceCardClassification.Food)
             {
                 newCard.foodText.text = GetCardAttribute<ResourceCardAttribute>(cardID).satietyValue.ToString();
+            }
+            else
+            {
+                newCard.foodText.gameObject.SetActive(false);
             }
         }
         else
@@ -274,8 +281,6 @@ public class CardManager : MonoBehaviour
             Debug.LogError($"Card icon attribute not found for card ID {cardID} of type {cardDescription}");
         }
         
-
-
         onCardCreated?.Invoke(newCard);
         return newCard;
     }
@@ -574,6 +579,34 @@ public class CardManager : MonoBehaviour
     public float GetWorkEfficiencyValue(WorkEfficiencyType workEfficiencyType)
         => DataBaseManager.Instance.GetWorkEfficiencyValue(workEfficiencyType);
 
+    public void GainEXP(long cardID, int exp)
+    {
+        CreatureCardAttribute creatureAttribute = GetCardAttribute<CreatureCardAttribute>(cardID);
+        if (creatureAttribute == null)
+        {
+            Debug.LogWarning($"CardManager: No CreatureCardAttribute found for cardID={cardID} when gaining EXP.");
+            return;
+        }
+        creatureAttribute.basicAttributes.EXP += exp;
+        int experience = (1 + creatureAttribute.basicAttributes.level) * creatureAttribute.levelUpExpIncreasePercent;
+        if (creatureAttribute.basicAttributes.EXP >= experience)
+        {
+            creatureAttribute.basicAttributes.level += 1;
+            creatureAttribute.basicAttributes.EXP -= experience;
+            // Increase other attributes on level up
+            creatureAttribute.basicAttributes.satiety += creatureAttribute.levelUpAttributes.satietyGrowth;
+            creatureAttribute.basicAttributes.health += creatureAttribute.levelUpAttributes.healthGrowth;
+            creatureAttribute.basicAttributes.attackPower += creatureAttribute.levelUpAttributes.attackPowerGrowth;
+            creatureAttribute.basicAttributes.spellPower += creatureAttribute.levelUpAttributes.spellPowerGrowth;
+            creatureAttribute.basicAttributes.armor += creatureAttribute.levelUpAttributes.armorGrowth;
+            creatureAttribute.basicAttributes.spellResistance += creatureAttribute.levelUpAttributes.spellResistanceGrowth;
+            creatureAttribute.basicAttributes.moveSpeed -= creatureAttribute.levelUpAttributes.moveSpeedGrowth;
+            creatureAttribute.basicAttributes.dodgeRate += creatureAttribute.levelUpAttributes.dodgeRateGrowth;
+            creatureAttribute.basicAttributes.attackSpeed -= creatureAttribute.levelUpAttributes.attackSpeedGrowth;
+            creatureAttribute.basicAttributes.attackRange += creatureAttribute.levelUpAttributes.attackRangeGrowth;
+            Debug.Log($"{transform.name} leveled up to level {creatureAttribute.basicAttributes.level}!");
+        }
+    }
 
     #endregion
 

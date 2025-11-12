@@ -35,11 +35,18 @@ MonoBehaviour:
       normalAttackDamageType: 0
       armor: 5
       spellResistance: 5
-      moveSpeed: 15
+      moveSpeed: 1
       dodgeRate: 0.05
-      attackSpeed: 9
+      attackSpeed: 1
       attackRange: 1
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 26
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 2
+        dropWeight: 3
       traits: 00000000
     levelUpAttributes:
       satietyGrowth: 0

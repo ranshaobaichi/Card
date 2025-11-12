@@ -12,8 +12,9 @@ using UnityEngine.UI;
 [Serializable]
 public struct EnemyWaveData
 {
-    public CreatureCardType creatureType;
-    public AxialCoordinate spawnCoord;
+    public List<CreatureCardType> creatureType;
+    public List<AxialCoordinate> spawnCoord;
+    public int totalExpGain;
 }
 public class BattleWorldManager : MonoBehaviour
 {
@@ -23,7 +24,10 @@ public class BattleWorldManager : MonoBehaviour
     public bool InBattle = false;
     public bool mannualTickControl = false;
     public bool canDragEnemy = false;
-    public static float TickInterval = 1.0f;
+    public float TickInterval = 1.0f;
+    public EnemyWaveData currentWaveData;
+    private List<CreatureCardType> testAddEnemyTypes = new List<CreatureCardType>();
+    
     [Header("Battle World Prefabs")]
     public GameObject BattleCreaturePrefab;
     public GameObject EquipmentSlotPrefab;
@@ -31,6 +35,7 @@ public class BattleWorldManager : MonoBehaviour
     public GameObject tooltipPrefab;
     public GameObject attributeDisplayPrefab;
     public GameObject traitItemnPrefab;
+    public GameObject rewardCardPrefab;
 
     [Header("Battle World Contents")]
     public GameObject PreparationAreaContent;
@@ -40,11 +45,16 @@ public class BattleWorldManager : MonoBehaviour
     public GameObject PlayerTraitGameobject;
     public GameObject EnemyTraitGameobject;
     public Button StartBattleButton;
+    [Header("Reward Panel")]
+    public GameObject rewardPanel;
+    public GameObject rewardCardPanel;
+    public Button nextSceneBtn;
     [Header("Battle World References")]
     public List<B_Creature> playerCreatures = new List<B_Creature>();
     public List<B_Creature> enemyCreatures = new List<B_Creature>();
     public List<B_Equipment> equipments = new List<B_Equipment>();
     public List<B_Creature> InBattleCreatures => playerCreatures.FindAll(c => c.inBattle);
+    public List<long> playerDeployedCreatureIDs = new List<long>();
     [Header("Traits")]
     // (Trait, count), if count == 0, the trait is inactive but has relevant creatures on the field
     public TraitPanel traitDescriptionPanel;
@@ -64,7 +74,6 @@ public class BattleWorldManager : MonoBehaviour
     public event Action<B_Creature> OnCreatureDead;
 
     #region TEST_FUNCTIONS_AND_DATA
-    public Button nextSceneBtn;
     /// <summary>
     /// TEST FUNCTION, create a tmp battle creature which will not be saved
     /// </summary>
@@ -96,7 +105,12 @@ public class BattleWorldManager : MonoBehaviour
         var attr = DataBaseManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(cardDescription);
         creature.creatureCardAttribute = attr;
         creature.curAttribute = (CardAttributeDB.CreatureCardAttribute.BasicAttributes)attr.basicAttributes.Clone();
+        creature.actAttribute = (CardAttributeDB.CreatureCardAttribute.BasicAttributes)attr.basicAttributes.Clone();
         creature.lineUp = lineUp;
+        creature.cardID = -1; // test creature has no valid cardID
+
+        if (lineUp == LineUp.Enemy) 
+            testAddEnemyTypes.Add(testCreatureCardType);
         return creature;
     }
 
@@ -134,6 +148,7 @@ public class BattleWorldManager : MonoBehaviour
     void OnEnable()
     {
         traitAttributesDict = DataBaseManager.Instance.GetAllTraitAttributes();
+        testAddEnemyTypes.Clear();
         // initialize battle objects from CardManager
         foreach (var id in CardManager.Instance.battleSceneCreatureCardIDs)
         {
@@ -170,34 +185,41 @@ public class BattleWorldManager : MonoBehaviour
             }
         }
 
+        OnCreatureDead += (B_Creature _) => EndBattle();
         StartBattleButton.onClick.AddListener(() =>
         {
             InBattle = true;
             Debug.Log("Battle Started");
+            playerDeployedCreatureIDs.Clear();
+            foreach (var creature in InBattleCreatures)
+            {
+                playerDeployedCreatureIDs.Add(creature.cardID);
+            }
 
             // make sure the OnBattleStart event is invoked before all creatures set their curAttribute
             // because some traits may modify the attributes at the start of battle
             OnBattleStart?.Invoke();
 
-
             foreach (var creature in playerCreatures)
             {
-                creature.curAttribute = creature.actAttribute;
+                creature.curAttribute.CopyFrom(creature.actAttribute);
             }
             foreach (var creature in enemyCreatures)
             {
-                creature.curAttribute = creature.actAttribute;
+                creature.curAttribute.CopyFrom(creature.actAttribute);
             }
             if (!mannualTickControl)
             {
                 StartCoroutine(ReapeatTick());
             }
+
+            StartBattleButton.interactable = false;
         });
     }
 
     void Update()
     {
-        if (InBattle && Input.GetKeyDown(KeyCode.Space))
+        if (InBattle && mannualTickControl && Input.GetKeyDown(KeyCode.Space))
         {
             InvokeTick();
         }
@@ -229,7 +251,7 @@ public class BattleWorldManager : MonoBehaviour
         {
             playerCreatures.Remove(creature);
             PlayerTick -= creature.Tick;
-            CardManager.Instance.RemoveCardAttribute(creature.cardID);
+            // CardManager.Instance.RemoveCardAttribute(creature.cardID);
         }
         else
         {
@@ -287,13 +309,13 @@ public class BattleWorldManager : MonoBehaviour
             return false;
         }
 
-        string[] lines = waveDataAsset.text.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-        foreach (var line in lines)
+        EnemyWaveData waveData = JsonUtility.FromJson<EnemyWaveData>(waveDataAsset.text);
+        for (int i = 0; i < waveData.creatureType.Count; i++)
         {
-            EnemyWaveData data = JsonUtility.FromJson<EnemyWaveData>(line);
-            var creatureGO = AddObj(LineUp.Enemy, data.creatureType);
-            HexNodeManager.MoveObject(creatureGO, null, HexNodeManager.Instance.Tiles[data.spawnCoord]);
+            var creatureGO = AddObj(LineUp.Enemy, waveData.creatureType[i]);
+            HexNodeManager.MoveObject(creatureGO, null, HexNodeManager.Instance.Tiles[waveData.spawnCoord[i]]);
         }
+        currentWaveData = waveData;
 
         UpdateActiveTraits(LineUp.Enemy);
         UpdateTraitDisplay(LineUp.Enemy);
@@ -301,19 +323,20 @@ public class BattleWorldManager : MonoBehaviour
         return true;
     }
 
-    public void SaveCurBattleWave(int waveIdx)
+    public void SaveCurBattleWave(int waveIdx, int expGain)
     {
 #if UNITY_EDITOR
         string json = "";
+        EnemyWaveData waveData = new EnemyWaveData
+        {
+            creatureType = new List<CreatureCardType>(),
+            spawnCoord = new List<AxialCoordinate>(),
+            totalExpGain = expGain
+        };
         foreach (var enemy in enemyCreatures)
         {
-            EnemyWaveData data = new EnemyWaveData
-            {
-                creatureType = CardManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(enemy.cardID).creatureCardType,
-                spawnCoord = enemy.hexNode.coord
-            };
-            string enemyJson = JsonUtility.ToJson(data);
-            json += enemyJson + "\n";
+            waveData.creatureType.Add(enemy.creatureCardAttribute.creatureCardType);
+            waveData.spawnCoord.Add(enemy.hexNode.coord);
         }
 
         string resourcesDir = Path.Combine(Application.dataPath, "Resources", "EnemyWaves");
@@ -339,7 +362,7 @@ public class BattleWorldManager : MonoBehaviour
     #region Life cycle Methods
     private void InvokeTick()
     {
-        Debug.Log("BattleWorldManager Invoke Tick");
+        // Debug.Log("BattleWorldManager Invoke Tick");
         PlayerTick?.Invoke();
         EnemyTick?.Invoke();
 
@@ -348,7 +371,7 @@ public class BattleWorldManager : MonoBehaviour
 
         NormalActions = null;
         DamageActions = null;
-        Debug.Log("BattleWorldManager Tick End");
+        // Debug.Log("BattleWorldManager Tick End");
     }
 
     public void OnCardClicked(B_Creature card)
@@ -359,7 +382,70 @@ public class BattleWorldManager : MonoBehaviour
 
     public void EndBattle()
     {
+        if (enemyCreatures.Count > 0 && InBattleCreatures.Count > 0) return;
+
         OnBattleEnd?.Invoke();
+        rewardPanel.SetActive(true);
+        if (enemyCreatures.Count == 0)
+        {
+            Debug.Log("BattleWorldManager: Battle Won!");
+            // gain exp
+            int expGain = currentWaveData.totalExpGain / Math.Min(1, playerDeployedCreatureIDs.Count);
+            foreach (var id in playerDeployedCreatureIDs)
+            {
+                CardManager.Instance.GainEXP(id, expGain);
+            }
+
+            // show reward cards
+            CardManager.Instance.battleReward.Clear();
+            List<CreatureCardType> enemyTypes = new List<CreatureCardType>();
+            enemyTypes.AddRange(currentWaveData.creatureType);
+            enemyTypes.AddRange(testAddEnemyTypes);
+            foreach (var creature in enemyTypes)
+            {
+                Debug.Log($"BattleWorldManager: Processing drop for creature {creature}");
+                Card.CardDescription creatureDescription = new Card.CardDescription
+                {
+                    cardType = CardType.Creatures,
+                    creatureCardType = creature
+                };
+                var dropcards = DataBaseManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(creatureDescription).basicAttributes.dropItem;
+
+                // Drop card due to drop weight
+                if (dropcards.Count == 0) continue;
+                int totalWeight = 0;
+                foreach (var dropcard in dropcards)
+                {
+                    totalWeight += dropcard.dropWeight;
+                }
+                int randomWeight = UnityEngine.Random.Range(0, totalWeight);
+                int currentWeight = 0;
+                Debug.Log($"BattleWorldManager: Dropping card for creature {creature}, Total weight {totalWeight}, Random weight {randomWeight}");
+                foreach (var dropcard in dropcards)
+                {
+                    currentWeight += dropcard.dropWeight;
+                    Debug.Log($"BattleWorldManager: Current weight {currentWeight}, Random weight {randomWeight}");
+                    if (randomWeight <= currentWeight)
+                    {
+                        Debug.Log($"BattleWorldManager: Dropped card {dropcard.cardDescription} from creature {creature}");
+                        // Create reward card
+                        for (int i = 0; i < dropcard.dropCount; i++)
+                        {
+                            var rewardCardGO = Instantiate(rewardCardPrefab, rewardCardPanel.transform);
+                            var rewardCard = rewardCardGO.GetComponent<DisplayCard>();
+                            rewardCard.Initialize(dropcard.cardDescription);
+                            CardManager.Instance.battleReward.Add(dropcard.cardDescription);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("BattleWorldManager: Battle Lost!");
+        }
+        InBattle = false;
     }
     #endregion
 

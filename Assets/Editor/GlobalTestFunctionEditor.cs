@@ -11,6 +11,7 @@ public class GlobalTestFunctionEditor : Editor
     SerializedProperty waveIndexToAddProp;
     SerializedProperty waveIndexToLoadProp;
     SerializedProperty equipmentCardTypeProp;
+    SerializedProperty expGainToAddProp;
 
     void OnEnable()
     {
@@ -20,6 +21,7 @@ public class GlobalTestFunctionEditor : Editor
         waveIndexToAddProp = serializedObject.FindProperty("waveIndexToAdd");
         waveIndexToLoadProp = serializedObject.FindProperty("waveIndexToLoad");
         equipmentCardTypeProp = serializedObject.FindProperty("equipmentCardType");
+        expGainToAddProp = serializedObject.FindProperty("expGainToAdd");
     }
 
     public override void OnInspectorGUI()
@@ -75,6 +77,7 @@ public class GlobalTestFunctionEditor : Editor
         GUI.enabled = true;
         EditorGUILayout.LabelField("保存当前场上敌人信息作为配置", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(waveIndexToAddProp, new GUIContent("第几波次"));
+        EditorGUILayout.PropertyField(expGainToAddProp, new GUIContent("经验值奖励"));
         GUI.enabled = EditorApplication.isPlaying && SceneManager.currentScene == SceneManager.BattleScene;
         if (GUILayout.Button("创建 敌人波次"))
         {

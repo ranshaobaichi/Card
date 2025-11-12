@@ -41,9 +41,10 @@ public class GlobalTestFunction : MonoBehaviour
     /// 创建一个敌人波次
     /// </summary>
     [SerializeField] public int waveIndexToAdd;
+    [SerializeField] public int expGainToAdd;
     public void CreateEnemyWave()
     {
-        FindAnyObjectByType<BattleWorldManager>().SaveCurBattleWave(waveIndexToAdd);
+        FindAnyObjectByType<BattleWorldManager>().SaveCurBattleWave(waveIndexToAdd, expGainToAdd);
     }
 
     /// <summary>

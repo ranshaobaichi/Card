@@ -61,6 +61,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     [Header("卡牌设置")]
     public CardDescription cardDescription;
     public Card preCardBeforeDrag;
+    public Text nameText;
     public Text foodText;
     [Tooltip("是否可以被拖动")] public bool canBeDragged;
     [Tooltip("是否可以被放置")] public bool canBePlaced;
@@ -131,13 +132,6 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         cardImage.material = null;
         outlineMaterialInstance = new Material(outlineMaterial);
         outlineOffset = outlineMaterialInstance.GetFloat("_DashOffset");
-
-        // TEST: Set the word on the card
-        var textComponent = GetComponentInChildren<Text>();
-        if (textComponent != null)
-        {
-            textComponent.text = GetCardTypeString();
-        }
     }
 
     protected void FollowPosition()

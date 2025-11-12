@@ -74,6 +74,25 @@ public class CardAttributeDB : ScriptableObject
                     traits = new List<Trait>(this.traits)
                 };
             }
+            public void CopyFrom(BasicAttributes other)
+            {
+                this.workEfficiencyAttributes = (WorkEfficiencyAttributes)other.workEfficiencyAttributes.Clone();
+                this.EXP = other.EXP;
+                this.level = other.level;
+                this.satiety = other.satiety;
+                this.health = other.health;
+                this.attackPower = other.attackPower;
+                this.spellPower = other.spellPower;
+                this.normalAttackDamageType = other.normalAttackDamageType;
+                this.armor = other.armor;
+                this.spellResistance = other.spellResistance;
+                this.moveSpeed = other.moveSpeed;
+                this.dodgeRate = other.dodgeRate;
+                this.attackSpeed = other.attackSpeed;
+                this.attackRange = other.attackRange;
+                this.dropItem = new List<DropCard>(other.dropItem);
+                this.traits = new List<Trait>(other.traits);
+            }
         }
 
         /// <summary>
