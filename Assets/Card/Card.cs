@@ -132,6 +132,23 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         cardImage.material = null;
         outlineMaterialInstance = new Material(outlineMaterial);
         outlineOffset = outlineMaterialInstance.GetFloat("_DashOffset");
+
+    }
+
+    void OnEnable()
+    {
+        if (cardDescription.cardType == CardType.Events)
+        {
+            SceneManager.BeforeSceneChanged += SaveOption;
+        }
+    }
+
+    void OnDisable()
+    {
+        if (cardDescription.cardType == CardType.Events)
+        {
+            SceneManager.BeforeSceneChanged -= SaveOption;
+        }
     }
 
     protected void FollowPosition()
@@ -170,7 +187,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         // Several initializations
         foreach (var card in GetFollowingCards())
         {
-            card.transform.localScale = dragScaleFactor * Vector3.one;
+            card.transform.localScale = dragScaleFactor * Vector3.one * 0.6f;
         }
     }
 
@@ -225,7 +242,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         cardSlot.UpdateMovingState(this, false);
         foreach (var card in GetFollowingCards())
         {
-            card.transform.localScale = Vector3.one;
+            card.transform.localScale = Vector3.one * 0.6f;
         }
     }
 
@@ -335,6 +352,53 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
                 break;
             default:
                 break;
+        }
+    }
+
+    //// UI Functions for Event Card ////
+    /// may be better to put them in child class ///
+    public int curWorkOptionIndex = -1;
+    public float eventProgress = 0f;
+    public void StartEvent(int optionIndex, float progress = 0f)
+    {
+        curWorkOptionIndex = optionIndex;
+        var eventUIAttribute = DataBaseManager.Instance.GetEventUIAttribute(cardDescription.eventCardType) ?? default;
+        cardSlot.StartProgressBar(eventUIAttribute.options[optionIndex].cost.timeCost, OnEndEvent);
+        cardSlot.progressBar.SetProgressValue(progress);
+    }
+    public void EndEvent()
+    {
+        if (curWorkOptionIndex == -1)
+        {
+            Debug.LogError("No option selected for event card!");
+            return;
+        }
+        cardSlot.EndProduction();
+    }
+
+    public void OnEndEvent()
+    {
+        // Produce rewards
+        var eventUIAttribute = DataBaseManager.Instance.GetEventUIAttribute(cardDescription.eventCardType) ?? default;
+        foreach (var reward in eventUIAttribute.options[curWorkOptionIndex].rewards)
+        {
+            for (int i = 0; i < reward.dropCount; i++)
+            {
+                Vector2 randomOffset = UnityEngine.Random.insideUnitCircle * 50f;
+                CardManager.Instance.CreateCard(reward.cardDescription, transform.position + (Vector3)randomOffset);
+            }
+        }
+
+        // Destroy event card
+        cardSlot.EndProduction();
+        CardManager.Instance.DeleteCard(this);
+    }
+
+    public void SaveOption()
+    {
+        if (curWorkOptionIndex != -1)
+        {
+            CardManager.Instance.eventCardProgress[cardID] = (curWorkOptionIndex, cardSlot.progressBar.progress);
         }
     }
 }

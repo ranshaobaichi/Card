@@ -10,6 +10,7 @@ public class T_Soldier : B_Trait, ITraitHolder
 
     public void ModifyAttributes(CardAttributeDB.CreatureCardAttribute.BasicAttributes baseAttributes, B_Creature creature)
     {
+        if (creature.hexNode == null) return;
         bool isInBackline = creature.lineUp == LineUp.Player ?
             creature.hexNode.coord.R == 6 || creature.hexNode.coord.R == 7 :
             creature.hexNode.coord.R == 0 || creature.hexNode.coord.R == 1;

@@ -110,7 +110,14 @@ public class SettlementCardManager : MonoBehaviour
             CreaturePanel.DeleteCard(creatureCard, true);
         }
 
-        SceneManager.LoadScene(SceneManager.BattleScene);
+        if (CardManager.Instance.battleSceneCreatureCardIDs.Count > 0)
+        {
+            SceneManager.LoadScene(SceneManager.BattleScene);
+        }
+        else
+        {
+            
+        }
     }
 
     public void DealWithSettlementData()

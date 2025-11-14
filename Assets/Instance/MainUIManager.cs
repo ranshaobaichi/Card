@@ -21,20 +21,33 @@ public class MainUIManager : MonoBehaviour
     public Button PopulationBtn;
     public GameObject PopulationPanel;
     public UI_PopulationPanel populationPanel;
-    [Header("科技树")]
-    public Button TechTreeBtn;
-    public GameObject TechTreePanel;
+    [Header("设置面板")]
+    public Button SettingsBtn;
+    public GameObject SettingsPanel;
+    public Button CloseSettingsBtn;
     [Header("文字信息")]
     public Text foodText;
     [Header("退出按钮")]
-    public Button QuitBtn;
+    public Button BackToStartBtn;
+    public Button ExitButton;
 
     void Start()
     {
         TaskBtn.onClick.AddListener(() => ChangePanelState(TaskPanel));
         CraftTableBtn.onClick.AddListener(() => ChangePanelState(CraftTablePanel));
         PopulationBtn.onClick.AddListener(() => ChangePanelState(PopulationPanel));
-        QuitBtn.onClick.AddListener(SceneManager.QuitToStartScene);
+        SettingsBtn.onClick.AddListener(() =>
+        {
+            SettingsPanel.SetActive(true);
+            TimeManager.Instance.ChangePauseGameState();
+        });
+        CloseSettingsBtn.onClick.AddListener(() =>
+        {
+            SettingsPanel.SetActive(false);
+            TimeManager.Instance.ChangePauseGameState();
+        });
+        ExitButton.onClick.AddListener(SceneManager.QuitToDesktop);
+        BackToStartBtn.onClick.AddListener(SceneManager.QuitToStartScene);
     }
 
     public void InitMainUI()

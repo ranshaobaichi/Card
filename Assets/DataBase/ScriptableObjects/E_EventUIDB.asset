@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4cc60f06376d7546b340040e8455d1a, type: 3}
+  m_Name: E_EventUIDB
+  m_EditorClassIdentifier: 
+  eventCardUIInfos:
+  - eventCardType: 1
+    descriptionText: "\u671B\u5411\u73B0\u5728\u7684\u5E9F\u589F\uFF0C\u518D\u4E00\u60F3\u8D77\u6C89\u7761\u4E4B\u524D\u5730\u4E0B\u57CE\u7684\u6837\u8C8C\u8BA9\u4F60\u611F\u5230\u550F\u5618\u4E0D\u5DF2\uFF0C\u4F46\u65B9\u624D\u4ECE\u91CD\u4F24\u6C89\u7761\u6062\u590D\u8FC7\u6765\u7684\u4F60\uFF0C\u865A\u5F31\u800C\u65E0\u529B\u7684\u5728\u5C1A\u672A\u574D\u584C\u7684\u90E8\u5206\u8E31\u6B65\uFF0C\u5BF9\u5982\u4F55\u91CD\u5EFA\u5730\u4E0B\u57CE\u611F\u5230\u4E86\u4E9B\u8BB8\u8FF7\u832B\uFF0C\u76F4\u5230\u8DEF\u8FC7\u4E00\u5904\u584C\u9677\u7684\u623F\u95F4\uFF0C\u4ECE\u788E\u77F3\u5806\u4E2D\u4F20\u6765\u7EDD\u671B\u7684\u547B\u541F\u2026\u2026"
+    options:
+    - optionText: "\u63A2\u7D22"
+      cost:
+        cardsCost:
+        - cardType: 2
+          resourceCardType: 0
+          creatureCardType: 24
+          eventCardType: 0
+        timeCost: 5
+      rewards:
+      - cardDescription:
+          cardType: 2
+          resourceCardType: 0
+          creatureCardType: 2
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 1
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 1
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 1
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 2
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 1
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 3
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 2
+        dropWeight: 1

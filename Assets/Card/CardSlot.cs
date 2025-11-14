@@ -361,6 +361,9 @@ public class CardSlot : MonoBehaviour
         // workloadEfficiency = 1.0f; // Example value, should be set based on actual logic
         if (this == movingCardSlot) return false;
 
+        // if has event card, cannot produce
+        if (cards.Find(card => card.cardDescription.cardType == CardType.Events)) return false;
+
         // Debug.Log($"Attempting to begin production in CardSlot {cardSlotID} with {cards.Count} cards.");
         // First check whether has a valid recipe
         var result = CardManager.Instance.GetRecipe(cards);
@@ -468,7 +471,7 @@ public class CardSlot : MonoBehaviour
             EndProduction();
     }
 
-    public void StartProgressBar(float totalTime, Action onComplete)
+    public void StartProgressBar(float totalTime, Action onComplete, float progress = 0f)
     {
         if (progressBar == null)
         {
@@ -482,7 +485,7 @@ public class CardSlot : MonoBehaviour
             return;
         }
         progressBar.gameObject.SetActive(true);
-        progressBar.StartProgressBar(totalTime, onComplete);
+        progressBar.StartProgressBar(totalTime, onComplete, progress);
     }
 
     public bool TryGetEventCard(out Card eventCard)

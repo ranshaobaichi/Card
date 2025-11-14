@@ -362,7 +362,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.2732725, g: 1, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -565,7 +565,7 @@ RectTransform:
   m_GameObject: {fileID: 6615154043505108549}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3430185349317921213}
@@ -699,6 +699,8 @@ MonoBehaviour:
   - {fileID: 1147743857347055230}
   - {fileID: 7808578635495786932}
   - {fileID: 5865805339973365165}
+  curWorkOptionIndex: -1
+  eventProgress: -1
 --- !u!114 &5405084790060809205
 MonoBehaviour:
   m_ObjectHideFlags: 0

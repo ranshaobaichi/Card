@@ -1,59 +1,82 @@
+using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class EventUI : MonoBehaviour
+public class EventUI : MonoBehaviour, IDragHandler, IBeginDragHandler
 {
-    public CloseButton closeBtn;
-    public Canvas UICanvas;
+    public GameObject displayCardPrefab;
+    public GameObject optionButtonPrefab;
+
     public GameObject cardDisplayPanel;
-    public GameObject eventCardPrefab;
-    [HideInInspector] public Card eventCard;
+    public GameObject optionPanel;
+    private Canvas _canvas;
+    public Button closeBtn;
+    public Text descriptionText;
+    public Text nameText;
+    public Card eventCard;
 
-    public void Start()
+    private Vector2 _pointerOffset;
+
+    void Awake()
     {
-        closeBtn.OnClosed += CloseUI;
+        _canvas = GetComponentInParent<Canvas>();
     }
 
-    public void OpenUI(Vector2 position = default)
+    void Start()
     {
-        if (position != default)
+        closeBtn.onClick.AddListener(() => Destroy(gameObject));
+    }
+
+    public void Initialize(Card card, int optIndex = -1, float progress = -1f)
+    {
+        eventCard = card;
+        var eventUIAttribute = DataBaseManager.Instance.GetEventUIAttribute(card.cardDescription.eventCardType) ?? default;
+
+        nameText.text = card.cardDescription.ToString();
+
+        descriptionText.text = eventUIAttribute.descriptionText;
+        foreach (var optionAttr in eventUIAttribute.options)
         {
-            RectTransform rectTransform = GetComponent<RectTransform>();
-            rectTransform.anchoredPosition = position;
+            var optionBtnGO = Instantiate(optionButtonPrefab, optionPanel.transform);
+            var optionBtn = optionBtnGO.GetComponent<E_OptionButton>();
+            optionBtn.Initialize(this, optionAttr, eventUIAttribute.options.IndexOf(optionAttr));
         }
-        gameObject.SetActive(true);
+
+        // Set the position to mouse position
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(_canvas.GetComponent<RectTransform>(), Input.mousePosition, _canvas.worldCamera, out Vector3 mousePos);
+        transform.position = mousePos;
+
         RefreshDisplayCards();
-    }
-
-    public void CloseUI()
-    {
-        foreach (Transform child in cardDisplayPanel.transform)
-        {
-            Destroy(child.gameObject);
-        }
-        gameObject.SetActive(false);
     }
 
     public void RefreshDisplayCards()
     {
-        static void SetText(GameObject obj, string text)
-        {
-            var textComp = obj.GetComponentInChildren<Text>();
-            if (textComp != null)
-            {
-                textComp.text = text;
-            }
-        }
-
         var cards = eventCard.cardSlot.cards;
         foreach (var card in cards)
         {
             if (card.cardDescription.cardType != Category.CardType.Events)
             {
-                var cardGO = Instantiate(eventCardPrefab, cardDisplayPanel.transform);
-                SetText(cardGO, card.GetCardTypeString());
-                Debug.Log($"Displaying card: {card.GetCardTypeString()}");
+                var cardGO = Instantiate(displayCardPrefab, cardDisplayPanel.transform);
+                cardGO.transform.localScale = 0.35f * Vector3.one;
+                var displayCard = cardGO.GetComponent<DisplayCard>();
+                displayCard.Initialize(card.cardDescription);
             }
         }
     }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(_canvas.GetComponent<RectTransform>(), eventData.position, eventData.pressEventCamera, out Vector3 mousePos);
+        transform.position = mousePos - (Vector3)_pointerOffset;
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(_canvas.GetComponent<RectTransform>(), eventData.position, eventData.pressEventCamera, out Vector3 mousePos);
+        _pointerOffset = mousePos - new Vector3(transform.position.x, transform.position.y);
+    }
+
 }

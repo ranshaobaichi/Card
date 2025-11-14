@@ -20,6 +20,7 @@ public class DataBaseManager : MonoBehaviour
         }
         cardAttributeDB.Initialize();
         traitDB.InitializeTraitDict();
+        eventCardUIDB.InitializeEventUIDict();
     }
 
     #region 合成表管理
@@ -58,9 +59,11 @@ public class DataBaseManager : MonoBehaviour
     #endregion
 
     #region 事件卡UI管理
-    public EventCardUIDB eventCardUIDB;
-    public bool TryGetEventCardUIPrefab(EventCardType eventCardType, out GameObject prefab)
-        => eventCardUIDB.TryGetEventCardUIPrefab(eventCardType, out prefab);
+    public EventUIDB eventCardUIDB;
+    public ReadOnlyDictionary<Category.EventCardType, EventUIDB.EventUIAttribute> GetAllEventUIAttributes()
+        => eventCardUIDB.GetEventCardUIDict();
+    public EventUIDB.EventUIAttribute? GetEventUIAttribute(EventCardType eventCardType)
+        => eventCardUIDB.GetEventUIAttribute(eventCardType);
 
     #endregion
 

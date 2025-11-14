@@ -21,7 +21,7 @@ public class BattleWorldManager : MonoBehaviour
     public static BattleWorldManager Instance;
     public static readonly string EnemyWavesResourcePath = "EnemyWaves/";
     public static readonly string EnemyWavesResourceName = "EnemyWave";
-    public bool InBattle = false;
+    [HideInInspector] public bool InBattle = false;
     public bool mannualTickControl = false;
     public bool canDragEnemy = false;
     public float TickInterval = 1.0f;
@@ -326,13 +326,14 @@ public class BattleWorldManager : MonoBehaviour
     public void SaveCurBattleWave(int waveIdx, int expGain)
     {
 #if UNITY_EDITOR
-        string json = "";
         EnemyWaveData waveData = new EnemyWaveData
         {
             creatureType = new List<CreatureCardType>(),
             spawnCoord = new List<AxialCoordinate>(),
             totalExpGain = expGain
         };
+
+        string json = JsonUtility.ToJson(waveData);
         foreach (var enemy in enemyCreatures)
         {
             waveData.creatureType.Add(enemy.creatureCardAttribute.creatureCardType);

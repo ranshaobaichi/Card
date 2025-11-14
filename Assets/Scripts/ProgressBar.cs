@@ -6,7 +6,7 @@ public class ProgressBar : MonoBehaviour
 {
     public Image fillImage;
     
-    public float currentTime = 0f;
+    public float progress = 0f;
     private bool isRunning = false;
     private float duration = 1f;
 
@@ -24,7 +24,7 @@ public class ProgressBar : MonoBehaviour
     {
         // 设置总持续时间
         ResetProgress(true);
-        currentTime = curTime;
+        progress = curTime;
         duration = totalTime > 0 ? totalTime : 1f;
         OnProgressComplete += onComplete;
     }
@@ -41,31 +41,30 @@ public class ProgressBar : MonoBehaviour
         if (!isRunning) return;
 
         // 累加已经过时间
-        currentTime += Time.deltaTime;
+        progress += Time.deltaTime;
 
         // 计算填充比例
-        float progress = Mathf.Clamp01(currentTime / duration);
-        fillImage.fillAmount = progress;
+        float fillAmount = Mathf.Clamp01(progress / duration);
+        fillImage.fillAmount = fillAmount;
 
         // 检查是否完成
-        if (currentTime >= duration)
+        if (progress >= duration)
         {
             isRunning = false;
             OnProgressComplete?.Invoke();
         }
     }
     
-    // 手动设置进度值(0-1)
     public void SetProgressValue(float value)
     {
-        isRunning = false;
-        fillImage.fillAmount = Mathf.Clamp01(value);
+        float percentage = value / duration;
+        progress = Mathf.Clamp(value, 0f, duration);
     }
     
     public void ResetProgress(bool state)
     {
         isRunning = state;
-        currentTime = 0f;
+        progress = 0f;
         fillImage.fillAmount = 0f;
         OnProgressComplete = null;
     }

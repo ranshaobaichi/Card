@@ -368,13 +368,12 @@ public class CardAttributeDBCsvImporter : EditorWindow
                     if (columnIndices.ContainsKey("Traits") && values.Length > columnIndices["Traits"])
                     {
                         string[] traitIDs = values[columnIndices["Traits"]].Split('*');
-                        bool flag = false;
+                        bool flag = true;
                         foreach (var traitID in traitIDs)
                         {
                             if (Enum.TryParse<Trait>(traitID, out Trait trait))
                             {
                                 attribute.basicAttributes.traits.Add(trait);
-                                flag &= true;
                             }
                             else
                             {
@@ -385,6 +384,9 @@ public class CardAttributeDBCsvImporter : EditorWindow
                         if (flag)
                             valCount++;
                     }
+                    else
+                        valCount++;
+
 
                     // 添加到字典
                     cardAttributeDB.creatureCardAttributes.Add(attribute);
@@ -618,17 +620,17 @@ public class CardAttributeDBCsvImporter : EditorWindow
                 columnIndices[headers[i]] = i;
             }
 
-            // 验证类型列存在
-            int typeIndex = Array.IndexOf(headers, "EquipmentType");
-            if (typeIndex < 0)
+            // 验证必要的列是否存在
+            if (!columnIndices.ContainsKey("EquipmentType"))
             {
-                EditorUtility.DisplayDialog("错误", "CSV文件缺少 EquipmentType 列！请检查标题行。", "确定");
+                EditorUtility.DisplayDialog("错误", "CSV文件缺少必要的EquipmentType列！", "确定");
                 return;
             }
 
             // 开始记录操作以支持撤销
             Undo.RecordObject(cardAttributeDB, "Import Equipment Card Data from CSV");
-            cardAttributeDB.resourceCardAttributes.Clear();
+            cardAttributeDB.equipmentCardAttributes = new List<CardAttributeDB.EquipmentCardAttribute>();
+            cardAttributeDB.equipmentCardAttributes.Clear();
             errorList.Clear();
 
             int successCount = 0;
@@ -643,125 +645,87 @@ public class CardAttributeDBCsvImporter : EditorWindow
 
                     string[] values = ParseCsvLine(lines[i]);
 
-                    if (values.Length <= typeIndex)
-                    {
-                        Debug.LogWarning($"第{i + 1}行数据列不足（缺少 ResourceType），已跳过");
-                        continue;
-                    }
-
                     // 跳过注释行
                     if (values[0].StartsWith("#"))
                         continue;
 
-                    // 解析资源卡类型
-                    if (!Enum.TryParse<ResourceCardType>(values[typeIndex], out ResourceCardType resourceType))
+                    if (values.Length <= columnIndices["EquipmentType"])
                     {
-                        errorList.Add($"第{i + 1}行: 无效的资源卡类型 '{values[typeIndex]}'");
-                        continue;
-                    }
-                    if (!cardAttributeDB.IsEquipmentCard(resourceType))
-                    {
-                        errorList.Add($"第{i + 1}行: 资源卡类型 '{resourceType}' 不是有效的装备卡类型");
+                        errorList.Add($"第{i + 1}行: 数据列不足，已跳过");
                         continue;
                     }
 
+                    // 解析装备卡类型
+                    if (!Enum.TryParse<ResourceCardType>(values[columnIndices["EquipmentType"]], out ResourceCardType equipmentType))
+                    {
+                        errorList.Add($"第{i + 1}行: 无效的装备卡类型 '{values[columnIndices["EquipmentType"]]}'");
+                        continue;
+                    }
+
+                    // 创建新的装备卡属性
                     CardAttributeDB.EquipmentCardAttribute attribute = new CardAttributeDB.EquipmentCardAttribute();
-                    attribute.equipmentCardType = resourceType;
+                    attribute.equipmentCardType = equipmentType;
                     attribute.basicAttributesBonus = new CardAttributeDB.EquipmentCardAttribute.EquipmentBasicAttributesBonus();
 
-                    int valNums = 11;
-                    int valCount = 0;
-
+                    // 解析属性加成
                     if (columnIndices.ContainsKey("Health") && values.Length > columnIndices["Health"])
                     {
-                        if (float.TryParse(values[columnIndices["Health"]], out float healthBonus))
-                        {
-                            attribute.basicAttributesBonus.health = healthBonus;
-                            valCount++;
-                        }
+                        if (float.TryParse(values[columnIndices["Health"]], out float health))
+                            attribute.basicAttributesBonus.health = health;
                     }
 
                     if (columnIndices.ContainsKey("AttackPower") && values.Length > columnIndices["AttackPower"])
                     {
-                        if (float.TryParse(values[columnIndices["AttackPower"]], out float attackBonus))
-                        {
-                            attribute.basicAttributesBonus.attackPower = attackBonus;
-                            valCount++;
-                        }
+                        if (float.TryParse(values[columnIndices["AttackPower"]], out float attackPower))
+                            attribute.basicAttributesBonus.attackPower = attackPower;
                     }
 
                     if (columnIndices.ContainsKey("SpellPower") && values.Length > columnIndices["SpellPower"])
                     {
-                        if (float.TryParse(values[columnIndices["SpellPower"]], out float spellBonus))
-                        {
-                            attribute.basicAttributesBonus.spellPower = spellBonus;
-                            valCount++;
-                        }
+                        if (float.TryParse(values[columnIndices["SpellPower"]], out float spellPower))
+                            attribute.basicAttributesBonus.spellPower = spellPower;
                     }
 
                     if (columnIndices.ContainsKey("Armor") && values.Length > columnIndices["Armor"])
                     {
-                        if (float.TryParse(values[columnIndices["Armor"]], out float armorBonus))
-                        {
-                            attribute.basicAttributesBonus.armor = armorBonus;
-                            valCount++;
-                        }
+                        if (float.TryParse(values[columnIndices["Armor"]], out float armor))
+                            attribute.basicAttributesBonus.armor = armor;
                     }
 
                     if (columnIndices.ContainsKey("SpellResistance") && values.Length > columnIndices["SpellResistance"])
                     {
-                        if (float.TryParse(values[columnIndices["SpellResistance"]], out float srBonus))
-                        {
-                            attribute.basicAttributesBonus.spellResistance = srBonus;
-                            valCount++;
-                        }
+                        if (float.TryParse(values[columnIndices["SpellResistance"]], out float spellResistance))
+                            attribute.basicAttributesBonus.spellResistance = spellResistance;
                     }
 
                     if (columnIndices.ContainsKey("MoveSpeed") && values.Length > columnIndices["MoveSpeed"])
                     {
-                        if (int.TryParse(values[columnIndices["MoveSpeed"]], out int moveBonus))
-                        {
-                            attribute.basicAttributesBonus.moveSpeed = moveBonus;
-                            valCount++;
-                        }
+                        if (int.TryParse(values[columnIndices["MoveSpeed"]], out int moveSpeed))
+                            attribute.basicAttributesBonus.moveSpeed = moveSpeed;
                     }
 
                     if (columnIndices.ContainsKey("DodgeRate") && values.Length > columnIndices["DodgeRate"])
                     {
-                        if (float.TryParse(values[columnIndices["DodgeRate"]], out float dodgeBonus))
-                        {
-                            attribute.basicAttributesBonus.dodgeRate = dodgeBonus;
-                            valCount++;
-                        }
+                        if (float.TryParse(values[columnIndices["DodgeRate"]], out float dodgeRate))
+                            attribute.basicAttributesBonus.dodgeRate = dodgeRate;
                     }
 
                     if (columnIndices.ContainsKey("AttackSpeed") && values.Length > columnIndices["AttackSpeed"])
                     {
-                        if (int.TryParse(values[columnIndices["AttackSpeed"]], out int asBonus))
-                        {
-                            attribute.basicAttributesBonus.attackSpeed = asBonus;
-                            valCount++;
-                        }
+                        if (int.TryParse(values[columnIndices["AttackSpeed"]], out int attackSpeed))
+                            attribute.basicAttributesBonus.attackSpeed = attackSpeed;
                     }
 
                     if (columnIndices.ContainsKey("AttackRange") && values.Length > columnIndices["AttackRange"])
                     {
-                        if (int.TryParse(values[columnIndices["AttackRange"]], out int arBonus))
-                        {
-                            attribute.basicAttributesBonus.attackRange = arBonus;
-                            valCount++;
-                        }
+                        if (int.TryParse(values[columnIndices["AttackRange"]], out int attackRange))
+                            attribute.basicAttributesBonus.attackRange = attackRange;
                     }
 
-                    // 添加到字典
-                    if (valCount == valNums)
-                    {
-                        cardAttributeDB.equipmentCardAttributes.Add(attribute);
-                        successCount++;
-                        Debug.Log($"导入装备卡属性: {resourceType}");
-                    }
-                    else
-                        errorList.Add($"第{i + 1}行: 装备卡 {resourceType} 属性值不完整，仅设置了 {valCount}/{valNums} 个属性值");
+                    // 添加到列表
+                    cardAttributeDB.equipmentCardAttributes.Add(attribute);
+                    successCount++;
+                    Debug.Log($"导入装备卡属性: {equipmentType}");
                 }
                 catch (Exception ex)
                 {
@@ -777,11 +741,11 @@ public class CardAttributeDBCsvImporter : EditorWindow
         }
         catch (Exception ex)
         {
-            Debug.LogError($"导入装备卡数据时出错: {ex.Message}");
-            EditorUtility.DisplayDialog("导入错误", $"导入装备卡数据时出错: {ex.Message}", "确定");
+            EditorUtility.DisplayDialog("导入错误", $"导入装备卡过程中出现错误: {ex.Message}", "确定");
+            Debug.LogException(ex);
         }
     }
-
+    
     private void DisplayResults(string cardType, int successCount)
     {
         EditorUtility.DisplayDialog("导入完成", $"成功导入 {successCount} 个{cardType}属性", "确定");

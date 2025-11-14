@@ -24,7 +24,7 @@ public class TimeManager : MonoBehaviour
     private int[] speedUpLevel = new int[] { 1, 2, 3, 5 };
     public float curGameTime
     {
-        get => timeProgressBar.currentTime;
+        get => timeProgressBar.progress;
         set => timeProgressBar.StartProgressBar(productionStateDuration, ChangeState, value);
     }
 

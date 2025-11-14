@@ -19,7 +19,40 @@ MonoBehaviour:
   - 75
   - 50
   creatureCardAttributes:
-  - levelUpExpIncreasePercent: 999
+  - levelUpExpIncreasePercent: 99999
+    creatureCardType: 24
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 2
+        exploreWorkEfficiency: 2
+        interactWorkEfficiency: 2
+      EXP: 0
+      level: 1
+      satiety: 0
+      health: 40
+      attackPower: 6
+      spellPower: 15
+      normalAttackDamageType: 2
+      armor: 80
+      spellResistance: 80
+      moveSpeed: 18
+      dodgeRate: 0.05
+      attackSpeed: 6
+      attackRange: 1
+      dropItem: []
+      traits: 0200000008000000
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 0
+      attackPowerGrowth: 0
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 20
     creatureCardType: 2
     basicAttributes:
       workEfficiencyAttributes:
@@ -33,28 +66,21 @@ MonoBehaviour:
       attackPower: 3
       spellPower: 0
       normalAttackDamageType: 0
-      armor: 5
-      spellResistance: 5
-      moveSpeed: 1
+      armor: 50
+      spellResistance: 50
+      moveSpeed: 15
       dodgeRate: 0.05
-      attackSpeed: 1
+      attackSpeed: 9
       attackRange: 1
-      dropItem:
-      - cardDescription:
-          cardType: 1
-          resourceCardType: 26
-          creatureCardType: 0
-          eventCardType: 0
-        dropCount: 2
-        dropWeight: 3
+      dropItem: []
       traits: 00000000
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 8
       attackPowerGrowth: 2
       spellPowerGrowth: 0
-      armorGrowth: 0
-      spellResistanceGrowth: 0
+      armorGrowth: 5
+      spellResistanceGrowth: 5
       moveSpeedGrowth: 0
       dodgeRateGrowth: 0.02
       attackSpeedGrowth: 0
@@ -73,21 +99,21 @@ MonoBehaviour:
       attackPower: 4
       spellPower: 0
       normalAttackDamageType: 0
-      armor: 5
-      spellResistance: 5
+      armor: 50
+      spellResistance: 50
       moveSpeed: 12
       dodgeRate: 0.1
       attackSpeed: 9
       attackRange: 1
       dropItem: []
-      traits: 01000000
+      traits: 0400000006000000
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 6
       attackPowerGrowth: 3
       spellPowerGrowth: 0
-      armorGrowth: 0
-      spellResistanceGrowth: 0
+      armorGrowth: 5
+      spellResistanceGrowth: 5
       moveSpeedGrowth: 0
       dodgeRateGrowth: 0.04
       attackSpeedGrowth: 0
@@ -106,20 +132,20 @@ MonoBehaviour:
       attackPower: 4
       spellPower: 0
       normalAttackDamageType: 0
-      armor: 15
-      spellResistance: 5
+      armor: 75
+      spellResistance: 20
       moveSpeed: 12
       dodgeRate: 0.15
       attackSpeed: 9
       attackRange: 1
       dropItem: []
-      traits: 
+      traits: 0000000002000000
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 6
       attackPowerGrowth: 2
       spellPowerGrowth: 0
-      armorGrowth: 2
+      armorGrowth: 10
       spellResistanceGrowth: 0
       moveSpeedGrowth: 0
       dodgeRateGrowth: 0.05
@@ -139,21 +165,21 @@ MonoBehaviour:
       attackPower: 6
       spellPower: 0
       normalAttackDamageType: 0
-      armor: 8
-      spellResistance: 0
+      armor: 60
+      spellResistance: 60
       moveSpeed: 12
       dodgeRate: 0.1
       attackSpeed: 9
       attackRange: 1
       dropItem: []
-      traits: 
+      traits: 0400000008000000
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 12
       attackPowerGrowth: 3
       spellPowerGrowth: 0
-      armorGrowth: 1
-      spellResistanceGrowth: 0
+      armorGrowth: 10
+      spellResistanceGrowth: 10
       moveSpeedGrowth: 0
       dodgeRateGrowth: 0.04
       attackSpeedGrowth: 0
@@ -172,21 +198,21 @@ MonoBehaviour:
       attackPower: 5
       spellPower: 0
       normalAttackDamageType: 0
-      armor: 15
-      spellResistance: 0
+      armor: 55
+      spellResistance: 55
       moveSpeed: 15
       dodgeRate: 0.05
       attackSpeed: 15
       attackRange: 1
       dropItem: []
-      traits: 
+      traits: 0100000004000000
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 9
       attackPowerGrowth: 2
       spellPowerGrowth: 0
-      armorGrowth: 0
-      spellResistanceGrowth: 0
+      armorGrowth: 5
+      spellResistanceGrowth: 5
       moveSpeedGrowth: 0
       dodgeRateGrowth: 0.02
       attackSpeedGrowth: 0
@@ -205,21 +231,21 @@ MonoBehaviour:
       attackPower: 6
       spellPower: 0
       normalAttackDamageType: 0
-      armor: 20
-      spellResistance: 0
+      armor: 60
+      spellResistance: 60
       moveSpeed: 15
       dodgeRate: 0.1
       attackSpeed: 9
       attackRange: 1
       dropItem: []
-      traits: 
+      traits: 0100000005000000
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 14
       attackPowerGrowth: 4
       spellPowerGrowth: 0
-      armorGrowth: 0
-      spellResistanceGrowth: 0
+      armorGrowth: 10
+      spellResistanceGrowth: 10
       moveSpeedGrowth: 0
       dodgeRateGrowth: 0.04
       attackSpeedGrowth: 0
@@ -238,21 +264,21 @@ MonoBehaviour:
       attackPower: 8
       spellPower: 0
       normalAttackDamageType: 2
-      armor: 15
-      spellResistance: 0
+      armor: 60
+      spellResistance: 60
       moveSpeed: 12
       dodgeRate: 0.1
       attackSpeed: 12
       attackRange: 1
       dropItem: []
-      traits: 
+      traits: 0100000003000000
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 14
       attackPowerGrowth: 3
       spellPowerGrowth: 0
-      armorGrowth: 0
-      spellResistanceGrowth: 0
+      armorGrowth: 10
+      spellResistanceGrowth: 10
       moveSpeedGrowth: 0
       dodgeRateGrowth: 0.04
       attackSpeedGrowth: 0
@@ -271,21 +297,21 @@ MonoBehaviour:
       attackPower: 8
       spellPower: 10
       normalAttackDamageType: 1
-      armor: 20
-      spellResistance: 0
+      armor: 60
+      spellResistance: 60
       moveSpeed: 15
       dodgeRate: 0.05
       attackSpeed: 12
       attackRange: 4
       dropItem: []
-      traits: 
+      traits: 0100000006000000
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 14
       attackPowerGrowth: 3
       spellPowerGrowth: 0
-      armorGrowth: 0
-      spellResistanceGrowth: 0
+      armorGrowth: 10
+      spellResistanceGrowth: 10
       moveSpeedGrowth: 0
       dodgeRateGrowth: 0.02
       attackSpeedGrowth: 0
@@ -304,21 +330,21 @@ MonoBehaviour:
       attackPower: 18
       spellPower: 0
       normalAttackDamageType: 0
-      armor: 25
-      spellResistance: 0
+      armor: 70
+      spellResistance: 70
       moveSpeed: 15
       dodgeRate: 0.1
       attackSpeed: 18
       attackRange: 1
       dropItem: []
-      traits: 
+      traits: 010000000200000005000000
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 20
       attackPowerGrowth: 5
       spellPowerGrowth: 0
-      armorGrowth: 0
-      spellResistanceGrowth: 0
+      armorGrowth: 10
+      spellResistanceGrowth: 10
       moveSpeedGrowth: 0
       dodgeRateGrowth: 0.04
       attackSpeedGrowth: 0
@@ -337,21 +363,21 @@ MonoBehaviour:
       attackPower: 4
       spellPower: 0
       normalAttackDamageType: 0
-      armor: 5
-      spellResistance: 5
+      armor: 45
+      spellResistance: 45
       moveSpeed: 9
       dodgeRate: 0.2
       attackSpeed: 12
       attackRange: 1
       dropItem: []
-      traits: 
+      traits: 0100000003000000
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 6
       attackPowerGrowth: 2
       spellPowerGrowth: 0
-      armorGrowth: 0
-      spellResistanceGrowth: 0
+      armorGrowth: 5
+      spellResistanceGrowth: 5
       moveSpeedGrowth: 0
       dodgeRateGrowth: 0.06
       attackSpeedGrowth: 0
@@ -366,25 +392,25 @@ MonoBehaviour:
       EXP: 0
       level: 1
       satiety: 4
-      health: 30
-      attackPower: 16
+      health: 15
+      attackPower: 8
       spellPower: 0
       normalAttackDamageType: 0
-      armor: 10
-      spellResistance: 10
+      armor: 60
+      spellResistance: 60
       moveSpeed: 12
       dodgeRate: 0.1
       attackSpeed: 9
       attackRange: 1
       dropItem: []
-      traits: 
+      traits: 0200000005000000
     levelUpAttributes:
       satietyGrowth: 0
-      healthGrowth: 24
-      attackPowerGrowth: 6
+      healthGrowth: 12
+      attackPowerGrowth: 3
       spellPowerGrowth: 0
-      armorGrowth: 0
-      spellResistanceGrowth: 0
+      armorGrowth: 5
+      spellResistanceGrowth: 5
       moveSpeedGrowth: 0
       dodgeRateGrowth: 0.04
       attackSpeedGrowth: 0
@@ -399,25 +425,25 @@ MonoBehaviour:
       EXP: 0
       level: 1
       satiety: 0
-      health: 36
-      attackPower: 19
+      health: 18
+      attackPower: 9
       spellPower: 10
       normalAttackDamageType: 0
-      armor: 12
-      spellResistance: 12
+      armor: 60
+      spellResistance: 60
       moveSpeed: 24
       dodgeRate: 0
       attackSpeed: 18
       attackRange: 1
       dropItem: []
-      traits: 
+      traits: 0200000000000000
     levelUpAttributes:
       satietyGrowth: 0
-      healthGrowth: 30
-      attackPowerGrowth: 5
+      healthGrowth: 15
+      attackPowerGrowth: 3
       spellPowerGrowth: 0
-      armorGrowth: 2
-      spellResistanceGrowth: 2
+      armorGrowth: 10
+      spellResistanceGrowth: 5
       moveSpeedGrowth: 0
       dodgeRateGrowth: 0
       attackSpeedGrowth: 0
@@ -432,25 +458,25 @@ MonoBehaviour:
       EXP: 0
       level: 1
       satiety: 0
-      health: 48
-      attackPower: 40
+      health: 24
+      attackPower: 14
       spellPower: 10
       normalAttackDamageType: 0
-      armor: 15
-      spellResistance: 15
+      armor: 80
+      spellResistance: 80
       moveSpeed: 24
       dodgeRate: 0
-      attackSpeed: 24
+      attackSpeed: 18
       attackRange: 1
       dropItem: []
-      traits: 
+      traits: 02000000
     levelUpAttributes:
       satietyGrowth: 0
-      healthGrowth: 40
-      attackPowerGrowth: 6
+      healthGrowth: 20
+      attackPowerGrowth: 3
       spellPowerGrowth: 0
-      armorGrowth: 3
-      spellResistanceGrowth: 3
+      armorGrowth: 10
+      spellResistanceGrowth: 10
       moveSpeedGrowth: 0
       dodgeRateGrowth: 0
       attackSpeedGrowth: 0
@@ -469,21 +495,21 @@ MonoBehaviour:
       attackPower: 5
       spellPower: 0
       normalAttackDamageType: 0
-      armor: 5
-      spellResistance: 5
+      armor: 45
+      spellResistance: 45
       moveSpeed: 13
       dodgeRate: 0.1
       attackSpeed: 15
       attackRange: 5
       dropItem: []
-      traits: 
+      traits: 0300000007000000
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 8
       attackPowerGrowth: 3
       spellPowerGrowth: 0
-      armorGrowth: 0
-      spellResistanceGrowth: 0
+      armorGrowth: 5
+      spellResistanceGrowth: 5
       moveSpeedGrowth: 0
       dodgeRateGrowth: 0.04
       attackSpeedGrowth: 0
@@ -502,21 +528,21 @@ MonoBehaviour:
       attackPower: 8
       spellPower: 0
       normalAttackDamageType: 0
-      armor: 10
-      spellResistance: 10
+      armor: 55
+      spellResistance: 55
       moveSpeed: 18
       dodgeRate: 0
       attackSpeed: 12
       attackRange: 1
       dropItem: []
-      traits: 
+      traits: 0400000000000000
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 14
       attackPowerGrowth: 3
       spellPowerGrowth: 0
-      armorGrowth: 2
-      spellResistanceGrowth: 2
+      armorGrowth: 5
+      spellResistanceGrowth: 5
       moveSpeedGrowth: 0
       dodgeRateGrowth: 0
       attackSpeedGrowth: 0
@@ -535,21 +561,21 @@ MonoBehaviour:
       attackPower: 8
       spellPower: 0
       normalAttackDamageType: 0
-      armor: 10
-      spellResistance: 10
+      armor: 60
+      spellResistance: 60
       moveSpeed: 12
       dodgeRate: 0.05
       attackSpeed: 12
       attackRange: 1
       dropItem: []
-      traits: 
+      traits: 0800000005000000
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 15
       attackPowerGrowth: 3
       spellPowerGrowth: 0
-      armorGrowth: 0
-      spellResistanceGrowth: 0
+      armorGrowth: 5
+      spellResistanceGrowth: 5
       moveSpeedGrowth: 0
       dodgeRateGrowth: 0.02
       attackSpeedGrowth: 0
@@ -568,21 +594,21 @@ MonoBehaviour:
       attackPower: 9
       spellPower: 10
       normalAttackDamageType: 1
-      armor: 20
-      spellResistance: 20
+      armor: 80
+      spellResistance: 80
       moveSpeed: 15
       dodgeRate: 0
       attackSpeed: 9
       attackRange: 1
       dropItem: []
-      traits: 
+      traits: 0600000002000000
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 20
       attackPowerGrowth: 5
       spellPowerGrowth: 0
-      armorGrowth: 2
-      spellResistanceGrowth: 2
+      armorGrowth: 10
+      spellResistanceGrowth: 10
       moveSpeedGrowth: 0
       dodgeRateGrowth: 0
       attackSpeedGrowth: 0
@@ -597,11 +623,11 @@ MonoBehaviour:
       EXP: 0
       level: 1
       satiety: 0
-      health: 4
+      health: 6
       attackPower: 2
       spellPower: 0
       normalAttackDamageType: 0
-      armor: 0
+      armor: 20
       spellResistance: 0
       moveSpeed: 15
       dodgeRate: 0.05
@@ -611,8 +637,8 @@ MonoBehaviour:
       traits: 
     levelUpAttributes:
       satietyGrowth: 0
-      healthGrowth: 10
-      attackPowerGrowth: 3
+      healthGrowth: 0
+      attackPowerGrowth: 0
       spellPowerGrowth: 0
       armorGrowth: 0
       spellResistanceGrowth: 0
@@ -630,12 +656,12 @@ MonoBehaviour:
       EXP: 0
       level: 1
       satiety: 0
-      health: 12
+      health: 10
       attackPower: 4
       spellPower: 0
       normalAttackDamageType: 0
-      armor: 10
-      spellResistance: 0
+      armor: 40
+      spellResistance: 20
       moveSpeed: 15
       dodgeRate: 0.05
       attackSpeed: 12
@@ -644,8 +670,140 @@ MonoBehaviour:
       traits: 
     levelUpAttributes:
       satietyGrowth: 0
-      healthGrowth: 12
-      attackPowerGrowth: 3
+      healthGrowth: 0
+      attackPowerGrowth: 0
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 200
+    creatureCardType: 26
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 1
+        exploreWorkEfficiency: 1
+        interactWorkEfficiency: 1
+      EXP: 0
+      level: 1
+      satiety: 0
+      health: 20
+      attackPower: 6
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 60
+      spellResistance: 60
+      moveSpeed: 12
+      dodgeRate: 0.05
+      attackSpeed: 9
+      attackRange: 2
+      dropItem: []
+      traits: 
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 0
+      attackPowerGrowth: 0
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 200
+    creatureCardType: 27
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 1
+        exploreWorkEfficiency: 1
+        interactWorkEfficiency: 1
+      EXP: 0
+      level: 1
+      satiety: 0
+      health: 40
+      attackPower: 4
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 0
+      spellResistance: 0
+      moveSpeed: 12
+      dodgeRate: 0
+      attackSpeed: 6
+      attackRange: 1
+      dropItem: []
+      traits: 
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 0
+      attackPowerGrowth: 0
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 200
+    creatureCardType: 28
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 1
+        exploreWorkEfficiency: 1
+        interactWorkEfficiency: 1
+      EXP: 0
+      level: 1
+      satiety: 0
+      health: 100
+      attackPower: 15
+      spellPower: 0
+      normalAttackDamageType: 1
+      armor: 180
+      spellResistance: 100
+      moveSpeed: 12
+      dodgeRate: 0.1
+      attackSpeed: 15
+      attackRange: 1
+      dropItem: []
+      traits: 
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 0
+      attackPowerGrowth: 0
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 0
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 200
+    creatureCardType: 29
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 1
+        exploreWorkEfficiency: 1
+        interactWorkEfficiency: 1
+      EXP: 0
+      level: 1
+      satiety: 0
+      health: 80
+      attackPower: 18
+      spellPower: 1
+      normalAttackDamageType: 2
+      armor: 200
+      spellResistance: 45
+      moveSpeed: 18
+      dodgeRate: 0
+      attackSpeed: 18
+      attackRange: 1
+      dropItem: []
+      traits: 
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 0
+      attackPowerGrowth: 0
       spellPowerGrowth: 0
       armorGrowth: 0
       spellResistanceGrowth: 0
@@ -667,8 +825,8 @@ MonoBehaviour:
       attackPower: 3
       spellPower: 0
       normalAttackDamageType: 0
-      armor: 20
-      spellResistance: 0
+      armor: 80
+      spellResistance: 45
       moveSpeed: 12
       dodgeRate: 0
       attackSpeed: 9
@@ -680,8 +838,8 @@ MonoBehaviour:
       healthGrowth: 10
       attackPowerGrowth: 2
       spellPowerGrowth: 0
-      armorGrowth: 0
-      spellResistanceGrowth: 0
+      armorGrowth: 20
+      spellResistanceGrowth: 15
       moveSpeedGrowth: 0
       dodgeRateGrowth: 0
       attackSpeedGrowth: 0
@@ -700,8 +858,8 @@ MonoBehaviour:
       attackPower: 8
       spellPower: 0
       normalAttackDamageType: 0
-      armor: 20
-      spellResistance: 0
+      armor: 100
+      spellResistance: 50
       moveSpeed: 10
       dodgeRate: 0
       attackSpeed: 9
@@ -713,8 +871,8 @@ MonoBehaviour:
       healthGrowth: 20
       attackPowerGrowth: 3
       spellPowerGrowth: 0
-      armorGrowth: 0
-      spellResistanceGrowth: 0
+      armorGrowth: 25
+      spellResistanceGrowth: 15
       moveSpeedGrowth: 0
       dodgeRateGrowth: 0
       attackSpeedGrowth: 0
@@ -729,12 +887,12 @@ MonoBehaviour:
       EXP: 0
       level: 1
       satiety: 0
-      health: 300
+      health: 150
       attackPower: 21
       spellPower: 0
       normalAttackDamageType: 0
-      armor: 25
-      spellResistance: 0
+      armor: 200
+      spellResistance: 50
       moveSpeed: 100
       dodgeRate: 0
       attackSpeed: 18
@@ -745,6 +903,39 @@ MonoBehaviour:
       satietyGrowth: 0
       healthGrowth: 0
       attackPowerGrowth: 0
+      spellPowerGrowth: 0
+      armorGrowth: 0
+      spellResistanceGrowth: 15
+      moveSpeedGrowth: 0
+      dodgeRateGrowth: 0
+      attackSpeedGrowth: 0
+      attackRangeGrowth: 0
+  - levelUpExpIncreasePercent: 200
+    creatureCardType: 25
+    basicAttributes:
+      workEfficiencyAttributes:
+        craftWorkEfficiency: 1
+        exploreWorkEfficiency: 1
+        interactWorkEfficiency: 1
+      EXP: 0
+      level: 1
+      satiety: 0
+      health: 5
+      attackPower: 2
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 20
+      spellResistance: 0
+      moveSpeed: 9
+      dodgeRate: 0
+      attackSpeed: 6
+      attackRange: 1
+      dropItem: []
+      traits: 
+    levelUpAttributes:
+      satietyGrowth: 0
+      healthGrowth: 3
+      attackPowerGrowth: 1
       spellPowerGrowth: 0
       armorGrowth: 0
       spellResistanceGrowth: 0
@@ -760,73 +951,73 @@ MonoBehaviour:
     priceValue: 1
   - resourceCardType: 2
     resourceClassification: 3
-    durability: 3
+    durability: 1
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 3
-    resourceClassification: 3
-    durability: 3
-    satietyValue: 0
+    resourceClassification: 1
+    durability: 1
+    satietyValue: 1
     priceValue: 1
   - resourceCardType: 4
-    resourceClassification: 3
-    durability: 3
+    resourceClassification: 4
+    durability: 1
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 5
-    resourceClassification: 3
-    durability: 3
+    resourceClassification: 4
+    durability: 1
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 6
-    resourceClassification: 3
-    durability: 3
+    resourceClassification: 4
+    durability: 1
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 7
     resourceClassification: 3
-    durability: 3
+    durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 8
     resourceClassification: 3
-    durability: 999
+    durability: 3
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 9
     resourceClassification: 3
-    durability: 999
+    durability: 3
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 10
-    resourceClassification: 3
-    durability: 999
-    satietyValue: 0
-    priceValue: 1
-  - resourceCardType: 11
-    resourceClassification: 3
-    durability: 999
-    satietyValue: 0
-    priceValue: 1
-  - resourceCardType: 12
-    resourceClassification: 3
-    durability: 999
-    satietyValue: 0
-    priceValue: 1
-  - resourceCardType: 13
-    resourceClassification: 3
-    durability: 999
-    satietyValue: 0
-    priceValue: 1
-  - resourceCardType: 14
-    resourceClassification: 3
-    durability: 999
-    satietyValue: 0
-    priceValue: 1
-  - resourceCardType: 15
     resourceClassification: 4
     durability: 1
     satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 11
+    resourceClassification: 4
+    durability: 1
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 12
+    resourceClassification: 4
+    durability: 1
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 13
+    resourceClassification: 1
+    durability: 1
+    satietyValue: 1
+    priceValue: 1
+  - resourceCardType: 14
+    resourceClassification: 1
+    durability: 1
+    satietyValue: 2
+    priceValue: 1
+  - resourceCardType: 15
+    resourceClassification: 1
+    durability: 3
+    satietyValue: 1
     priceValue: 1
   - resourceCardType: 16
     resourceClassification: 4
@@ -845,12 +1036,12 @@ MonoBehaviour:
     priceValue: 1
   - resourceCardType: 19
     resourceClassification: 4
-    durability: 1
+    durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 20
     resourceClassification: 4
-    durability: 1
+    durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 21
@@ -869,28 +1060,28 @@ MonoBehaviour:
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 24
-    resourceClassification: 4
-    durability: 1
+    resourceClassification: 2
+    durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 25
-    resourceClassification: 4
+    resourceClassification: 2
     durability: 1
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 26
-    resourceClassification: 4
-    durability: 1
+    resourceClassification: 2
+    durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 27
-    resourceClassification: 4
-    durability: 1
+    resourceClassification: 3
+    durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 28
-    resourceClassification: 4
-    durability: 1
+    resourceClassification: 3
+    durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 29
@@ -899,33 +1090,94 @@ MonoBehaviour:
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 30
-    resourceClassification: 4
-    durability: 1
+    resourceClassification: 2
+    durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 31
     resourceClassification: 4
-    durability: 2
+    durability: 1
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 32
-    resourceClassification: 1
+    resourceClassification: 4
     durability: 1
-    satietyValue: 1
+    satietyValue: 0
     priceValue: 1
   - resourceCardType: 33
-    resourceClassification: 1
-    durability: 3
-    satietyValue: 1
+    resourceClassification: 4
+    durability: 1
+    satietyValue: 0
     priceValue: 1
   - resourceCardType: 34
-    resourceClassification: 1
-    durability: 2
-    satietyValue: 1
+    resourceClassification: 4
+    durability: 1
+    satietyValue: 0
     priceValue: 1
   - resourceCardType: 35
-    resourceClassification: 1
-    durability: 3
-    satietyValue: 1
+    resourceClassification: 4
+    durability: 999
+    satietyValue: 0
     priceValue: 1
-  equipmentCardAttributes: []
+  - resourceCardType: 36
+    resourceClassification: 4
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 37
+    resourceClassification: 1
+    durability: 2
+    satietyValue: 2
+    priceValue: 1
+  - resourceCardType: 38
+    resourceClassification: 3
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 39
+    resourceClassification: 2
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 40
+    resourceClassification: 2
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 41
+    resourceClassification: 2
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 42
+    resourceClassification: 2
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 43
+    resourceClassification: 2
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 44
+    resourceClassification: 2
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 45
+    resourceClassification: 2
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  equipmentCardAttributes:
+  - equipmentCardType: 26
+  - equipmentCardType: 24
+  - equipmentCardType: 30
+  - equipmentCardType: 25
+  - equipmentCardType: 39
+  - equipmentCardType: 40
+  - equipmentCardType: 41
+  - equipmentCardType: 42
+  - equipmentCardType: 43
+  - equipmentCardType: 44
+  - equipmentCardType: 45

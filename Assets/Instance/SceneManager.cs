@@ -59,7 +59,7 @@ public class SceneManager : MonoBehaviour
         
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
     }
-    
+
     public static void QuitToStartScene()
     {
         BeforeSceneChanged?.Invoke();
@@ -76,6 +76,12 @@ public class SceneManager : MonoBehaviour
 
         BeforeSceneChanged = null;
         AfterSceneChanged = null;
+    }
+    
+    public static void QuitToDesktop()
+    {
+        BeforeSceneChanged?.Invoke();
+        QuitGame();
     }
 
     public static void QuitGame()
