@@ -14,7 +14,7 @@ public class T_Tribe : B_Trait, ITraitHolder
     {
         foreach (var creature in inBattleCreatures)
         {
-            ModifyAttributes(creature.actAttribute);
+            ModifyAttributes(creature.actAttribute, creature);
             if (creature.actAttribute.traits.Contains(traitType) && (level == 4 || level == 5))
             {
                 creature.attackEffetcts.Add(AttackEffetct.TrueDamagePercentageOfAttackPower);

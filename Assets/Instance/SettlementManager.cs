@@ -116,7 +116,8 @@ public class SettlementCardManager : MonoBehaviour
         }
         else
         {
-            
+            // TESTING: If no creature cards in battle scene, still allow to proceed to battle scene
+            SceneManager.LoadScene(SceneManager.BattleScene);
         }
     }
 

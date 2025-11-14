@@ -12,7 +12,7 @@ public class T_Cavalry : B_Trait, ITraitHolder
     void Start() => traitType = Trait.冲击骑兵;
     public void ModifyAttributes(CardAttributeDB.CreatureCardAttribute.BasicAttributes baseAttributes, B_Creature creature = null)
     {
-        if (creature.actAttribute.traits.Contains(traitType))
+        if (baseAttributes.traits.Contains(traitType))
         {
             baseAttributes.moveSpeed = 3;
         }
@@ -34,7 +34,7 @@ public class T_Cavalry : B_Trait, ITraitHolder
             if (creature.actAttribute.traits.Contains(traitType) && level > 0)
             {
                 speedUpCreature[creature] = creature.actAttribute.moveSpeed;
-                ModifyAttributes(creature.actAttribute);
+                ModifyAttributes(creature.actAttribute, creature);
             }
         }
         tickCount = durationTickCountPerLevel[level];

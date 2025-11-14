@@ -2,7 +2,7 @@
 # 资源卡类型,# 资源卡分类（下拉列表选择）,# 资源卡耐久度,# 食物卡可恢复的总饱食度,# 资源卡的售卖价值值
 #,# Food为食物卡、Equipment为装备卡,# 空白则匹配默认值1,# 仅当资源卡分类为Food时有效,# 请填写整数
 #,# Resourcepoint为资源点、Others为其他,# 尽量不要留出空白全部填写,# 请填写整数,
-探索点,ResourcePoint,999,,0
+王座厅探索点,ResourcePoint,999,,0
 废弃的蘑菇农场,ResourcePoint,1,,0
 蘑菇,Food,1,1,0
 金币,Others,1,,0
@@ -20,7 +20,7 @@
 尸体,Others,1,,0
 石砖,Others,1,,0
 建筑材料,Others,1,,0
-酒馆,Others,999,,0
+喧闹酒馆,Others,999,,0
 锻造加工台,Others,999,,0
 废铁,Others,1,,0
 土壤,Others,1,,0
@@ -37,7 +37,7 @@
 白银,Others,1,,2
 金块,Others,1,,3
 熔炉,Others,999,,0
-精怪安全屋,Others,999,,0
+秘密安全屋,Others,999,,0
 肉食,Food,2,2,0
 地下城入口,ResourcePoint,999,,0
 附魔石匣,Equipment,999,,4
@@ -47,3 +47,12 @@
 白银护石,Equipment,999,,5
 秘银,Equipment,999,,5
 骑士巨剑,Equipment,999,,7
+蘑菇农场,ResourcePoint,999,,0
+地下真菌田,ResourcePoint,999,,0
+铁矿隧道,ResourcePoint,999,,0
+灵魂石,Others,1,,0
+贵族家徽,Others,1,,0
+临时传导台,Others,999,,0
+鲜血祭坛,Others,999,,0
+奴隶,Others,1,,0
+烈酒,Food,1,3,0

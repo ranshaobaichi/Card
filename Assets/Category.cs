@@ -34,7 +34,7 @@ namespace Category
         尸体,
         石砖,
         建筑材料,
-        酒馆,
+        喧闹酒馆,
         锻造加工台,
         废铁,
         土壤,
@@ -51,7 +51,7 @@ namespace Category
         白银,
         金块,
         熔炉,
-        精怪安全屋,
+        秘密安全屋,
         肉食,
         地下城入口,
         附魔石匣,
@@ -61,6 +61,15 @@ namespace Category
         白银护石,
         秘银,
         骑士巨剑,
+        蘑菇农场,
+        地下真菌田,
+        铁矿隧道,
+        灵魂石,
+        贵族家徽,
+        临时传导台,
+        鲜血祭坛,
+        奴隶,
+        烈酒,
     }
 
     [Serializable]
@@ -106,7 +115,6 @@ namespace Category
         侍从,
         流浪骑士,
         森林男爵,
-
     }
 
     public enum EventCardType

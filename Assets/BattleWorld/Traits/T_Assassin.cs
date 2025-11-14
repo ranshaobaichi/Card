@@ -12,16 +12,6 @@ public class T_Assassin : B_Trait, ITraitHolder
 
     public void ModifyAttributes(CardAttributeDB.CreatureCardAttribute.BasicAttributes baseAttributes, B_Creature creature = null)
     {
-        if (baseAttributes == null)
-        {
-            Debug.LogError("BaseAttributes is null in T_Assassin ModifyAttributes");
-            return;
-        }
-        if (baseAttributes.traits == null)
-        {
-            Debug.LogError("BaseAttributes.traits is null in T_Assassin ModifyAttributes");
-            return;
-        }
         if (baseAttributes.traits.Contains(traitType))
         {
             float bonus = damageBonusPerLevel[level];

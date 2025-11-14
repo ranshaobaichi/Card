@@ -1169,6 +1169,51 @@ MonoBehaviour:
     durability: 999
     satietyValue: 0
     priceValue: 1
+  - resourceCardType: 46
+    resourceClassification: 3
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 47
+    resourceClassification: 3
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 48
+    resourceClassification: 3
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 49
+    resourceClassification: 4
+    durability: 1
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 50
+    resourceClassification: 4
+    durability: 1
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 51
+    resourceClassification: 4
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 52
+    resourceClassification: 4
+    durability: 999
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 53
+    resourceClassification: 4
+    durability: 1
+    satietyValue: 0
+    priceValue: 1
+  - resourceCardType: 54
+    resourceClassification: 1
+    durability: 1
+    satietyValue: 3
+    priceValue: 1
   equipmentCardAttributes:
   - equipmentCardType: 26
   - equipmentCardType: 24

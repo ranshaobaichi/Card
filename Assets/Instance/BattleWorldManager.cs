@@ -81,6 +81,12 @@ public class BattleWorldManager : MonoBehaviour
     /// <param name="testCreatureCardType"></param>
     public B_Creature AddObj(LineUp lineUp, CreatureCardType testCreatureCardType)
     {
+        if (testCreatureCardType == CreatureCardType.None || testCreatureCardType == CreatureCardType.Any)
+        {
+            Debug.LogError($"BattleWorldManager: Invalid testCreatureCardType {testCreatureCardType}");
+            return null;
+        }
+        Debug.Log($"BattleWorldManager: Adding test creature of type {testCreatureCardType} to {lineUp}");
         var creatureGO = Instantiate(BattleCreaturePrefab, PreparationAreaContent.transform.position, Quaternion.identity, PreparationAreaContent.transform);
         var creature = creatureGO.GetComponent<B_Creature>();
         var image = creatureGO.GetComponent<Image>();
@@ -313,13 +319,18 @@ public class BattleWorldManager : MonoBehaviour
         for (int i = 0; i < waveData.creatureType.Count; i++)
         {
             var creatureGO = AddObj(LineUp.Enemy, waveData.creatureType[i]);
+            if (creatureGO == null)
+            {
+                Debug.LogError($"LoadBattleWave: 无法创建敌人波次中的生物对象，类型: {waveData.creatureType[i]}");
+                continue;
+            }
             HexNodeManager.MoveObject(creatureGO, null, HexNodeManager.Instance.Tiles[waveData.spawnCoord[i]]);
         }
         currentWaveData = waveData;
 
-        UpdateActiveTraits(LineUp.Enemy);
-        UpdateTraitDisplay(LineUp.Enemy);
+        Debug.Log($"LoadBattleWave: 成功加载敌人波次 {waveIdx}，包含 {waveData.creatureType.Count} 个敌人。");
 
+        UpdateActiveTraits(LineUp.Enemy);
         return true;
     }
 
@@ -333,13 +344,13 @@ public class BattleWorldManager : MonoBehaviour
             totalExpGain = expGain
         };
 
-        string json = JsonUtility.ToJson(waveData);
         foreach (var enemy in enemyCreatures)
         {
             waveData.creatureType.Add(enemy.creatureCardAttribute.creatureCardType);
             waveData.spawnCoord.Add(enemy.hexNode.coord);
         }
 
+        string json = JsonUtility.ToJson(waveData);
         string resourcesDir = Path.Combine(Application.dataPath, "Resources", "EnemyWaves");
         if (!Directory.Exists(resourcesDir))
             Directory.CreateDirectory(resourcesDir);
