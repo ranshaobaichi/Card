@@ -37,7 +37,7 @@ public class TraitItem : MonoBehaviour, IPointerClickHandler
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            BattleWorldManager.Instance.traitDescriptionPanel.Initialize(this);
+            BattleWorldManager.Instance.traitDescriptionPanel.InitializeForBattle(this);
         }
     }
 

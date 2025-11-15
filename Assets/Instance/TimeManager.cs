@@ -49,7 +49,7 @@ public class TimeManager : MonoBehaviour
         speedUpButton = GameObject.FindWithTag("SpeedUpButton")?.GetComponent<Button>();
 
         timescalelevelText = GameObject.FindWithTag("TimeScaleLevelText")?.GetComponent<Text>();
-        timescalelevelText.text = $"当前速度倍率：{speedUpLevel[currentSpeedUpLevel]}";
+        timescalelevelText.text = $"当前时间流速：{speedUpLevel[currentSpeedUpLevel]}";
     }
 
     void OnEnable()

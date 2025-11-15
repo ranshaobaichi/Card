@@ -68,8 +68,33 @@ public class HexNode : MonoBehaviour
         new (int, int)[] { (-1, 0), (-1, 1), (0, -1), (0, 1), (1, 0), (1, 1) },
         new (int, int)[] { (-1, -1), (-1, 0), (0, -1), (0, 1), (1, -1), (1, 0) },
     };
+    public Material enemyMaterial, playerMaterial;
+    public Image image;
 
-    public B_Creature occupant;
+    private B_Creature _occupant;
+    public B_Creature occupant
+    {
+        get => _occupant;
+        set
+        {
+            if (value != null)
+            {
+                if (value.lineUp == Category.Battle.LineUp.Player)
+                {
+                    image.material = playerMaterial;
+                }
+                else
+                {
+                    image.material = enemyMaterial;
+                }
+            }
+            else
+            {
+                image.material = null;
+            }
+            _occupant = value;
+        }
+    }
     public AxialCoordinate coord;
     public bool walkable;
     public int GetDistance(HexNode other) => coord.GetDistance(other.coord);
@@ -96,15 +121,6 @@ public class HexNode : MonoBehaviour
                 neighbors ??= new List<HexNode>();
                 neighbors.Add(neighborNode);
             }
-        }
-
-
-        /// TEST
-        Text text = GetComponentInChildren<Text>();
-        if (text != null)
-        {
-            text.text = coord.ToString();
-            // Debug.Log($"Node {coord} has {neighbors?.Count ?? 0} neighbors.");
         }
     }
 

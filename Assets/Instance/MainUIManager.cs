@@ -117,6 +117,6 @@ public class MainUIManager : MonoBehaviour
             neededFoodAmount += creatureCardAttr.basicAttributes.satiety;
         }
 
-        foodText.text = $"食物: {foodAmount}/{neededFoodAmount}";
+        foodText.text = $"{foodAmount}/{neededFoodAmount}";
     }
 }

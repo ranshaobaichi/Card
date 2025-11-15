@@ -79,6 +79,16 @@ public class CameraController : MonoBehaviour
     void HandleZoom()
     {
         if (cam == null || !cam.orthographic) return;
+        MainUIManager mainUIManager = FindAnyObjectByType<MainUIManager>();
+        if (mainUIManager != null)
+        {
+            if (mainUIManager.CraftTablePanel.activeSelf ||
+                mainUIManager.PopulationPanel.activeSelf ||
+                mainUIManager.TaskPanel.activeSelf)
+            {
+                return; // 如果任一面板打开，禁止缩放
+            }
+        }
         
         // 获取鼠标滚轮输入
         float scrollInput = Input.GetAxis("Mouse ScrollWheel");

@@ -25,7 +25,7 @@ public class TraitPanel : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
-    public void Initialize(TraitItem traitItem)
+    public void InitializeForBattle(TraitItem traitItem)
     {
         var trait = traitItem.trait;
         var lineUp = traitItem.lineUp;
@@ -73,6 +73,60 @@ public class TraitPanel : MonoBehaviour, IBeginDragHandler, IDragHandler
             Color color = levelDescriptions[i].color;
             color.a = i == level - 1 ? 1f : 0.5f;
             levelDescriptions[i].color = color;
+        }
+
+        gameObject.SetActive(true);
+    }
+
+    public void InitializeNormal(Trait trait, Canvas canvas)
+    {
+        // Get the mouse position
+        RectTransform rt = transform as RectTransform;
+        if (canvas != null && rt != null)
+        {
+            Camera cam = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvas.transform as RectTransform,
+                Input.mousePosition,
+                cam,
+                out Vector2 localPoint
+            );
+            rt.anchoredPosition = localPoint;
+        }
+        else
+        {
+            // fallback for non-UI or missing canvas
+            Vector3 mousePos = Input.mousePosition;
+            transform.position = mousePos;
+        }
+
+
+        var attr = DataBaseManager.Instance.GetAllTraitAttributes()[trait];
+        traitIcon.sprite = attr.icon;
+        traitName.text = trait.ToString();
+        traitDescription.text = attr.description;
+
+        // Set population text
+        string populationString = "";
+        List<int> thresholds = attr.levelThresholds;
+        for (int i = 0; i < thresholds.Count; i++)
+        {
+            if (i == thresholds.Count - 1)
+                populationString += thresholds[i];
+            else
+                populationString += thresholds[i] + "/";
+        }
+        traitPopulation.text = populationString;
+        Color popColor = traitPopulation.color;
+        popColor.a = 1f;
+        traitPopulation.color = popColor;
+
+        // Set level descriptions
+        levelDescriptions.ForEach(text => text.gameObject.SetActive(false));
+        for (int i = 0; i < attr.levelDescriptions.Count; i++)
+        {
+            levelDescriptions[i].gameObject.SetActive(true);
+            levelDescriptions[i].text = $"{attr.levelThresholds[i]}：{attr.levelDescriptions[i]}";
         }
 
         gameObject.SetActive(true);

@@ -9,12 +9,12 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 {
     // 组件
     private Image image;
-    public Text nameText;
 
     // 引用
     public HexNode hexNode;
     public bool inBattle => hexNode != null;
     public Transform equiptmentSlot;
+    public DisplayCard displayCard;
 
     // 属性
     public long cardID;
@@ -86,19 +86,29 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         curAttribute = (BasicAttributes)attr.basicAttributes.Clone();
         _actAttribute = (BasicAttributes)curAttribute.Clone();
 
-        nameText.text = attr.creatureCardType.ToString();
+        Card.CardDescription cardDescription = new Card.CardDescription
+        {
+            cardType = Category.CardType.Creatures,
+            creatureCardType = attr.creatureCardType
+        };
+        displayCard.Initialize(cardDescription);
         // Debug.Log("Attack Range: " + attr.basicAttributes.attackRange + " Basic is " + curAttribute.attackRange);
     }
 
     public void Tick()
     {
         var opponents = lineUp == LineUp.Player ?
-            BattleWorldManager.Instance.enemyCreatures :
-            BattleWorldManager.Instance.playerCreatures;
+            BattleWorldManager.Instance.GetInBattleCreatures(LineUp.Enemy) :
+            BattleWorldManager.Instance.GetInBattleCreatures(LineUp.Player);
         B_Creature closestOpponents = null;
         int closestDistance = int.MaxValue;
         foreach (var enemy in opponents)
         {
+            if (hexNode == null)
+            {
+                Debug.LogError($"{transform.name} is not on any hex node!");
+                return;
+            }
             int distance = hexNode.GetDistance(enemy.hexNode);
             if (distance < closestDistance)
             {
@@ -323,6 +333,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         oriPosition = transform.position;
         oriParent = transform.parent.gameObject;
         transform.SetParent(BattleWorldManager.Instance.DraggingSlot, false);
+        displayCard.SetOnlyDisplayIllustration(false);
         isDragging = true;
     }
 
@@ -342,8 +353,16 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         bool succPut = false;
         if (eventData.pointerCurrentRaycast.gameObject != null)
         {
+            bool inBack()
+            {
+                if (lineUp == LineUp.Player)
+                {
+                    return hexNode.coord.R <= 4;
+                }
+                return true;
+            }
             GameObject hitObj = eventData.pointerCurrentRaycast.gameObject;
-            if (hitObj.TryGetComponent<HexNode>(out var node) && node.walkable)
+            if (hitObj.TryGetComponent<HexNode>(out var node) && node.walkable && inBack())
             {
                 Debug.Log("Dropped on HexNode");
                 succPut = true;
@@ -364,7 +383,12 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             transform.SetParent(oriParent.transform, false);
             transform.position = oriPosition;
         }
-        
+
+        if (inBattle)
+            displayCard.SetOnlyDisplayIllustration(true);
+        else
+            displayCard.SetOnlyDisplayIllustration(false);
+            
         BattleWorldManager.Instance.UpdateActiveTraits(lineUp);
         image.raycastTarget = true;
     }

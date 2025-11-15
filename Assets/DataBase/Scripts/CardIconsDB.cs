@@ -19,12 +19,24 @@ public class CardIconsDB : ScriptableObject
         public Sprite side;
     }
 
+    [Serializable]
+    public class CardIllustration
+    {
+        public CreatureCardType cardDescription;
+        public Sprite illustration;
+    }
+
     public List<CardIconAttribute> cardIconAttributes;
+    public List<CardIllustration> cardIllustrations;
+
     private Dictionary<CardType, CardIconAttribute> cardIconsDict;
     private Dictionary<ResourceCardClassification, CardIconAttribute> resourceCardClassificationIconsDict;
+    private Dictionary<CreatureCardType, CardIllustration> cardIllustrationsDict;
+
     public void Initialize()
     {
         InitCardIconAttributes();
+        InitCardIllustrations();
     }
     public void InitCardIconAttributes()
     {
@@ -40,6 +52,14 @@ public class CardIconsDB : ScriptableObject
             {
                 resourceCardClassificationIconsDict[attribute.resourceCardClassification] = attribute;
             }
+        }
+    }
+    public void InitCardIllustrations()
+    {
+        cardIllustrationsDict = new Dictionary<CreatureCardType, CardIllustration>();
+        foreach (var illustration in cardIllustrations)
+        {
+            cardIllustrationsDict[illustration.cardDescription] = illustration;
         }
     }
 
@@ -61,6 +81,16 @@ public class CardIconsDB : ScriptableObject
             }
         }
         attribute = null;
+        return false;
+    }
+
+    public bool TryGetCardIllustration(CreatureCardType cardDescription, out CardIllustration illustration)
+    {
+        if (cardIllustrationsDict.TryGetValue(cardDescription, out illustration))
+        {
+            return true;
+        }
+        illustration = null;
         return false;
     }
 }

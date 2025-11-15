@@ -15,7 +15,7 @@ MonoBehaviour:
   recipeList:
   - recipeID: 1
     recipeName: "\u79CD\u690D\u8611\u83C7"
-    recipeDescription: "\u8FD9\u662F\u5730\u4E0B\u57CE\u4E3A\u6570\u4E0D\u591A\u7684\u571F\u58E4\uFF0C\u5B83\u4EC5\u5269\u7684\u8425\u517B\u53EA\u591F\u5728\u8015\u79CD\u51E0\u6B21\uFF0C\u5982\u679C\u6025\u7F3A\u98DF\u7269\uFF0C\u53EF\u4EE5\u628A\u5B83\u7FFB\u4E2A\u5E95\u671D\u5929\uFF0C\u627E\u627E\u6709\u6CA1\u6709\u85CF\u8D77\u6765\u7684\u4E1C\u897F"
+    recipeDescription: 
     workload: 12000
     workType: 3
     inputCards:
@@ -108,7 +108,7 @@ MonoBehaviour:
       dropWeight: 10
   - recipeID: 3
     recipeName: "\u80A5\u6C83\u571F\u58E4"
-    recipeDescription: "\u571F\u5730\u9700\u8981\u80A5\u529B\uFF0C\u4E00\u4E9B\u5C38\u9AB8\u5C31\u662F\u6700\u597D\u7684\u517B\u6599"
+    recipeDescription: 
     workload: 9000
     workType: 3
     inputCards:
@@ -134,7 +134,7 @@ MonoBehaviour:
       dropWeight: 10
   - recipeID: 4
     recipeName: "\u79CD\u690D\u8611\u83C7"
-    recipeDescription: "\u5982\u4ECA\uFF0C\u5DF2\u7ECF\u4E0D\u7528\u62C5\u5FC3\u571F\u5730\u7684\u80A5\u529B\u4E0D\u591F\uFF0C\u4E0D\u8FC7\u6709\u4E9B\u7528\u4E0D\u5230\u7684\u5C38\u4F53\u6216\u5185\u810F\u8FD8\u662F\u53EF\u4EE5\u4F7F\u5B83\u7684\u4EA7\u91CF\u589E\u52A0"
+    recipeDescription: 
     workload: 10000
     workType: 3
     inputCards:
@@ -269,7 +269,7 @@ MonoBehaviour:
       dropWeight: 3
   - recipeID: 6
     recipeName: "\u6269\u5927\u519C\u7530"
-    recipeDescription: "\u5730\u4E0B\u57CE\u65E5\u6E10\u70ED\u95F9\u8D77\u6765\uFF0C\u9700\u8981\u517B\u6D3B\u7684\u5634\u4E5F\u591A\u4E86\u4E0D\u5C11\uFF0C\u662F\u65F6\u5019\u6269\u5F20\u519C\u7530\uFF0C\u66F4\u9AD8\u6548\u7684\u751F\u4EA7\u4E86\uFF01"
+    recipeDescription: 
     workload: 13000
     workType: 3
     inputCards:
@@ -332,7 +332,7 @@ MonoBehaviour:
       dropWeight: 10
   - recipeID: 8
     recipeName: "\u81EA\u7136\u751F\u957F"
-    recipeDescription: "\u83CC\u4E1D\u5DF2\u7ECF\u57CB\u5165\u571F\u58E4\u91CC\uFF0C\u5373\u4FBF\u4E0D\u9700\u8981\u79CD\u5B50\uFF0C\u4E5F\u53EF\u4EE5\u81EA\u884C\u751F\u4EA7"
+    recipeDescription: 
     workload: 6000
     workType: 3
     inputCards:
@@ -350,7 +350,7 @@ MonoBehaviour:
       dropWeight: 10
   - recipeID: 9
     recipeName: "\u8611\u83C7\u917F\u9020"
-    recipeDescription: "\u5C06\u90A3\u4E9B\u5403\u4E0B\u53BB\u540E\u4F1A\u660F\u8FF7\uFF0C\u81F4\u5E7B\u7684\u8611\u83C7\u6311\u51FA\u6765\uFF01\u8FD9\u4E9B\u90FD\u662F\u4E0A\u597D\u7684\u917F\u9152\u6750\u6599"
+    recipeDescription: 
     workload: 2500
     workType: 3
     inputCards:
@@ -372,12 +372,16 @@ MonoBehaviour:
       dropWeight: 10
   - recipeID: 10
     recipeName: "\u53D1\u9175"
-    recipeDescription: "\u4E0D\u7528\u7BA1\u5B83\u4EEC\uFF0C\u968F\u4FBF\u627E\u4E2A\u5730\u513F\u5806\u7740\uFF01"
+    recipeDescription: 
     workload: 10000
     workType: 3
     inputCards:
     - cardType: 1
       resourceCardType: 13
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 6
       creatureCardType: 0
       eventCardType: 0
     outputCards:
@@ -390,7 +394,7 @@ MonoBehaviour:
       dropWeight: 10
   - recipeID: 11
     recipeName: "\u738B\u5EA7\u5385\u5E9F\u589F\u63A2\u7D22"
-    recipeDescription: "\u8FD9\u662F\u4F60\u9192\u6765\u7684\u5730\u65B9\uFF0C\u8FD9\u91CC\u662F\u5730\u4E0B\u57CE\u5165\u53E3\uFF0C\u4E5F\u662F\u7EDD\u5927\u90E8\u5206\u5192\u9669\u8005\u4F1A\u95EF\u8FDB\u6765\u7684\u6700\u6DF1\u5904\uFF0C\u738B\u5EA7\u5385\u56DB\u901A\u516B\u8FBE\uFF0C\u54EA\u6015\u5982\u4ECA\u7EDD\u5927\u90E8\u5206\u90FD\u5DF2\u574D\u584C\uFF0C\u4F46\u8981\u5728\u53EF\u4EE5\u884C\u52A8\u7684\u533A\u57DF\u5185\u5BFB\u627E\u53EF\u7528\u7684\u7269\u8D44\uFF0C\u4E5F\u4E0D\u662F\u4E00\u4EF6\u7B80\u5355\u4E8B"
+    recipeDescription: 
     workload: 1800
     workType: 2
     inputCards:
@@ -556,8 +560,8 @@ MonoBehaviour:
       dropCount: 1
       dropWeight: 10
   - recipeID: 16
-    recipeName: "\u57FA\u7840\u4F20\u5BFC\u53F0"
-    recipeDescription: "\u8D8A\u662F\u6DF1\u5165\u7684\u5730\u5E95\uFF0C\u9B54\u529B\u7684\u6D8C\u52A8\u4FBF\u6108\u53D1\u5F3A\u70C8\uFF0C\u5B83\u4EEC\u6D41\u6DCC\u5728\u5CA9\u77F3\u4E4B\u4E2D\uFF0C\u5076\u7136\u7684\u6C47\u805A\uFF0C\u4FBF\u4F1A\u4EE4\u5176\u5F02\u53D8\u6210\u5404\u8272\u77FF\u85CF\uFF0C\u56E0\u6B64\u6BCF\u4E00\u79CD\u91D1\u5C5E\u90FD\u8574\u542B\u7740\u6216\u591A\u6216\u5C11\u7684\u9B54\u529B\uFF0C\u54EA\u6015\u662F\u4E00\u5757\u5E9F\u94C1\u4E5F\u4E0D\u4F8B\u5916\u3002\u5229\u7528\u624B\u5934\u7684\u6750\u6599\uFF0C\u4E34\u65F6\u642D\u5EFA\u4E00\u684C\u548F\u9B54\u4F20\u5BFC\u53F0\uFF0C\u5C06\u901D\u8005\u7684\u7075\u9B42\u5F15\u5BFC\u6210\u65B0\u7684\u5C0F\u9B3C\uFF0C\u4E3A\u5730\u4E0B\u57CE\u6DFB\u7816\u52A0\u74E6\uFF01"
+    recipeName: "\u4E34\u65F6\u4F20\u5BFC\u53F0"
+    recipeDescription: 
     workload: 6500
     workType: 1
     inputCards:
@@ -581,7 +585,14 @@ MonoBehaviour:
       resourceCardType: 0
       creatureCardType: 1
       eventCardType: 0
-    outputCards: []
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 51
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
   - recipeID: 17
     recipeName: "\u5236\u9020\u5C0F\u9B3C"
     recipeDescription: 
@@ -704,6 +715,18 @@ MonoBehaviour:
       resourceCardType: 8
       creatureCardType: 0
       eventCardType: 0
+    - cardType: 1
+      resourceCardType: 6
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 6
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
     outputCards:
     - cardDescription:
         cardType: 1
@@ -802,7 +825,15 @@ MonoBehaviour:
     recipeDescription: 
     workload: 1800
     workType: 1
-    inputCards: []
+    inputCards:
+    - cardType: 1
+      resourceCardType: 23
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
+      eventCardType: 0
     outputCards:
     - cardDescription:
         cardType: 1
@@ -933,7 +964,7 @@ MonoBehaviour:
       dropWeight: 10
   - recipeID: 28
     recipeName: "\u5730\u4E0B\u57CE\u5165\u53E3"
-    recipeDescription: "\u5730\u4E0B\u57CE\u5165\u53E3\u5916\u5C31\u662F\u4E00\u7247\u68EE\u6797\uFF0C\u8BA9\u5C0F\u9B3C\u4EEC\u5728\u641C\u96C6\u6728\u6599\u4E4B\u4F59\uFF0C\u5076\u5C14\u4E5F\u4F1A\u78B0\u89C1\u4E00\u4E9B\u730E\u7269\u3002"
+    recipeDescription: 
     workload: 1800
     workType: 2
     inputCards:
@@ -1207,7 +1238,7 @@ MonoBehaviour:
       dropWeight: 10
   - recipeID: 37
     recipeName: "\u79D8\u5BC6\u5B89\u5168\u5C4B"
-    recipeDescription: "\u5730\u4E0B\u57CE\u867D\u7136\u88AB\u6BC1\u706D\u4E86\uFF0C\u4F46\u6D3E\u51FA\u53BB\u7684\u5730\u7CBE\u54E8\u63A2\u4F9D\u7136\u6F5C\u4F0F\u5728\u5730\u4E0A\u4E16\u754C\u7684\u5404\u4E2A\u89D2\u843D\uFF0C\u6709\u4E9B\u751A\u81F3\u6839\u672C\u4E0D\u77E5\u9053\u8FD9\u4E00\u6D88\u606F\uFF0C\u4E00\u65E6\u8FDE\u901A\u4EBA\u7C7B\u57CE\u5E02\u4E0B\u6C34\u9053\u4E0E\u8352\u91CE\u7684\u5BC6\u9053\u88AB\u5EFA\u7ACB\uFF0C\u5730\u7CBE\u4EEC\u5C06\u4F1A\u51C6\u5907\u597D\u518D\u6B21\u4E3A\u5730\u4E0B\u57CE\u6548\u52B3\u3002"
+    recipeDescription: 
     workload: 6500
     workType: 3
     inputCards:
@@ -1307,11 +1338,34 @@ MonoBehaviour:
     workload: 7500
     workType: 1
     inputCards:
+    - cardType: 1
+      resourceCardType: 20
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 32
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 32
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 32
+      creatureCardType: 0
+      eventCardType: 0
     - cardType: 2
       resourceCardType: 0
       creatureCardType: 1
       eventCardType: 0
-    outputCards: []
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 42
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
   - recipeID: 42
     recipeName: "\u9644\u9B54\u77F3\u5323"
     recipeDescription: 
@@ -1334,7 +1388,14 @@ MonoBehaviour:
       resourceCardType: 0
       creatureCardType: 1
       eventCardType: 0
-    outputCards: []
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 39
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
   - recipeID: 43
     recipeName: "\u5236\u5F0F\u6B66\u5668"
     recipeDescription: 
@@ -1361,7 +1422,14 @@ MonoBehaviour:
       resourceCardType: 0
       creatureCardType: 1
       eventCardType: 0
-    outputCards: []
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 40
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
   - recipeID: 44
     recipeName: "\u4F20\u5BFC\u9B54\u6756"
     recipeDescription: 
@@ -1384,18 +1452,44 @@ MonoBehaviour:
       resourceCardType: 0
       creatureCardType: 24
       eventCardType: 0
-    outputCards: []
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 41
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
   - recipeID: 45
     recipeName: "\u767D\u94F6\u62A4\u77F3"
     recipeDescription: 
     workload: 7500
     workType: 1
     inputCards:
+    - cardType: 1
+      resourceCardType: 20
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 33
+      creatureCardType: 0
+      eventCardType: 0
+    - cardType: 1
+      resourceCardType: 33
+      creatureCardType: 0
+      eventCardType: 0
     - cardType: 2
       resourceCardType: 0
       creatureCardType: 24
       eventCardType: 0
-    outputCards: []
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 43
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
   - recipeID: 46
     recipeName: "\u79D8\u94F6"
     recipeDescription: 
@@ -1418,7 +1512,14 @@ MonoBehaviour:
       resourceCardType: 0
       creatureCardType: 1
       eventCardType: 0
-    outputCards: []
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 44
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
   - recipeID: 47
     recipeName: "\u55A7\u95F9\u9152\u9986"
     recipeDescription: 
@@ -1449,7 +1550,14 @@ MonoBehaviour:
       resourceCardType: 37
       creatureCardType: 0
       eventCardType: 0
-    outputCards: []
+    outputCards:
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 19
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 1
+      dropWeight: 10
   - recipeID: 48
     recipeName: "\u8001\u7EC3\u7684\u730E\u624B"
     recipeDescription: 

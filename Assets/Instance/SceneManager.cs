@@ -7,6 +7,7 @@ public class SceneManager : MonoBehaviour
     public const string BattleScene = "BattleScene";
     public const string SettlementScene = "SettlementScene";
     public const string StartScene = "StartScene";
+    public const string LoseScene = "LoseScene";
     public static string currentScene = "";
     public static SceneManager Instance;
 
@@ -64,15 +65,7 @@ public class SceneManager : MonoBehaviour
     {
         BeforeSceneChanged?.Invoke();
         UnityEngine.SceneManagement.SceneManager.LoadScene(StartScene);
-        GameObject[] ddolObjs = GameObject.FindGameObjectsWithTag("DontDestroyOnLoad");
-        foreach (var obj in ddolObjs)
-        {
-            // TEST
-            // Debug.Log("Destroying object: " + obj.name);
-            if (obj.name == "SceneManager" || obj.name == "GlobalTestFunction" || obj.name == "SaveDataManager")
-                continue;
-            Destroy(obj);
-        }
+        DestroyAllDontDestroyOnLoadObjects();
 
         BeforeSceneChanged = null;
         AfterSceneChanged = null;
@@ -87,11 +80,24 @@ public class SceneManager : MonoBehaviour
     public static void QuitGame()
     {
 #if UNITY_EDITOR
-            // 停止编辑器中的播放模式
-            UnityEditor.EditorApplication.isPlaying = false;
+        // 停止编辑器中的播放模式
+        UnityEditor.EditorApplication.isPlaying = false;
 #else
             // 在发布版中退出应用
             UnityEngine.Application.Quit();
 #endif
+    }
+    
+    private static void DestroyAllDontDestroyOnLoadObjects()
+    {
+        GameObject[] ddolObjs = GameObject.FindGameObjectsWithTag("DontDestroyOnLoad");
+        foreach (var obj in ddolObjs)
+        {
+            // TEST
+            // Debug.Log("Destroying object: " + obj.name);
+            if (obj.name == "SceneManager" || obj.name == "GlobalTestFunction" || obj.name == "SaveDataManager")
+                continue;
+            Destroy(obj);
+        }
     }
 }

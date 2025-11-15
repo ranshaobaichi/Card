@@ -89,20 +89,6 @@ public class BattleWorldManager : MonoBehaviour
         Debug.Log($"BattleWorldManager: Adding test creature of type {testCreatureCardType} to {lineUp}");
         var creatureGO = Instantiate(BattleCreaturePrefab, PreparationAreaContent.transform.position, Quaternion.identity, PreparationAreaContent.transform);
         var creature = creatureGO.GetComponent<B_Creature>();
-        var image = creatureGO.GetComponent<Image>();
-        if (lineUp == LineUp.Player)
-        {
-            playerCreatures.Add(creature);
-            PlayerTick += creature.Tick;
-            image.color = Color.blue;
-        }
-        else
-        {
-            enemyCreatures.Add(creature);
-            EnemyTick += creature.Tick;
-            image.color = Color.red;
-        }
-
         Card.CardDescription cardDescription = new Card.CardDescription
         {
             cardType = CardType.Creatures,
@@ -114,9 +100,17 @@ public class BattleWorldManager : MonoBehaviour
         creature.actAttribute = (CardAttributeDB.CreatureCardAttribute.BasicAttributes)attr.basicAttributes.Clone();
         creature.lineUp = lineUp;
         creature.cardID = -1; // test creature has no valid cardID
+        creature.displayCard.Initialize(cardDescription);
 
-        if (lineUp == LineUp.Enemy) 
+        if (lineUp == LineUp.Enemy)
+        {
+            enemyCreatures.Add(creature);
             testAddEnemyTypes.Add(testCreatureCardType);
+        }
+        else
+        {
+            playerCreatures.Add(creature);
+        }
         return creature;
     }
 
@@ -192,35 +186,7 @@ public class BattleWorldManager : MonoBehaviour
         }
 
         OnCreatureDead += (B_Creature _) => EndBattle();
-        StartBattleButton.onClick.AddListener(() =>
-        {
-            InBattle = true;
-            Debug.Log("Battle Started");
-            playerDeployedCreatureIDs.Clear();
-            foreach (var creature in InBattleCreatures)
-            {
-                playerDeployedCreatureIDs.Add(creature.cardID);
-            }
-
-            // make sure the OnBattleStart event is invoked before all creatures set their curAttribute
-            // because some traits may modify the attributes at the start of battle
-            OnBattleStart?.Invoke();
-
-            foreach (var creature in playerCreatures)
-            {
-                creature.curAttribute.CopyFrom(creature.actAttribute);
-            }
-            foreach (var creature in enemyCreatures)
-            {
-                creature.curAttribute.CopyFrom(creature.actAttribute);
-            }
-            if (!mannualTickControl)
-            {
-                StartCoroutine(ReapeatTick());
-            }
-
-            StartBattleButton.interactable = false;
-        });
+        StartBattleButton.onClick.AddListener(StartBattle);
     }
 
     void Update()
@@ -229,6 +195,46 @@ public class BattleWorldManager : MonoBehaviour
         {
             InvokeTick();
         }
+    }
+
+    private void StartBattle()
+    {
+        InBattle = true;
+        Debug.Log("Battle Started");
+        playerDeployedCreatureIDs.Clear();
+        PlayerTick = null;
+        EnemyTick = null;
+
+        foreach (var creature in GetInBattleCreatures(LineUp.Player))
+        {
+            playerDeployedCreatureIDs.Add(creature.cardID);
+            // Debug.Log("player creature added to tick: " + creature.name);
+            PlayerTick += creature.Tick;
+        }
+        foreach (var creature in enemyCreatures)
+        {
+            // Debug.Log("enemy creature added to tick: " + creature.name);
+            EnemyTick += creature.Tick;
+        }
+
+        // make sure the OnBattleStart event is invoked before all creatures set their curAttribute
+        // because some traits may modify the attributes at the start of battle
+        OnBattleStart?.Invoke();
+
+        foreach (var creature in playerCreatures)
+        {
+            creature.curAttribute.CopyFrom(creature.actAttribute);
+        }
+        foreach (var creature in enemyCreatures)
+        {
+            creature.curAttribute.CopyFrom(creature.actAttribute);
+        }
+        if (!mannualTickControl)
+        {
+            StartCoroutine(ReapeatTick());
+        }
+
+        StartBattleButton.interactable = false;
     }
 
     private IEnumerator ReapeatTick()
@@ -251,8 +257,20 @@ public class BattleWorldManager : MonoBehaviour
         lineUp == LineUp.Player ? playerCreatures : enemyCreatures;
     public List<B_Creature> GetInBattleCreatures(LineUp lineUp) =>
         lineUp == LineUp.Player ? InBattleCreatures : enemyCreatures;
+
+    /// <summary>
+    /// Remove a creature from battle world, including from hex node and relevant lists
+    /// Must use in battle
+    /// </summary>
+    /// <param name="creature"></param>
     public void RemoveObj(B_Creature creature)
     {
+        if (!InBattle)
+        {
+            Debug.LogError("BattleWorldManager RemoveObj: Cannot remove creature when not in battle.");
+            return;
+        }
+
         if (creature.lineUp == LineUp.Player)
         {
             playerCreatures.Remove(creature);
@@ -281,7 +299,6 @@ public class BattleWorldManager : MonoBehaviour
         var creature = creatureGO.GetComponent<B_Creature>();
         creature.creatureCardAttribute = attr;
         playerCreatures.Add(creature);
-        PlayerTick += creature.Tick;
 
         creature.Init(cardID, LineUp.Player);
     }
@@ -325,6 +342,7 @@ public class BattleWorldManager : MonoBehaviour
                 continue;
             }
             HexNodeManager.MoveObject(creatureGO, null, HexNodeManager.Instance.Tiles[waveData.spawnCoord[i]]);
+            creatureGO.displayCard.SetOnlyDisplayIllustration(true);
         }
         currentWaveData = waveData;
 

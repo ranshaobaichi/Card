@@ -12,7 +12,7 @@ public class CraftTableCsvImporter : EditorWindow
     private string csvFilePath = "";
     private CraftTableDB craftTableDB;
     private char delimiter = ','; // CSV分隔符
-    private List<(string, string)> errorList = new(); // 记录可能未成功导入的行
+    private List<string> errorList = new(); // 记录可能未成功导入的行
 
     [MenuItem("Tools/Import Craft Recipes From CSV")]
     public static void ShowWindow()
@@ -135,14 +135,21 @@ public class CraftTableCsvImporter : EditorWindow
                         recipe.workType = ParseWorkType(values[workTypeIndex]);
 
                         // 解析输入卡牌
-                        recipe.inputCards = ParseInputCardsList(values[inputCardsIndex]);
+                        recipe.inputCards = ParseInputCardsList(recipe.recipeName, values[inputCardsIndex]);
 
                         // 解析输出卡牌
-                        recipe.outputCards = ParseOutputCardsList(values[outputCardsIndex]);
+                        recipe.outputCards = ParseOutputCardsList(recipe.recipeName, values[outputCardsIndex]);
 
                         craftTableDB.recipeList.Add(recipe);
-                        successCount++;
-                        Debug.Log($"成功导入配方: {recipe.recipeName}");
+                        if (!(recipe.inputCards.Count == 0 || recipe.outputCards.Count == 0))
+                        {
+                            successCount++;
+                            Debug.Log($"成功导入配方: {recipe.recipeName}");
+                        }
+                        else
+                        {
+                            errorList.Add($"配方 '{recipe.recipeName}': 输入或输出卡牌列表为空，可能未成功导入");
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -157,10 +164,10 @@ public class CraftTableCsvImporter : EditorWindow
             EditorUtility.DisplayDialog("导入完成", $"成功导入 {successCount} 个配方", "确定");
             if (errorList.Count > 0)
             {
-                StringBuilder errorMsg = new StringBuilder("以下行的卡牌类型可能有误:\n");
-                foreach (var (fullEntry, invalidType) in errorList)
+                StringBuilder errorMsg = new StringBuilder("错误信息:\n");
+                foreach (var error in errorList)
                 {
-                    errorMsg.AppendLine($"卡牌条目: \"{fullEntry}\", 无效类型: \"{invalidType}\"");
+                    errorMsg.AppendLine(error);
                 }
                 EditorUtility.DisplayDialog("导入警告", errorMsg.ToString(), "确定");
             }
@@ -215,12 +222,15 @@ public class CraftTableCsvImporter : EditorWindow
         return WorkType.None;
     }
 
-    private List<DropCard> ParseOutputCardsList(string cardsString)
+    private List<DropCard> ParseOutputCardsList(string recipeName, string cardsString)
     {
         List<DropCard> cards = new List<DropCard>();
 
         if (string.IsNullOrEmpty(cardsString))
+        {
+            errorList.Add($"配方 '{recipeName}': 输出卡牌为空");
             return cards;
+        }
 
         string[] cardEntries = cardsString.Split(',');
         foreach (string cardEntry in cardEntries)
@@ -250,7 +260,7 @@ public class CraftTableCsvImporter : EditorWindow
                             if (Enum.TryParse<ResourceCardType>(cardTypeStr, out ResourceCardType resourceType))
                                 cardDesc.cardDescription.resourceCardType = resourceType;
                             else
-                                errorList.Add((cardsString, cardTypeStr)); // 记录错误
+                                errorList.Add($"配方 '{recipeName}': 无法解析资源卡类型 '{cardTypeStr}'");
                             break;
 
                         case 'C': // 生物卡
@@ -258,7 +268,7 @@ public class CraftTableCsvImporter : EditorWindow
                             if (Enum.TryParse<CreatureCardType>(cardTypeStr, out CreatureCardType creatureType))
                                 cardDesc.cardDescription.creatureCardType = creatureType;
                             else
-                                errorList.Add((cardsString, cardTypeStr)); // 记录错误
+                                errorList.Add($"配方 '{recipeName}': 无法解析生物卡类型 '{cardTypeStr}'");
                             break;
 
                         case 'E': // 事件卡
@@ -266,24 +276,31 @@ public class CraftTableCsvImporter : EditorWindow
                             if (Enum.TryParse<EventCardType>(cardTypeStr, out EventCardType eventType))
                                 cardDesc.cardDescription.eventCardType = eventType;
                             else
-                                errorList.Add((cardsString, cardTypeStr)); // 记录错误
+                                errorList.Add($"配方 '{recipeName}': 无法解析事件卡类型 '{cardTypeStr}'");
                             break;
                     }
 
                     cards.Add(cardDesc);
                 }
             }
+            else
+            {
+                errorList.Add($"配方 '{recipeName}': 输出卡牌格式错误 '{cardEntry}'");
+            }
         }
 
         return cards;
     }
     
-    private List<Card.CardDescription> ParseInputCardsList(string cardsString)
+    private List<Card.CardDescription> ParseInputCardsList(string recipeName, string cardsString)
     {
         List<Card.CardDescription> cards = new List<Card.CardDescription>();
 
         if (string.IsNullOrEmpty(cardsString))
+        {
+            errorList.Add($"配方 '{recipeName}': 输入卡牌为空");
             return cards;
+        }
             
         string[] cardEntries = cardsString.Split(',');
         foreach (string cardEntry in cardEntries)
@@ -304,7 +321,7 @@ public class CraftTableCsvImporter : EditorWindow
                         if (Enum.TryParse<ResourceCardType>(cardTypeStr, out ResourceCardType resourceType))
                             cardDesc.resourceCardType = resourceType;
                         else
-                            errorList.Add((cardsString, cardTypeStr)); // 记录错误
+                            errorList.Add($"配方 '{recipeName}': 无法解析资源卡类型 '{cardTypeStr}'");
                         break;
 
                     case 'C': // 生物卡
@@ -312,7 +329,7 @@ public class CraftTableCsvImporter : EditorWindow
                         if (Enum.TryParse<CreatureCardType>(cardTypeStr, out CreatureCardType creatureType))
                             cardDesc.creatureCardType = creatureType;
                         else
-                            errorList.Add((cardsString, cardTypeStr)); // 记录错误
+                            errorList.Add($"配方 '{recipeName}': 无法解析生物卡类型 '{cardTypeStr}'");
                         break;
 
                     case 'E': // 事件卡
@@ -320,14 +337,18 @@ public class CraftTableCsvImporter : EditorWindow
                         if (Enum.TryParse<EventCardType>(cardTypeStr, out EventCardType eventType))
                             cardDesc.eventCardType = eventType;
                         else
-                            errorList.Add((cardsString, cardTypeStr)); // 记录错误
+                            errorList.Add($"配方 '{recipeName}': 无法解析事件卡类型 '{cardTypeStr}'");
                         break;
                 }
-                    
+
                 for (int i = 0; i < count; i++)
                 {
                     cards.Add(cardDesc);
                 }
+            }
+            else
+            {
+                errorList.Add($"配方 '{recipeName}': 输入卡牌格式错误 '{cardEntry}'");
             }
         }
         

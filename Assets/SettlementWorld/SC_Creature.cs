@@ -12,11 +12,10 @@ class SC_Creature : SettlementCard
     public override void InitCard(long cardID)
     {
         this.cardID = cardID;
-        foodValueText.gameObject.SetActive(false);
         var attr = CardManager.Instance.GetCardAttribute<CreatureCardAttribute>(cardID);
+        type = attr.creatureCardType;
         // Debug.Log($"Initializing creature card {cardID} with satiety {attr.basicAttributes.satiety}");
         satietyText.text = $"{attr.basicAttributes.satiety}";
-        nameText.text = attr.creatureCardType.ToString();
         satiety = attr.basicAttributes.satiety;
         SetCardImage();
     }
@@ -28,8 +27,6 @@ class SC_Creature : SettlementCard
             return;
         }
         this.cardID = cardID;
-        foodValueText.gameObject.SetActive(false);
-        nameText.text = CardManager.Instance.GetCardAttribute<CreatureCardAttribute>(cardID).creatureCardType.ToString();
         satietyText.text = $"{initialSatiety}";
         satiety = initialSatiety;
     }

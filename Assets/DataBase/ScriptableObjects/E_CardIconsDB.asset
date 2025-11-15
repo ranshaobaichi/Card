@@ -61,3 +61,22 @@ MonoBehaviour:
     illustration: {fileID: 0}
     bottom: {fileID: 21300000, guid: df89137f3057eb5419afe782b9ab868f, type: 3}
     side: {fileID: 21300000, guid: 9257f11516cabf54094b5e93bc337793, type: 3}
+  cardIllustrations:
+  - cardDescription: 2
+    illustration: {fileID: 21300000, guid: b51bed8707f85a14ba24c152bce1a230, type: 3}
+  - cardDescription: 7
+    illustration: {fileID: 21300000, guid: 1c1a5748a1c398442b76fa0ddef656a9, type: 3}
+  - cardDescription: 10
+    illustration: {fileID: 21300000, guid: 44055d92804e2c74ba8f2af68c72fc88, type: 3}
+  - cardDescription: 5
+    illustration: {fileID: 21300000, guid: 8dcfe5bec10f4c9438533b2f22340ffa, type: 3}
+  - cardDescription: 4
+    illustration: {fileID: 21300000, guid: 08de8d27f3bf98d4aa5225ac464d3f8d, type: 3}
+  - cardDescription: 9
+    illustration: {fileID: 21300000, guid: 5a82dd2c26ea886438b3054c34f4e25d, type: 3}
+  - cardDescription: 6
+    illustration: {fileID: 21300000, guid: 9eea50a08c5733c48b7bffd2de4319ae, type: 3}
+  - cardDescription: 11
+    illustration: {fileID: 21300000, guid: 39d9051f125965f4ebc147379bab1dc1, type: 3}
+  - cardDescription: 8
+    illustration: {fileID: 21300000, guid: 614437c55998cd14897257dbae0495f5, type: 3}

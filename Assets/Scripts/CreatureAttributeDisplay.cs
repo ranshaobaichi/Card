@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class CreatureAttributeDisplay : MonoBehaviour, IDragHandler, IBeginDragHandler
 {
     public static GameObject preDisplayPanel;
+    public TraitPanel traitPanel;
     public Button exitBtn;
     public Text nameText; // 生物名称
     public Text EXPText;  // 当前经验值
@@ -22,6 +23,7 @@ public class CreatureAttributeDisplay : MonoBehaviour, IDragHandler, IBeginDragH
     public Text attackSpeedText; // 攻击速度
     public Text attackRangeText; // 攻击距离
     public Image illustrationImage; // 立绘
+    public List<Button> traitsImages; // 特性图标列表
 
     private Canvas _canvas;
     private Vector2 _pointerOffset;
@@ -118,6 +120,46 @@ public class CreatureAttributeDisplay : MonoBehaviour, IDragHandler, IBeginDragH
         dodgeRateText.text = basicAttributes.dodgeRate.ToString();
         attackSpeedText.text = basicAttributes.attackSpeed.ToString();
         attackRangeText.text = basicAttributes.attackRange.ToString();
+
+        // Set the illustration image
+        if (CardManager.Instance.TryGetCardIllustration(creatureAttribute.creatureCardType, out var illustration))
+        {
+            illustrationImage.sprite = illustration.illustration;
+        }
+        else
+        {
+            illustrationImage.gameObject.SetActive(false);
+        }
+
+        // Set the traits images
+        var spriteDict = DataBaseManager.Instance.GetAllTraitAttributes();
+        for (int i = 0; i < traitsImages.Count; i++) 
+        {
+            if (i < basicAttributes.traits.Count)
+            {
+                traitsImages[i].gameObject.SetActive(true);
+
+                var traitKey = basicAttributes.traits[i];
+                if (spriteDict.TryGetValue(traitKey, out var traitAttr))
+                    traitsImages[i].image.sprite = traitAttr.icon;
+                else
+                    traitsImages[i].image.sprite = null;
+
+                traitsImages[i].onClick.RemoveAllListeners();
+                int traitIndex = i;
+                var capturedTrait = basicAttributes.traits[traitIndex];
+                traitsImages[i].onClick.AddListener(() =>
+                {
+                    traitPanel.InitializeNormal(capturedTrait, _canvas);
+                });
+            }
+            else
+            {
+                traitsImages[i].gameObject.SetActive(false);
+                traitsImages[i].image.sprite = null;
+                traitsImages[i].onClick.RemoveAllListeners();
+            }
+        }
         // BUG : Set the illustration image
     }
 

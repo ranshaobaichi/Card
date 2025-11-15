@@ -75,7 +75,20 @@ public class SettlementCardManager : MonoBehaviour
 
     public void ChangeToNextStage()
     {
-        DisplayTooltipPanel();
+        bool hasUnsatiatedCreatures = false;
+        foreach (SettlementCard card in CreaturePanel.cards)
+        {
+            if (card is SC_Creature creatureCard && creatureCard.satiety > 0)
+            {
+                hasUnsatiatedCreatures = true;
+                break;
+            }
+        }
+
+        if (hasUnsatiatedCreatures || BattleCardPanel.cards.Count == 0)
+            DisplayTooltipPanel();
+        else
+            ExitSettlementScene();
     }
 
     private void DisplayTooltipPanel()
@@ -84,7 +97,7 @@ public class SettlementCardManager : MonoBehaviour
         List<string> cardsNotFull = new List<string>();
         foreach (SettlementCard card in CreaturePanel.cards)
             if (card is SC_Creature creatureCard && creatureCard.satiety > 0)
-                cardsNotFull.Add(creatureCard.nameText.text);
+                cardsNotFull.Add(creatureCard.displayCard.nameText.text);
 
         if (cardsNotFull.Count > 0)
         {
@@ -104,20 +117,35 @@ public class SettlementCardManager : MonoBehaviour
             if (card is SC_Creature creatureCard && creatureCard.satiety > 0)
                 cardsNotFull.Add(creatureCard);
 
-        foreach (SC_Creature creatureCard in cardsNotFull)
-        {
-            Debug.Log($"Creature card {creatureCard.nameText.text} is not fully satiated (Satiety: {creatureCard.satiety}). It will be removed.");
-            CreaturePanel.DeleteCard(creatureCard, true);
-        }
-
         if (CardManager.Instance.battleSceneCreatureCardIDs.Count > 0)
         {
             SceneManager.LoadScene(SceneManager.BattleScene);
+            foreach (SC_Creature creatureCard in cardsNotFull)
+            {
+                Debug.Log($"Creature card {creatureCard.displayCard.nameText.text} is not fully satiated (Satiety: {creatureCard.satiety}). It will be removed.");
+                CreaturePanel.DeleteCard(creatureCard, true);
+            }
         }
         else
         {
-            // TESTING: If no creature cards in battle scene, still allow to proceed to battle scene
-            SceneManager.LoadScene(SceneManager.BattleScene);
+            bool allCreaturesDead = true;
+            foreach (var creature in CreaturePanel.cards)
+            {
+                if (creature is SC_Creature scc && scc.satiety == 0)
+                {
+                    allCreaturesDead = false;
+                    break;
+                }
+            }
+            if (allCreaturesDead)
+            {
+                SceneManager.LoadScene(SceneManager.LoseScene);
+            }
+            else
+            {
+                Instantiate(tooltipPrefab, GetComponentInParent<Canvas>().transform).GetComponent<TooltipText>()
+                    .SetTooltipText("请将饱腹的生物出战，否则将失败！", TooltipText.TooltipMode.Error);
+            }
         }
     }
 

@@ -11,8 +11,8 @@ class SC_Food : SettlementCard
         this.cardID = cardID;
         satietyText.transform.parent.gameObject.SetActive(false);
         resourceAttribute = CardManager.Instance.GetCardAttribute<ResourceCardAttribute>(cardID);
-        foodValueText.text = $"{satietyValue}";
-        nameText.text = resourceAttribute.resourceCardType.ToString();
+        type = resourceAttribute.resourceCardType;
+        displayCard.foodText.text = $"{satietyValue}";
         Debug.Log("food type is " + resourceAttribute.resourceCardType.ToString());
         SetCardImage();
     }
@@ -25,7 +25,7 @@ class SC_Food : SettlementCard
         }
         // Reduce the satiety value
         resourceAttribute.satietyValue -= amount;
-        foodValueText.text = $"{resourceAttribute.satietyValue}";
+        displayCard.foodText.text = $"{resourceAttribute.satietyValue}";
         return true;
     }
 }

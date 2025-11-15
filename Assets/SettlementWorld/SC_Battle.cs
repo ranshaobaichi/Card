@@ -3,9 +3,9 @@ class SC_Battle : SettlementCard
     public override void InitCard(long cardID)
     {
         this.cardID = cardID;
-        nameText.text = CardManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(cardID).creatureCardType.ToString();
+        var attr = CardManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(cardID);
+        type = attr.creatureCardType;
         satietyText.transform.parent.gameObject.SetActive(false);
-        foodValueText.gameObject.SetActive(false);
         SetCardImage();
     }
 }

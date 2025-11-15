@@ -86,9 +86,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     }
     public long cardID;
     protected bool isMoving;
-
-    [Header("卡牌图像列表 - 顺序为：类型、背景、顶部装饰、立绘、底部装饰、侧边装饰")]
-    public List<Image> cardImages;
+    public DisplayCard displayCard;
 
 
     public void SetCardType(CardDescription description) => cardDescription = description;
@@ -132,7 +130,6 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         cardImage.material = null;
         outlineMaterialInstance = new Material(outlineMaterial);
         outlineOffset = outlineMaterialInstance.GetFloat("_DashOffset");
-
     }
 
     void OnEnable()

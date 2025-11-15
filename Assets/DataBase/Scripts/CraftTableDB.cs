@@ -22,7 +22,7 @@ public class CraftTableDB : ScriptableObject
         [Header("配方设置")]
         [Tooltip("配方ID")] public int recipeID;
         [Tooltip("配方名称")] public string recipeName;
-        [Tooltip("配方描述")] public string recipeDescription;
+        [TextArea] [Tooltip("配方描述")] public string recipeDescription;
         [Tooltip("配方工作量")] public float workload;
         [Tooltip("配方工作类型")] public Category.Production.WorkType workType;
 

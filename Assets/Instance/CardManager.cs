@@ -268,30 +268,7 @@ public class CardManager : MonoBehaviour
         AddCardAttribute(newCard, attribute);
 
         // Set the card images
-        ResourceCardClassification resourceClassification = cardDescription.cardType == CardType.Resources ? GetCardAttribute<ResourceCardAttribute>(cardID).resourceClassification : ResourceCardClassification.None;
-        var succ = TryGetCardIconAttribute(cardDescription.cardType, out var cardIconAttrribute, resourceClassification);
-        if (succ)
-        {
-            newCard.cardImages[0].sprite = cardIconAttrribute.type;
-            newCard.cardImages[1].sprite = cardIconAttrribute.background;
-            newCard.cardImages[2].sprite = cardIconAttrribute.top;
-            newCard.cardImages[3].sprite = cardIconAttrribute.illustration;
-            newCard.cardImages[4].sprite = cardIconAttrribute.bottom;
-            newCard.cardImages[5].sprite = cardIconAttrribute.side;
-            newCard.nameText.text = cardDescription.ToString();
-            if (resourceClassification == ResourceCardClassification.Food)
-            {
-                newCard.foodText.text = GetCardAttribute<ResourceCardAttribute>(cardID).satietyValue.ToString();
-            }
-            else
-            {
-                newCard.foodText.gameObject.SetActive(false);
-            }
-        }
-        else
-        {
-            Debug.LogError($"Card icon attribute not found for card ID {cardID} of type {cardDescription}");
-        }
+        newCard.displayCard.Initialize(cardDescription);
         
         onCardCreated?.Invoke(newCard);
         return newCard;
@@ -559,6 +536,8 @@ public class CardManager : MonoBehaviour
     #region 卡牌图标
     public bool TryGetCardIconAttribute(CardType cardType, out CardIconsDB.CardIconAttribute attribute, ResourceCardClassification resourceCardClassification = ResourceCardClassification.None)
         => cardIconsDB.TryGetCardIconAttribute(cardType, out attribute, resourceCardClassification);
+    public bool TryGetCardIllustration(CreatureCardType cardDescription, out CardIconsDB.CardIllustration illustration)
+        => cardIconsDB.TryGetCardIllustration(cardDescription, out illustration);
     #endregion
 
     #endregion

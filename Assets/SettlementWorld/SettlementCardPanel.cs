@@ -87,6 +87,7 @@ public class SettlementCardPanel : MonoBehaviour
     {
         // Create and initialize the card
         GameObject slot = Instantiate(CardSlotPrefab, contentTransform);
+        // BUG: hardcoded to get the first child as the card
         GameObject card = slot.transform.GetChild(0).gameObject;
         T newCard = card.AddComponent<T>();
         newCard.InitCard(cardID);
