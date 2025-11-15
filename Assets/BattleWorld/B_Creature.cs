@@ -2,8 +2,8 @@ using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Category.Battle;
-using System.Collections.Generic;
 using static CardAttributeDB.CreatureCardAttribute;
+using System.Collections.Generic;
 
 public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
 {
@@ -127,7 +127,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             // if already to attack, add DamageActions to BattleWorldManager
             if (curAttribute.attackSpeed == 0)
             {
-                BattleWorldManager.Instance.DamageActions += () => Attack(closestOpponents);
+                BattleWorldManager.Instance.DamageActions += () => StartCoroutine(AttackAnimation(closestOpponents, BattleWorldManager.Instance.TickInterval));
                 curAttribute.attackSpeed = actAttribute.attackSpeed;
             }
             else
@@ -145,7 +145,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
                 if (path != null && path.Count > 1)
                 {
                     HexNodeManager.ReserveObject(this, path[1]);
-                    BattleWorldManager.Instance.NormalActions += () => MoveTo(path[1]);
+                    BattleWorldManager.Instance.NormalActions += () => StartCoroutine(MoveAnimation(path[1], BattleWorldManager.Instance.TickInterval));
                 }
                 curAttribute.moveSpeed = actAttribute.moveSpeed;
             }
@@ -154,6 +154,31 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
                 curAttribute.moveSpeed -= 1;
             }
         }
+    }
+
+    private System.Collections.IEnumerator AttackAnimation(B_Creature target, float duration)
+    {
+        bool hasAttacked = false;
+        Vector3 originalPosition = transform.position;
+        Vector3 targetPosition = target.transform.position;
+        float elapsed = 0f;
+        float halfDuration = duration / 2f;
+        while (elapsed < duration)
+        {
+            if (!hasAttacked && elapsed >= duration / 2f)
+            {
+                Attack(target);
+                hasAttacked = true;
+            }
+            if (elapsed < halfDuration)
+                transform.position = Vector3.Lerp(originalPosition, targetPosition, elapsed / halfDuration);
+            else
+                transform.position = Vector3.Lerp(targetPosition, originalPosition, (elapsed - halfDuration) / halfDuration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = originalPosition;
     }
 
     public void Attack(B_Creature target)
@@ -256,6 +281,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             if (roll <= dodgeChance)
             {
                 Debug.Log($"{transform.name} dodged the attack!");
+                DamageTextPool.Instance?.ShowDamageText(transform.position, "闪避!", DamageText.PresetColors.Dodge, BattleWorldManager.Instance?.DraggingSlot);
                 return false;
             }
         }
@@ -282,6 +308,11 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         curAttribute.health = Mathf.Round(curAttribute.health * 100f) / 100f;
         Debug.Log($"{transform.name} actual damage taken: {actualDamage}, health after: {curAttribute.health}");
 
+        // Show damage text
+        DamageTextPool.Instance?.ShowDamageText(transform.position, actualDamage,
+            DamageText.PresetColors.GetDamageColor(damageType),
+            BattleWorldManager.Instance?.DraggingSlot);
+
         if (curAttribute.health <= 0)
         {
             Debug.Log($"{transform.name} has been defeated!");
@@ -292,8 +323,18 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         return true;
     }
 
-    public void MoveTo(HexNode targetNode)
+    public System.Collections.IEnumerator MoveAnimation(HexNode targetNode, float duration)
     {
+        Vector3 startPos = transform.position;
+        Vector3 endPos = targetNode.transform.position;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            transform.position = Vector3.Lerp(startPos, endPos, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
         HexNodeManager.MoveObject(this, hexNode, targetNode);
     }
 
@@ -353,16 +394,16 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         bool succPut = false;
         if (eventData.pointerCurrentRaycast.gameObject != null)
         {
-            bool inBack()
+            bool inBack(AxialCoordinate coord)
             {
                 if (lineUp == LineUp.Player)
                 {
-                    return hexNode.coord.R <= 4;
+                    return coord.R >= 4;
                 }
                 return true;
             }
             GameObject hitObj = eventData.pointerCurrentRaycast.gameObject;
-            if (hitObj.TryGetComponent<HexNode>(out var node) && node.walkable && inBack())
+            if (hitObj.TryGetComponent<HexNode>(out var node) && node.walkable && inBack(node.coord))
             {
                 Debug.Log("Dropped on HexNode");
                 succPut = true;

@@ -25,6 +25,7 @@ public class BattleWorldManager : MonoBehaviour
     public bool mannualTickControl = false;
     public bool canDragEnemy = false;
     public float TickInterval = 1.0f;
+    public static int currentWaveIndex = -1;
     public EnemyWaveData currentWaveData;
     private List<CreatureCardType> testAddEnemyTypes = new List<CreatureCardType>();
     
@@ -145,14 +146,35 @@ public class BattleWorldManager : MonoBehaviour
         nextSceneBtn.onClick.AddListener(() => SceneManager.LoadScene(SceneManager.ProductionScene));
     }
 
+    private void UpdateSaveDataWaveIndex()
+    {
+        SaveDataManager.currentSaveData.currentWaveIndex = currentWaveIndex;
+    }
+
+    void Start()
+    {
+        SceneManager.BeforeSceneChanged += UpdateSaveDataWaveIndex;
+    }
+
+    void OnDestroy()
+    {
+        SceneManager.BeforeSceneChanged -= UpdateSaveDataWaveIndex;
+    }
+
     void OnEnable()
     {
         traitAttributesDict = DataBaseManager.Instance.GetAllTraitAttributes();
         testAddEnemyTypes.Clear();
+        // initialize wave index
+        if (currentWaveIndex < 0)
+        {
+            currentWaveIndex = SaveDataManager.currentSaveData.currentWaveIndex;
+        }
+
         // initialize battle objects from CardManager
         foreach (var id in CardManager.Instance.battleSceneCreatureCardIDs)
         {
-            Debug.Log($"BattleWorldManager adding battle object with card ID: {id}");
+            // Debug.Log($"BattleWorldManager adding battle object with card ID: {id}");
             AddBattleObject(id);
         }
 
@@ -185,7 +207,18 @@ public class BattleWorldManager : MonoBehaviour
             }
         }
 
-        OnCreatureDead += (B_Creature _) => EndBattle();
+        // load current wave
+        if (currentWaveIndex >= 0)
+        {
+            StartCoroutine(delayedLoadWave(3, currentWaveIndex));
+        }
+        else
+        {
+            Debug.LogError($"BattleWorldManager: currentWaveIndex {currentWaveIndex} is invalid.");    
+        }
+
+
+        OnCreatureDead += _ => EndBattle();
         StartBattleButton.onClick.AddListener(StartBattle);
     }
 
@@ -322,6 +355,13 @@ public class BattleWorldManager : MonoBehaviour
         equipment.equipmentSlot = equipmentSlot;
     }
 
+    private IEnumerator delayedLoadWave(int frameCount, int waveIdx)
+    {
+        for (int i = 0; i < frameCount; i++)
+            yield return null;
+        LoadBattleWave(waveIdx);
+    }
+
     public bool LoadBattleWave(int waveIdx)
     {
         string path = EnemyWavesResourcePath + EnemyWavesResourceName + '_' + waveIdx;
@@ -407,7 +447,10 @@ public class BattleWorldManager : MonoBehaviour
     public void OnCardClicked(B_Creature card)
     {
         CreatureAttributeDisplay panel = Instantiate(attributeDisplayPrefab, GetComponentInParent<Canvas>().transform).GetComponent<CreatureAttributeDisplay>();
-        panel.UpdateAttributes(card.creatureCardAttribute, card.actAttribute);
+        if (!InBattle)
+            panel.UpdateAttributes(card.creatureCardAttribute, card.actAttribute);
+        else
+            panel.UpdateAttributes(card.creatureCardAttribute, card.curAttribute);
     }
 
     public void EndBattle()

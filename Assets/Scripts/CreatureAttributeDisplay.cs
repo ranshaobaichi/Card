@@ -104,7 +104,7 @@ public class CreatureAttributeDisplay : MonoBehaviour, IDragHandler, IBeginDragH
             $"{basicAttributes.EXP} / {creatureAttribute.levelUpExpNeeded}" :
             "∞";
         levelText.text = basicAttributes.level.ToString();
-        healthText.text = basicAttributes.health.ToString(format: "F0");
+        healthText.text = basicAttributes.health.ToString(format: "F2");
         attackPowerText.text = basicAttributes.attackPower.ToString();
         spellPowerText.text = basicAttributes.spellPower.ToString();
         normalAttackDamageTypeText.text = basicAttributes.normalAttackDamageType switch
@@ -160,7 +160,6 @@ public class CreatureAttributeDisplay : MonoBehaviour, IDragHandler, IBeginDragH
                 traitsImages[i].onClick.RemoveAllListeners();
             }
         }
-        // BUG : Set the illustration image
     }
 
     public void OnBeginDrag(PointerEventData eventData)
