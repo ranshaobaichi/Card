@@ -76,8 +76,11 @@ public class TimeManager : MonoBehaviour
         if (SceneManager.currentScene == SceneManager.ProductionScene)
         {
             timeProgressBar = GameObject.FindWithTag("TimeProgressBar")?.GetComponent<ProgressBar>();
+            timeProgressBar.StartProgressBar(productionStateDuration, ChangeState);
             pauseButton = GameObject.FindWithTag("PauseButton")?.GetComponent<Button>();
+            pauseButton.onClick.AddListener(ChangePauseGameState);
             speedUpButton = GameObject.FindWithTag("SpeedUpButton")?.GetComponent<Button>();
+            speedUpButton.onClick.AddListener(ChangeSpeedUpLevel);
             timescalelevelText = GameObject.FindWithTag("TimeScaleLevelText")?.GetComponent<Text>();
             timescalelevelText.text = $"当前速度倍率：{speedUpLevel[currentSpeedUpLevel]}";
         }

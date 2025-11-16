@@ -49,34 +49,6 @@ MonoBehaviour:
         eventCardType: 0
       dropCount: 3
       dropWeight: 2
-    - cardDescription:
-        cardType: 1
-        resourceCardType: 3
-        creatureCardType: 0
-        eventCardType: 0
-      dropCount: 4
-      dropWeight: 8
-    - cardDescription:
-        cardType: 1
-        resourceCardType: 3
-        creatureCardType: 0
-        eventCardType: 0
-      dropCount: 4
-      dropWeight: 8
-    - cardDescription:
-        cardType: 1
-        resourceCardType: 3
-        creatureCardType: 0
-        eventCardType: 0
-      dropCount: 4
-      dropWeight: 8
-    - cardDescription:
-        cardType: 1
-        resourceCardType: 3
-        creatureCardType: 0
-        eventCardType: 0
-      dropCount: 4
-      dropWeight: 8
   - recipeID: 2
     recipeName: "\u91C7\u96C6\u8611\u83C7"
     recipeDescription: 
@@ -97,15 +69,22 @@ MonoBehaviour:
         resourceCardType: 3
         creatureCardType: 0
         eventCardType: 0
-      dropCount: 2
-      dropWeight: 10
+      dropCount: 1
+      dropWeight: 8
     - cardDescription:
         cardType: 1
         resourceCardType: 3
         creatureCardType: 0
         eventCardType: 0
       dropCount: 2
-      dropWeight: 10
+      dropWeight: 2
+    - cardDescription:
+        cardType: 1
+        resourceCardType: 3
+        creatureCardType: 0
+        eventCardType: 0
+      dropCount: 2
+      dropWeight: 2
   - recipeID: 3
     recipeName: "\u80A5\u6C83\u571F\u58E4"
     recipeDescription: 
@@ -442,20 +421,6 @@ MonoBehaviour:
         eventCardType: 0
       dropCount: 1
       dropWeight: 5
-    - cardDescription:
-        cardType: 1
-        resourceCardType: 7
-        creatureCardType: 0
-        eventCardType: 0
-      dropCount: 1
-      dropWeight: 50
-    - cardDescription:
-        cardType: 1
-        resourceCardType: 38
-        creatureCardType: 0
-        eventCardType: 0
-      dropCount: 1
-      dropWeight: 50
   - recipeID: 12
     recipeName: "\u5207\u5272\u7816\u5757"
     recipeDescription: 
