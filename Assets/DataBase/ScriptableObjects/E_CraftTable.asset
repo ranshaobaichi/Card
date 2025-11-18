@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recipeList:
   - recipeID: 1
-    recipeName: "\u79CD\u690D\u8611\u83C7"
+    recipeName: "\u79CD\u690D\u8611\u83C71"
     recipeDescription: 
     workload: 12000
     workType: 3
@@ -112,7 +112,7 @@ MonoBehaviour:
       dropCount: 1
       dropWeight: 10
   - recipeID: 4
-    recipeName: "\u79CD\u690D\u8611\u83C7"
+    recipeName: "\u79CD\u690D\u8611\u83C72"
     recipeDescription: 
     workload: 10000
     workType: 3

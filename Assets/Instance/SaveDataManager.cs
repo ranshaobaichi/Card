@@ -26,6 +26,9 @@ public class SaveDataManager : MonoBehaviour
         public int currentWaveIndex;
         public List<CardData> allCardData;
         public List<CardSlotData> allCardSlotData;
+
+        public float musicVolume;
+        public float fxVolume;
     }
 
     public static SaveDataManager Instance;
@@ -77,6 +80,7 @@ public class SaveDataManager : MonoBehaviour
                         break;
                     case Category.CardType.Events:
                         // Currently no event card attributes to save
+                        
                         break;
                     default:
                         Debug.LogError($"Unknown card type: {cardType}");
@@ -113,6 +117,8 @@ public class SaveDataManager : MonoBehaviour
             currentWaveIndex = BattleWorldManager.currentWaveIndex <= 0 ? 1 : BattleWorldManager.currentWaveIndex,
             allCardData = allCardData,
             allCardSlotData = allCardSlotData,
+            musicVolume = SoundManager.Instance.musicVolume,
+            fxVolume = SoundManager.Instance.fxVolume,
         };
 
         string json = JsonUtility.ToJson(saveData, prettyPrint: true);

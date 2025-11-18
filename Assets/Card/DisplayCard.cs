@@ -33,14 +33,26 @@ public class DisplayCard : MonoBehaviour
             cardImagesContainer.type.sprite = cardIconAttrribute.type;
             cardImagesContainer.background.sprite = cardIconAttrribute.background;
             cardImagesContainer.top.sprite = cardIconAttrribute.top;
-            if (cardDescription.cardType == CardType.Creatures && CardManager.Instance.TryGetCardIllustration(cardDescription.creatureCardType, out var illustration))
+
+            bool succSetIllustration = false;
+            switch (cardDescription.cardType)
             {
-                cardImagesContainer.illustration.sprite = illustration.illustration;
+                case CardType.Creatures:
+                    succSetIllustration = CardManager.Instance.TryGetCardIllustration(cardDescription.creatureCardType, out var cardIllustration);
+                    if (succSetIllustration)
+                    {
+                        cardImagesContainer.illustration.sprite = cardIllustration.illustration;
+                    }
+                    break;
+                case CardType.Resources:
+                    succSetIllustration = CardManager.Instance.TryGetResourcesCardIcon(cardDescription.resourceCardType, out var resourceIcon);
+                    if (succSetIllustration)
+                    {
+                        cardImagesContainer.illustration.sprite = resourceIcon.icon;
+                    }
+                    break;
             }
-            else
-            {
-                cardImagesContainer.illustration.gameObject.SetActive(false);
-            }
+            if (!succSetIllustration) cardImagesContainer.illustration.gameObject.SetActive(false);
 
             cardImagesContainer.bottom.sprite = cardIconAttrribute.bottom;
             cardImagesContainer.side.sprite = cardIconAttrribute.side;

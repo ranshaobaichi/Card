@@ -86,6 +86,23 @@ public class CraftTableDB : ScriptableObject
         return null;
     }
 
+    public List<Recipe> GetRecipes(List<Card> inputCards, List<Recipe> fromList = null)
+    {
+        if (fromList == null)
+            fromList = recipeList;
+        List<Recipe> matchedRecipes = new List<Recipe>();
+        foreach (var recipe in fromList)
+        {
+            var cardDescs = inputCards.Select(card => card.cardDescription).ToList();
+            var usedCardIndices = CanCraftRecipeWithIndices(recipe, cardDescs);
+            if (usedCardIndices != null)
+            {
+                matchedRecipes.Add(recipe);
+            }
+        }
+        return matchedRecipes;
+    }
+
     // 检查给定的输入卡牌是否满足配方需求，并返回使用的卡牌索引
     private List<int> CanCraftRecipeWithIndices(Recipe recipe, List<Card.CardDescription> availableCards)
     {

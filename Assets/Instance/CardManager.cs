@@ -152,6 +152,10 @@ public class CardManager : MonoBehaviour
 
         // Init timeManager
         TimeManager.Instance.curGameTime = saveData.curGameTime;
+
+        // BUG: should set the volume in SoundManager
+        SoundManager.Instance.SetMusicVolume(saveData.musicVolume);
+        SoundManager.Instance.SetFXVolume(saveData.fxVolume);
     }
 
     /// <summary>
@@ -171,7 +175,7 @@ public class CardManager : MonoBehaviour
                 CardType.Resources => GetCardAttribute<ResourceCardAttribute>(cardData.cardID),
                 _ => null,
             };
-            if (attribute == null) continue;
+            if (attribute == null && cardData.cardDescription.cardType != CardType.Events) continue;
             Card card = CreateCard(cardData.cardDescription, Vector2.zero, cardData.cardID, attribute);
             tmpCardsDict[card.cardID] = card;
         }
@@ -348,6 +352,8 @@ public class CardManager : MonoBehaviour
         => unlockedCraftableRecipes.AsReadOnly();
     public (List<Card>, CraftTableDB.Recipe)? GetRecipe(List<Card> inputCards)
         => DataBaseManager.Instance.craftTableDB.GetRecipe(inputCards, unlockedCraftableRecipes);
+    public List<CraftTableDB.Recipe> GetRecipes(List< Card> inputCards, List<CraftTableDB.Recipe> fromList = null)
+        => DataBaseManager.Instance.GetRecipes(inputCards, fromList);
     # endregion
 
     #region 事件卡UI管理
@@ -538,6 +544,8 @@ public class CardManager : MonoBehaviour
         => cardIconsDB.TryGetCardIconAttribute(cardType, out attribute, resourceCardClassification);
     public bool TryGetCardIllustration(CreatureCardType cardDescription, out CardIconsDB.CardIllustration illustration)
         => cardIconsDB.TryGetCardIllustration(cardDescription, out illustration);
+    public bool TryGetResourcesCardIcon(ResourceCardType resourceCardType, out CardIconsDB.ResourcesCardIcons resourceIcon)
+        => cardIconsDB.TryGetResourcesCardIcon(resourceCardType, out resourceIcon);
     #endregion
 
     #endregion

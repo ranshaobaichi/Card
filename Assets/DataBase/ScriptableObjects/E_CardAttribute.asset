@@ -171,7 +171,14 @@ MonoBehaviour:
       dodgeRate: 0.1
       attackSpeed: 9
       attackRange: 1
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 16
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 10
       traits: 0400000008000000
     levelUpAttributes:
       satietyGrowth: 0
@@ -204,7 +211,14 @@ MonoBehaviour:
       dodgeRate: 0.05
       attackSpeed: 15
       attackRange: 1
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 16
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 10
       traits: 0100000004000000
     levelUpAttributes:
       satietyGrowth: 0
@@ -237,7 +251,14 @@ MonoBehaviour:
       dodgeRate: 0.1
       attackSpeed: 9
       attackRange: 1
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 16
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 10
       traits: 0100000005000000
     levelUpAttributes:
       satietyGrowth: 0
@@ -270,7 +291,14 @@ MonoBehaviour:
       dodgeRate: 0.1
       attackSpeed: 12
       attackRange: 1
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 16
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 10
       traits: 0100000003000000
     levelUpAttributes:
       satietyGrowth: 0
@@ -303,7 +331,14 @@ MonoBehaviour:
       dodgeRate: 0.05
       attackSpeed: 12
       attackRange: 4
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 16
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 10
       traits: 0100000006000000
     levelUpAttributes:
       satietyGrowth: 0
@@ -336,7 +371,14 @@ MonoBehaviour:
       dodgeRate: 0.1
       attackSpeed: 18
       attackRange: 1
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 16
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 10
       traits: 010000000200000005000000
     levelUpAttributes:
       satietyGrowth: 0
@@ -369,7 +411,14 @@ MonoBehaviour:
       dodgeRate: 0.2
       attackSpeed: 12
       attackRange: 1
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 16
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 10
       traits: 0100000003000000
     levelUpAttributes:
       satietyGrowth: 0
@@ -402,7 +451,14 @@ MonoBehaviour:
       dodgeRate: 0.1
       attackSpeed: 9
       attackRange: 1
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 16
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 10
       traits: 0200000005000000
     levelUpAttributes:
       satietyGrowth: 0
@@ -435,7 +491,21 @@ MonoBehaviour:
       dodgeRate: 0
       attackSpeed: 18
       attackRange: 1
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 23
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 2
+        dropWeight: 10
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 23
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 2
+        dropWeight: 10
       traits: 0200000000000000
     levelUpAttributes:
       satietyGrowth: 0
@@ -468,7 +538,21 @@ MonoBehaviour:
       dodgeRate: 0
       attackSpeed: 18
       attackRange: 1
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 23
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 2
+        dropWeight: 10
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 23
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 2
+        dropWeight: 10
       traits: 02000000
     levelUpAttributes:
       satietyGrowth: 0
@@ -501,7 +585,14 @@ MonoBehaviour:
       dodgeRate: 0.1
       attackSpeed: 15
       attackRange: 5
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 16
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 10
       traits: 0300000007000000
     levelUpAttributes:
       satietyGrowth: 0
@@ -534,7 +625,14 @@ MonoBehaviour:
       dodgeRate: 0
       attackSpeed: 12
       attackRange: 1
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 16
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 10
       traits: 0400000000000000
     levelUpAttributes:
       satietyGrowth: 0
@@ -567,7 +665,14 @@ MonoBehaviour:
       dodgeRate: 0.05
       attackSpeed: 12
       attackRange: 1
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 16
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 10
       traits: 0800000005000000
     levelUpAttributes:
       satietyGrowth: 0
@@ -600,7 +705,14 @@ MonoBehaviour:
       dodgeRate: 0
       attackSpeed: 9
       attackRange: 1
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 16
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 10
       traits: 0600000002000000
     levelUpAttributes:
       satietyGrowth: 0
@@ -633,7 +745,28 @@ MonoBehaviour:
       dodgeRate: 0.05
       attackSpeed: 9
       attackRange: 1
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 16
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 4
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 53
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 3
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 29
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 3
       traits: 
     levelUpAttributes:
       satietyGrowth: 0
@@ -666,7 +799,28 @@ MonoBehaviour:
       dodgeRate: 0.05
       attackSpeed: 12
       attackRange: 1
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 16
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 5
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 53
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 2
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 29
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 3
       traits: 
     levelUpAttributes:
       satietyGrowth: 0
@@ -699,7 +853,35 @@ MonoBehaviour:
       dodgeRate: 0.05
       attackSpeed: 9
       attackRange: 2
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 16
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 4
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 4
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 2
+        dropWeight: 4
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 4
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 2
+        dropWeight: 4
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 29
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 3
       traits: 
     levelUpAttributes:
       satietyGrowth: 0
@@ -732,7 +914,28 @@ MonoBehaviour:
       dodgeRate: 0
       attackSpeed: 6
       attackRange: 1
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 54
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 4
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 4
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 2
+        dropWeight: 6
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 4
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 2
+        dropWeight: 6
       traits: 
     levelUpAttributes:
       satietyGrowth: 0
@@ -765,7 +968,14 @@ MonoBehaviour:
       dodgeRate: 0.1
       attackSpeed: 15
       attackRange: 1
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 50
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 10
       traits: 
     levelUpAttributes:
       satietyGrowth: 0
@@ -798,7 +1008,14 @@ MonoBehaviour:
       dodgeRate: 0
       attackSpeed: 18
       attackRange: 1
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 45
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 10
       traits: 
     levelUpAttributes:
       satietyGrowth: 0
@@ -831,7 +1048,14 @@ MonoBehaviour:
       dodgeRate: 0
       attackSpeed: 9
       attackRange: 1
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 37
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 10
       traits: 
     levelUpAttributes:
       satietyGrowth: 0
@@ -864,7 +1088,28 @@ MonoBehaviour:
       dodgeRate: 0
       attackSpeed: 9
       attackRange: 1
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 16
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 5
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 37
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 2
+        dropWeight: 5
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 37
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 2
+        dropWeight: 5
       traits: 
     levelUpAttributes:
       satietyGrowth: 0
@@ -897,7 +1142,77 @@ MonoBehaviour:
       dodgeRate: 0
       attackSpeed: 18
       attackRange: 10
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 29
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 4
+        dropWeight: 5
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 29
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 4
+        dropWeight: 5
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 29
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 4
+        dropWeight: 5
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 29
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 4
+        dropWeight: 5
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 37
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 6
+        dropWeight: 5
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 37
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 6
+        dropWeight: 5
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 37
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 6
+        dropWeight: 5
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 37
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 6
+        dropWeight: 5
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 37
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 6
+        dropWeight: 5
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 37
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 6
+        dropWeight: 5
       traits: 
     levelUpAttributes:
       satietyGrowth: 0
@@ -930,7 +1245,21 @@ MonoBehaviour:
       dodgeRate: 0
       attackSpeed: 6
       attackRange: 1
-      dropItem: []
+      dropItem:
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 29
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 8
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 4
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 1
+        dropWeight: 2
       traits: 
     levelUpAttributes:
       satietyGrowth: 0
@@ -1007,7 +1336,7 @@ MonoBehaviour:
   - resourceCardType: 13
     resourceClassification: 1
     durability: 1
-    satietyValue: 1
+    satietyValue: 2
     priceValue: 1
   - resourceCardType: 14
     resourceClassification: 1

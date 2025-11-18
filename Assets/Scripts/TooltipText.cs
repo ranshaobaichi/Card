@@ -89,7 +89,7 @@ public class TooltipText : MonoBehaviour
         float elapsed = 0f;
         while (elapsed < duration)
         {
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
             float newAlpha = Mathf.Lerp(alpha, 0, elapsed / duration);
             tooltipText.color = new Color(tooltipText.color.r, tooltipText.color.g, tooltipText.color.b, newAlpha);
             yield return null;

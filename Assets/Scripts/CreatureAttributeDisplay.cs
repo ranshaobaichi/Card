@@ -53,17 +53,18 @@ public class CreatureAttributeDisplay : MonoBehaviour, IDragHandler, IBeginDragH
         exitBtn.onClick.AddListener(() => Destroy(this.gameObject));
     }
 
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            var rect = transform as RectTransform;
-            var canvas = rect.GetComponentInParent<Canvas>();
-            var cam = (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay) ? canvas.worldCamera : null;
-            bool isPointerOver = RectTransformUtility.RectangleContainsScreenPoint(rect, Input.mousePosition, cam);
-            if (!isPointerOver) Destroy(this.gameObject);
-        }
-    }
+    // void Update()
+    // {
+    //     if (Input.GetMouseButtonDown(0))
+    //     {
+    //         RectTransform rt = transform as RectTransform;
+    //         Camera cam = _canvas != null && _canvas.renderMode != RenderMode.ScreenSpaceOverlay ? _canvas.worldCamera : null;
+    //         if (rt != null && RectTransformUtility.RectangleContainsScreenPoint(rt, Input.mousePosition, cam))
+    //         {
+    //             Destroy(this.gameObject);
+    //         }
+    //     }
+    // }
 
     public void UpdateAttributes(CardAttributeDB.CreatureCardAttribute creatureAttribute, CardAttributeDB.CreatureCardAttribute.BasicAttributes basicAttributes = null)
     {

@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class EventUI : MonoBehaviour, IDragHandler, IBeginDragHandler
 {
+    public static int openEventUICount = 0;
     public GameObject displayCardPrefab;
     public GameObject optionButtonPrefab;
 
@@ -27,7 +28,13 @@ public class EventUI : MonoBehaviour, IDragHandler, IBeginDragHandler
 
     void Start()
     {
+        openEventUICount++;
         closeBtn.onClick.AddListener(() => Destroy(gameObject));
+    }
+
+    void OnDestroy()
+    {
+        openEventUICount--;
     }
 
     public void Initialize(Card card, int optIndex = -1, float progress = -1f)

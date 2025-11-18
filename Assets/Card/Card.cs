@@ -1,13 +1,17 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Category;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
 public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
+    private static WaitForSecondsRealtime _waitForSecondsRealtime0_01 = new WaitForSecondsRealtime(0.01f);
+
     [Serializable]
     public struct CardDescription
     {
@@ -29,11 +33,34 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         {
             return cardType switch
             {
-                CardType.Creatures => creatureCardType.ToString(),
+                CardType.Creatures => creatureCardType == CreatureCardType.Any ? "任意生物" : creatureCardType.ToString(),
                 CardType.Resources => resourceCardType.ToString(),
                 CardType.Events => eventCardType.ToString(),
                 _ => "Unknown"
             };
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj is CardDescription other)
+            {
+                return cardType == other.cardType &&
+                       cardType switch
+                       {
+                           CardType.Creatures => creatureCardType == other.creatureCardType,
+                           CardType.Resources => resourceCardType == other.resourceCardType,
+                           CardType.Events => eventCardType == other.eventCardType,
+                           _ => true,
+                       };
+            }
+            return false;
+        }
+        public static bool operator ==(CardDescription a, CardDescription b)
+        {
+            return a.Equals(b);
+        }
+        public static bool operator !=(CardDescription a, CardDescription b)
+        {
+            return !a.Equals(b);
         }
     }
     public Card preCard = null, laterCard = null;
@@ -44,10 +71,9 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     public GameObject cardSlotPrefab;
 
     [Header("拖拽与对齐设置")]
-    [Range(5f, 10f)][Tooltip("卡牌跟随速度")] public float followSpeed;
-    [Tooltip("卡牌容忍距离")] public float tolerantDistance = 20.0f;
+    [Tooltip("卡牌跟随速度")] public float followSpeed;
     [Tooltip("卡牌Y轴对齐距离")] public float yAlignedDistance = 40.0f;
-    [Range(1.0f, 1.2f)][Tooltip("卡牌拖动时放大系数")] public float dragScaleFactor = 1.05f;
+    [Range(1.0f, 1.2f)] [Tooltip("卡牌拖动时放大系数")] public float dragScaleFactor = 1.05f;
     protected Vector3 initPosition;
 
     [Header("描边设置")]
@@ -57,12 +83,14 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     [Tooltip("卡牌可放置提示色")] public Color successOutlineColor = Color.green;
     [Tooltip("卡牌不可放置提示色")] public Color failureOutlineColor = Color.red;
     protected float outlineOffset;
+    [Header("合成指示")]
+    public GameObject craftTooltipPanel;
+    public Text craftTooltipNameText;
+    public Text asInputText, asOutputText;
 
     [Header("卡牌设置")]
     public CardDescription cardDescription;
     public Card preCardBeforeDrag;
-    public Text nameText;
-    public Text foodText;
     [Tooltip("是否可以被拖动")] public bool canBeDragged;
     [Tooltip("是否可以被放置")] public bool canBePlaced;
     [Tooltip("是否可以放置在其他卡牌上")] public bool canPlaceOnCard;
@@ -87,7 +115,9 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     public long cardID;
     protected bool isMoving;
     public DisplayCard displayCard;
-
+    
+    // 添加协程引用
+    private Coroutine displayOutlineCoroutine;
 
     public void SetCardType(CardDescription description) => cardDescription = description;
     public string GetCardTypeString() => cardDescription.ToString();
@@ -130,6 +160,45 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         cardImage.material = null;
         outlineMaterialInstance = new Material(outlineMaterial);
         outlineOffset = outlineMaterialInstance.GetFloat("_DashOffset");
+
+        // Set the name text
+        craftTooltipNameText.text = cardDescription.ToString();
+        var craftTables = DataBaseManager.Instance.GetAllRecipes();
+        string input = "", output = "";
+        foreach (var recipe in craftTables)
+        {
+            if (recipe.inputCards.Contains(cardDescription))
+            {
+                input += $"- {recipe.recipeName}\n";
+            }
+            foreach (var drop in recipe.outputCards)
+            {
+                if (drop.cardDescription == cardDescription)
+                {
+                    output += $"- {recipe.recipeName}\n";
+                }
+                break;
+            }
+        }
+        asInputText.text = input == "" ? "无" : input.TrimEnd('\n');
+        asOutputText.text = output == "" ? "无" : output.TrimEnd('\n');
+    }
+
+    protected void Update()
+    {
+        if (isMoving && preCard != null)
+        {
+            FollowPosition();
+        }
+
+        if (craftTooltipPanel.activeSelf && Input.GetMouseButtonDown(0))
+        {
+            var rect = transform as RectTransform;
+            var _canvas = rect.GetComponentInParent<Canvas>();
+            var cam = (_canvas != null && _canvas.renderMode != RenderMode.ScreenSpaceOverlay) ? _canvas.worldCamera : null;
+            bool isPointerOver = RectTransformUtility.RectangleContainsScreenPoint(rect, Input.mousePosition, cam);
+            if (!isPointerOver) craftTooltipPanel.SetActive(false);
+        }
     }
 
     void OnEnable()
@@ -150,23 +219,24 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
     protected void FollowPosition()
     {
-        if (preCard == null)
-        {
-            CancelInvoke(nameof(FollowPosition));
-            return;
-        }
         Vector3 targetPosition = preCard.transform.position - new Vector3(0, yAlignedDistance, 0);
         var pos = Vector3.Lerp(transform.position, targetPosition, Time.unscaledDeltaTime * followSpeed);
+        // Debug.Log($"Following position: current={transform.position}, target={targetPosition}, new={pos}");
         transform.position = pos;
 
-        if (transform.position == targetPosition)
+        if (Vector3.Distance(transform.position, targetPosition) <= 2f && !CardManager.Instance.isDragging && !preCard.isMoving)
         {
-            CancelInvoke(nameof(FollowPosition));
+            // Debug.Log($"Card {cardDescription} reached target position.");
+            transform.position = targetPosition;
+            isMoving = false;
+            cardImage.raycastTarget = true;
         }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (canBeDragged == false || CardManager.Instance.isDragging == true || isMoving == true)
+            return;
         // Set the self state and global dragging state
         cardImage.raycastTarget = false;
         CardManager.Instance.draggingCard = this;
@@ -179,24 +249,28 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
         // Update card slot information
         CardSlot.ChangeCardsToSlot(cardSlot, movingCardSlot, GetFollowingCards());
-        cardSlot.UpdateMovingState(this, true);
 
         // Several initializations
         foreach (var card in GetFollowingCards())
         {
             card.transform.localScale = dragScaleFactor * Vector3.one * 0.6f;
         }
+        ChangeMovingState(true);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         // Follow the mouse position
+        if (CardManager.Instance.isDragging == false)
+            return;
         RectTransformUtility.ScreenPointToWorldPointInRectangle(canvas.GetComponent<RectTransform>(), eventData.position, eventData.pressEventCamera, out Vector3 mousePos);
         transform.position = mousePos;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (CardManager.Instance.isDragging == false)
+            return;
         bool endOnCard = false;
         // if put on other cards, place it after the card and inherit its cardslot
         if (eventData.pointerCurrentRaycast.gameObject != null)
@@ -236,7 +310,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         cardImage.raycastTarget = true;
         preCardBeforeDrag = null;
         initPosition = Vector3.zero;
-        cardSlot.UpdateMovingState(this, false);
+        ChangeMovingState(false);
         foreach (var card in GetFollowingCards())
         {
             card.transform.localScale = Vector3.one * 0.6f;
@@ -251,12 +325,15 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
             isMoving = true;
             cardImage.raycastTarget = false;
             setShadow();
-            InvokeRepeating(nameof(FollowPosition), 0f, 0.01f);
+            if (laterCard != null)
+            {
+                laterCard.ChangeMovingState(true);
+            }
         }
         else
         {
             setShadow();
-            cardImage.raycastTarget = true;
+            // Debug.Log($"Card {cardDescription} stopped moving.");
             isMoving = false;
         }
     }
@@ -294,12 +371,14 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
             )
         {
             SetOutline(true);
+            cardSlot.ShowCraftingTooltip(draggingCard);
         }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         SetOutline(false);
+        cardSlot.HideCraftingTooltip();
     }
 
     public void SetOutline(bool show)
@@ -314,13 +393,28 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
             else
                 outlineMaterialInstance.SetColor("_OutlineColor", failureOutlineColor);
 
-            InvokeRepeating(nameof(DisplayOutline), 0f, 0.016f * 15);
+            if (displayOutlineCoroutine != null)
+                StopCoroutine(displayOutlineCoroutine);
+            displayOutlineCoroutine = StartCoroutine(DisplayOutlineCoroutine());
         }
         else
         {
             // Hide outline
             cardImage.material = null;
-            CancelInvoke(nameof(DisplayOutline));
+            if (displayOutlineCoroutine != null)
+            {
+                StopCoroutine(displayOutlineCoroutine);
+                displayOutlineCoroutine = null;
+            }
+        }
+    }
+
+    private IEnumerator DisplayOutlineCoroutine()
+    {
+        while (true)
+        {
+            DisplayOutline();
+            yield return new WaitForSecondsRealtime(0.016f * 15);
         }
     }
 
@@ -333,6 +427,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         }
     }
 
+    protected bool firstShow = true;
     public void OnPointerClick(PointerEventData eventData)
     {
         // if (cardSlot.TryGetEventCard(out Card eventCard))
@@ -341,6 +436,14 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         // }
         switch (cardDescription.cardType)
         {
+            case CardType.Resources:
+                craftTooltipPanel.SetActive(true);
+                if (firstShow)
+                {
+                    firstShow = false;
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(craftTooltipPanel.GetComponent<RectTransform>());
+                }
+                break;
             case CardType.Creatures:
                 CardManager.Instance.DisplayCreatureAttribute(this);
                 break;
@@ -356,11 +459,13 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     /// may be better to put them in child class ///
     public int curWorkOptionIndex = -1;
     public float eventProgress = 0f;
-    public void StartEvent(int optionIndex, float progress = 0f)
+    public void StartEvent(int optionIndex, float progress = 0f, EventUI eventUI = null)
     {
         curWorkOptionIndex = optionIndex;
         var eventUIAttribute = DataBaseManager.Instance.GetEventUIAttribute(cardDescription.eventCardType) ?? default;
-        cardSlot.StartProgressBar(eventUIAttribute.options[optionIndex].cost.timeCost, OnEndEvent);
+        cardSlot.StartProgressBar(eventUIAttribute.options[optionIndex].cost.timeCost, () => {
+            OnEndEvent(eventUI);
+        });
         cardSlot.progressBar.SetProgressValue(progress);
     }
     public void EndEvent()
@@ -373,7 +478,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         cardSlot.EndProduction();
     }
 
-    public void OnEndEvent()
+    public void OnEndEvent(EventUI eventUI)
     {
         // Produce rewards
         var eventUIAttribute = DataBaseManager.Instance.GetEventUIAttribute(cardDescription.eventCardType) ?? default;
@@ -388,6 +493,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
         // Destroy event card
         cardSlot.EndProduction();
+        if (eventUI != null) Destroy(eventUI.gameObject);
         CardManager.Instance.DeleteCard(this);
     }
 

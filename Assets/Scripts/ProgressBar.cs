@@ -1,14 +1,20 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.EventSystems;
+using Unity.VisualScripting;
 
-public class ProgressBar : MonoBehaviour
+public class ProgressBar : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     public Image fillImage;
+    public Text progressText;
+
     
     public float progress = 0f;
     private bool isRunning = false;
     private float duration = 1f;
+    private bool isHovered = false;
+    private bool permanentDisplayProgress = false;
 
     public event Action OnProgressComplete;
     
@@ -22,11 +28,17 @@ public class ProgressBar : MonoBehaviour
 
     public void StartProgressBar(float totalTime, Action onComplete, float curTime = 0f)
     {
+        gameObject.SetActive(true);
         // 设置总持续时间
         ResetProgress(true);
         progress = curTime;
         duration = totalTime > 0 ? totalTime : 1f;
         OnProgressComplete += onComplete;
+
+        isHovered = false;
+        permanentDisplayProgress = false;
+        if (progressText != null)
+            progressText.gameObject.SetActive(false);
     }
 
     public void StopProgressBar()
@@ -46,6 +58,11 @@ public class ProgressBar : MonoBehaviour
         // 计算填充比例
         float fillAmount = Mathf.Clamp01(progress / duration);
         fillImage.fillAmount = fillAmount;
+
+        if (progressText != null && progressText.gameObject.activeSelf)
+        {
+            progressText.text = $"{(fillAmount * 100).ToString("F1")}%";
+        }
 
         // 检查是否完成
         if (progress >= duration)
@@ -67,5 +84,34 @@ public class ProgressBar : MonoBehaviour
         progress = 0f;
         fillImage.fillAmount = 0f;
         OnProgressComplete = null;
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        isHovered = true;
+        if (progressText == null) return;
+        progressText.gameObject.SetActive(true);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        isHovered = false;
+        if (progressText == null) return;
+        if (!permanentDisplayProgress)
+            progressText.gameObject.SetActive(false);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (isHovered && progressText != null)
+        {
+            // 将屏幕坐标转换为填充图片的本地坐标
+            RectTransform rt = fillImage.rectTransform;
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rt, eventData.position, eventData.pressEventCamera, out Vector2 localPoint))
+            {
+                permanentDisplayProgress = !permanentDisplayProgress;
+                progressText.gameObject.SetActive(permanentDisplayProgress);
+            }
+        }
     }
 }

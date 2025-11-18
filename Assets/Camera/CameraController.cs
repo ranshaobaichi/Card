@@ -9,12 +9,18 @@ public class CameraController : MonoBehaviour
     public float moveSpeed = 200f;
     public float edgeThreshold = 20f; // 鼠标距离屏幕边缘多少像素时触发移动
     
+    [Header("拖拽设置")]
+    public bool enableDrag = true;
+    public float dragSpeed = 1f;
+    
     [Header("缩放设置")]
     public float zoomSpeed = 50f;
     public float minSize = 400f;
     public float maxSize = 800f;
     
     private Camera cam;
+    private Vector3 dragOrigin;
+    private bool isDragging = false;
     
     void Start()
     {
@@ -27,12 +33,53 @@ public class CameraController : MonoBehaviour
     
     void Update()
     {
+        HandleDrag();
         HandleEdgeMovement();
         HandleZoom();
     }
     
+    void HandleDrag()
+    {
+        if (!enableDrag) return;
+        
+        // 按下鼠标左键开始拖拽
+        if (Input.GetMouseButtonDown(1) && CardManager.Instance.isDragging == false)
+        {
+            dragOrigin = cam.ScreenToWorldPoint(Input.mousePosition);
+            isDragging = true;
+        }
+        
+        // 拖拽中
+        if (isDragging && Input.GetMouseButton(1))
+        {
+            Vector3 currentPos = cam.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 difference = dragOrigin - currentPos;
+            
+            Vector3 newPosition = transform.position + difference * dragSpeed;
+            
+            // 限制摄像机移动范围
+            if (upRightBoundary != null && downLeftBoundary != null)
+            {
+                newPosition.x = Mathf.Clamp(newPosition.x, downLeftBoundary.position.x, upRightBoundary.position.x);
+                newPosition.y = Mathf.Clamp(newPosition.y, downLeftBoundary.position.y, upRightBoundary.position.y);
+            }
+            
+            transform.position = newPosition;
+            dragOrigin = cam.ScreenToWorldPoint(Input.mousePosition);
+        }
+        
+        // 松开鼠标停止拖拽
+        if (Input.GetMouseButtonUp(1))
+        {
+            isDragging = false;
+        }
+    }
+    
     void HandleEdgeMovement()
     {
+        // 拖拽时禁用边缘移动
+        if (isDragging) return;
+        
         Vector3 moveDirection = Vector3.zero;
         
         // 检测鼠标位置
@@ -86,8 +133,13 @@ public class CameraController : MonoBehaviour
                 mainUIManager.PopulationPanel.activeSelf ||
                 mainUIManager.TaskPanel.activeSelf)
             {
-                return; // 如果任一面板打开，禁止缩放
+                return; // 如果任一面板打开,禁止缩放
             }
+        }
+
+        if (EventUI.openEventUICount > 0)
+        {
+            return; // 如果有事件UI打开,禁止缩放
         }
         
         // 获取鼠标滚轮输入

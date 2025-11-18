@@ -210,6 +210,7 @@ public class BattleWorldManager : MonoBehaviour
         // load current wave
         if (currentWaveIndex >= 0)
         {
+            Debug.Log($"BattleWorldManager: Loading wave index {currentWaveIndex}");
             StartCoroutine(delayedLoadWave(3, currentWaveIndex));
         }
         else
@@ -519,6 +520,7 @@ public class BattleWorldManager : MonoBehaviour
             Debug.Log("BattleWorldManager: Battle Lost!");
         }
         InBattle = false;
+        currentWaveIndex++;
     }
     #endregion
 

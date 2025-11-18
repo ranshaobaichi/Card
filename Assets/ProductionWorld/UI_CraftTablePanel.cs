@@ -36,15 +36,11 @@ public class UI_CraftTablePanel : MonoBehaviour
             }
 
             string inputCardsStr = "所需卡牌:\n";
-            int index = 0;
             foreach (var kvp in inputCardCounts)
             {
-                index++;
-                if (index < inputCardCounts.Count)
-                    inputCardsStr += $"- {kvp.Key} x{kvp.Value}\n";
-                else
-                    inputCardsStr += $"- {kvp.Key} x{kvp.Value}";
+                inputCardsStr += $"- {kvp.Key} x{kvp.Value}\n";
             }
+            inputCardsStr = inputCardsStr.TrimEnd('\n'); // 去掉最后的换行符
             inputText.text = inputCardsStr;
         }
         else
@@ -56,11 +52,21 @@ public class UI_CraftTablePanel : MonoBehaviour
         string outputCardsStr = "产出卡牌:\n";
         if (recipe.outputCards.Count > 0)
         {
-            for (int i = 0; i < recipe.outputCards.Count - 1; i++)
+            Dictionary<Card.CardDescription, int> outputCardCounts = new Dictionary<Card.CardDescription, int>();
+            foreach (var dropCard in recipe.outputCards)
             {
-                outputCardsStr += $"- {recipe.outputCards[i].cardDescription}\n";
+                var card = dropCard.cardDescription;
+                if (outputCardCounts.ContainsKey(card))
+                    outputCardCounts[card]++;
+                else
+                    outputCardCounts[card] = 1;
             }
-            outputCardsStr += $"- {recipe.outputCards[recipe.outputCards.Count - 1].cardDescription}";
+
+            foreach (var kvp in outputCardCounts)
+            {
+                outputCardsStr += $"- {kvp.Key} x {kvp.Value}\n";
+            }
+            outputCardsStr = outputCardsStr.TrimEnd('\n');
             outputText.text = outputCardsStr;
         }
         else

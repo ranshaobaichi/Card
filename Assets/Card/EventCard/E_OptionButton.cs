@@ -43,7 +43,7 @@ public class E_OptionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         {
             OptionButton.onClick.AddListener(() =>
             {
-                eventUI.eventCard.StartEvent(optionIndex);
+                eventUI.eventCard.StartEvent(optionIndex, eventUI: eventUI);
                 OptionButton.interactable = false;
             });
         }

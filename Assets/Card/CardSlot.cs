@@ -4,12 +4,15 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using Category;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CardSlot : MonoBehaviour
 {
     public int maxCardCount;
     public List<Card> cards = new List<Card>();
     public ProgressBar progressBar;
+    public GameObject craftCardPanel;
+    public Text craftingRecipeText;
     public static CardSlot movingCardSlot;
     private CraftTableDB.Recipe currentRecipe;
     private List<Card> currentCraftingCards = new List<Card>();
@@ -329,14 +332,6 @@ public class CardSlot : MonoBehaviour
     #endregion
 
 # region 接口方法
-    public void UpdateMovingState(Card card, bool state)
-    {
-        while (card != null)
-        {
-            card.ChangeMovingState(state);
-            card = card.laterCard;
-        }
-    }
 
     public void UpdateLastCardPlacementState()
     {
@@ -484,7 +479,6 @@ public class CardSlot : MonoBehaviour
             onComplete?.Invoke();
             return;
         }
-        progressBar.gameObject.SetActive(true);
         progressBar.StartProgressBar(totalTime, onComplete, progress);
     }
 
@@ -492,5 +486,31 @@ public class CardSlot : MonoBehaviour
     {
         eventCard = cards.Find(card => card.cardDescription.cardType == CardType.Events);
         return eventCard != null;
+    }
+
+    public void ShowCraftingTooltip(Card card)
+    {
+        if (craftCardPanel.activeSelf) return;
+        List<Card> cardsToCheck = new List<Card> { card };
+        cardsToCheck.AddRange(cards.Where(c => c != card));
+        List<CraftTableDB.Recipe> possibleRecipes = CardManager.Instance.GetRecipes(cardsToCheck);
+        if (possibleRecipes.Count != 0)
+        {
+            craftCardPanel.SetActive(true);
+            string recipes = "";
+            foreach (var recipe in possibleRecipes)
+            {
+                recipes += $"{recipe.recipeName}\n";
+            }
+            recipes = recipes.TrimEnd('\n');
+            craftingRecipeText.text = recipes;
+        }
+    }
+    
+    public void HideCraftingTooltip()
+    {
+        if (craftCardPanel == null || !craftCardPanel.activeSelf) return;
+        craftCardPanel.SetActive(false);
+        craftingRecipeText.text = "";
     }
 }

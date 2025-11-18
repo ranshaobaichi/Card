@@ -15,11 +15,6 @@ public class UI_FoldNode : MonoBehaviour
         foldButton.onClick.AddListener(ChangeFoldState);
     }
 
-    public void OnDisable()
-    {
-        if (!isFolded) ChangeFoldState();
-    }
-
     public void AddItem(GameObject item)
     {
         if (!foldableItems.Contains(item)) foldableItems.Add(item);

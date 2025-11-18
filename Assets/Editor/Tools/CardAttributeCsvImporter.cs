@@ -365,6 +365,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
                         }
                     }
 
+                    // 解析羁绊
                     if (columnIndices.ContainsKey("Traits") && values.Length > columnIndices["Traits"])
                     {
                         string[] traitIDs = values[columnIndices["Traits"]].Split('*');
@@ -837,7 +838,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
         string[] cardEntries = cardsString.Split(',');
         foreach (string cardEntry in cardEntries)
         {
-            string[] parts = cardEntry.Trim().Split('*');
+            string[] parts = cardEntry.Trim().Split('-');
             if (parts.Length == 4)
             {
                 char typePrefix = parts[0].Trim()[0]; // R, C, E

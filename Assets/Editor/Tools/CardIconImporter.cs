@@ -3,271 +3,289 @@ using UnityEditor;
 using System.Collections.Generic;
 using System.IO;
 using Category;
+using System.Linq;
 
 public class CardIconImporter : EditorWindow
 {
-    private CardAttributeDB cardAttributeDB;
+    private CardIconsDB cardIconsDB;
     private Vector2 scrollPosition;
-    private Dictionary<CardType, bool> foldoutStates = new Dictionary<CardType, bool>();
-    private string[] cardTypeNames;
-    private SerializedObject serializedObject;
+    private string creatureIconPath = "";
+    private string resourceIconPath = "";
+    private List<string> errorList = new List<string>();
+    private List<string> missingList = new List<string>();
 
-    [MenuItem("Tools/Card System/Card Icon Importer")]
+    [MenuItem("Tools/Import Card Icons")]
     public static void ShowWindow()
     {
         GetWindow<CardIconImporter>("Card Icon Importer");
-    }
-
-    private void OnEnable()
-    {
-        cardTypeNames = System.Enum.GetNames(typeof(CardType));
-        
-        // 初始化折叠状态
-        foreach (CardType cardType in System.Enum.GetValues(typeof(CardType)))
-        {
-            if (!foldoutStates.ContainsKey(cardType))
-            {
-                foldoutStates[cardType] = false;
-            }
-        }
     }
 
     private void OnGUI()
     {
         GUILayout.Label("Card Icon Importer", EditorStyles.boldLabel);
 
-        // 选择CardAttributeDB
+        // 选择CardIconsDB
         EditorGUILayout.BeginHorizontal();
-        cardAttributeDB = (CardAttributeDB)EditorGUILayout.ObjectField("Card Attribute DB", cardAttributeDB, typeof(CardAttributeDB), false);
+        cardIconsDB = (CardIconsDB)EditorGUILayout.ObjectField("Card Icons DB", cardIconsDB, typeof(CardIconsDB), false);
         if (GUILayout.Button("Find", GUILayout.Width(60)))
         {
-            string[] guids = AssetDatabase.FindAssets("t:CardAttributeDB");
+            string[] guids = AssetDatabase.FindAssets("t:CardIconsDB");
             if (guids.Length > 0)
             {
                 string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-                cardAttributeDB = AssetDatabase.LoadAssetAtPath<CardAttributeDB>(path);
+                cardIconsDB = AssetDatabase.LoadAssetAtPath<CardIconsDB>(path);
             }
         }
         EditorGUILayout.EndHorizontal();
 
-        if (cardAttributeDB == null)
+        if (cardIconsDB == null)
         {
-            EditorGUILayout.HelpBox("请先选择一个CardAttributeDB资源!", MessageType.Warning);
+            EditorGUILayout.HelpBox("请先选择一个CardIconsDB资源!", MessageType.Warning);
             return;
         }
 
-        serializedObject = new SerializedObject(cardAttributeDB);
+        EditorGUILayout.Space(10);
 
-        // 批量导入按钮
-        if (GUILayout.Button("批量导入图标"))
+        // 生物卡图标路径选择
+        EditorGUILayout.BeginHorizontal();
+        creatureIconPath = EditorGUILayout.TextField("生物卡图标路径:", creatureIconPath);
+        if (GUILayout.Button("浏览...", GUILayout.Width(80)))
         {
-            BatchImportIcons();
+            string path = EditorUtility.OpenFolderPanel("选择生物卡图标文件夹", "Assets", "");
+            if (!string.IsNullOrEmpty(path))
+            {
+                creatureIconPath = path;
+            }
+        }
+        EditorGUILayout.EndHorizontal();
+
+        // 资源卡图标路径选择
+        EditorGUILayout.BeginHorizontal();
+        resourceIconPath = EditorGUILayout.TextField("资源卡图标路径:", resourceIconPath);
+        if (GUILayout.Button("浏览...", GUILayout.Width(80)))
+        {
+            string path = EditorUtility.OpenFolderPanel("选择资源卡图标文件夹", "Assets", "");
+            if (!string.IsNullOrEmpty(path))
+            {
+                resourceIconPath = path;
+            }
+        }
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.Space(10);
+
+        // 导入按钮
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("导入生物卡图标"))
+        {
+            ImportCreatureIcons();
         }
 
-        EditorGUILayout.Space();
-        
-        // 滚动视图
+        if (GUILayout.Button("导入资源卡图标"))
+        {
+            ImportResourceIcons();
+        }
+
+        if (GUILayout.Button("导入全部图标"))
+        {
+            ImportCreatureIcons();
+            ImportResourceIcons();
+        }
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.Space(10);
+
+        // 滚动视图显示当前数据
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
         
-        // 为每种卡牌类型创建一个折叠面板
-        foreach (CardType cardType in System.Enum.GetValues(typeof(CardType)))
-        {
-            foldoutStates[cardType] = EditorGUILayout.Foldout(foldoutStates[cardType], cardType.ToString() + " Icons", true);
-            
-            if (foldoutStates[cardType])
-            {
-                EditorGUI.indentLevel++;
-                DisplayCardTypeIcons(cardType);
-                EditorGUI.indentLevel--;
-            }
-        }
+        EditorGUILayout.LabelField("当前数据库内容:", EditorStyles.boldLabel);
+        EditorGUI.indentLevel++;
+        EditorGUILayout.LabelField($"生物卡插画数量: {cardIconsDB.cardIllustrations?.Count ?? 0}");
+        EditorGUILayout.LabelField($"资源卡图标数量: {cardIconsDB.resourcesCardIcons?.Count ?? 0}");
+        EditorGUI.indentLevel--;
         
         EditorGUILayout.EndScrollView();
-        
-        // 应用更改
-        if (serializedObject.hasModifiedProperties)
-        {
-            serializedObject.ApplyModifiedProperties();
-            EditorUtility.SetDirty(cardAttributeDB);
-        }
     }
 
-    private void DisplayCardTypeIcons(CardType cardType)
+    private void ImportCreatureIcons()
     {
-        // 确保字典已初始化
-        if (!cardAttributeDB.cardIcons.ContainsKey(cardType))
+        try
         {
-            cardAttributeDB.cardIcons[cardType] = new Dictionary<int, Sprite>();
-        }
-
-        // 获取该类型的子类型枚举
-        System.Type subTypeEnum = GetSubTypeEnum(cardType);
-        if (subTypeEnum == null) return;
-        
-        string[] subTypeNames = System.Enum.GetNames(subTypeEnum);
-        System.Array subTypeValues = System.Enum.GetValues(subTypeEnum);
-
-        EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("添加全部子类型"))
-        {
-            for (int i = 0; i < subTypeValues.Length; i++)
+            if (string.IsNullOrEmpty(creatureIconPath))
             {
-                int value = (int)subTypeValues.GetValue(i);
-                if (!cardAttributeDB.cardIcons[cardType].ContainsKey(value))
+                EditorUtility.DisplayDialog("错误", "请选择生物卡图标文件夹！", "确定");
+                return;
+            }
+
+            if (!Directory.Exists(creatureIconPath))
+            {
+                EditorUtility.DisplayDialog("错误", "指定的生物卡图标路径不存在！", "确定");
+                return;
+            }
+
+            Undo.RecordObject(cardIconsDB, "Import Creature Icons");
+            
+            if (cardIconsDB.cardIllustrations == null)
+                cardIconsDB.cardIllustrations = new List<CardIconsDB.CardIllustration>();
+            
+            cardIconsDB.cardIllustrations.Clear();
+            errorList.Clear();
+            missingList.Clear();
+
+            int successCount = 0;
+            string[] supportedExtensions = new[] { "*.png", "*.jpg", "*.jpeg" };
+
+            // 获取所有CreatureCardType枚举值
+            var creatureTypes = System.Enum.GetValues(typeof(CreatureCardType)).Cast<CreatureCardType>();
+
+            foreach (var creatureType in creatureTypes)
+            {
+                if (creatureType == CreatureCardType.None || creatureType == CreatureCardType.Any)
+                    continue;
+                string typeName = creatureType.ToString();
+                bool found = false;
+
+                // 搜索所有支持的图片格式
+                foreach (var extension in supportedExtensions)
                 {
-                    cardAttributeDB.cardIcons[cardType][value] = null;
+                    string[] files = Directory.GetFiles(creatureIconPath, $"{typeName}{extension.Replace("*", "")}");
+                    
+                    if (files.Length > 0)
+                    {
+                        string relativePath = GetRelativePath(files[0]);
+                        if (string.IsNullOrEmpty(relativePath))
+                        {
+                            errorList.Add($"{typeName}: 无法获取文件相对路径");
+                            continue;
+                        }
+
+                        Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(relativePath);
+                        if (sprite != null)
+                        {
+                            CardIconsDB.CardIllustration illustration = new CardIconsDB.CardIllustration
+                            {
+                                cardDescription = creatureType,
+                                illustration = sprite
+                            };
+                            cardIconsDB.cardIllustrations.Add(illustration);
+                            successCount++;
+                            found = true;
+                            break;
+                        }
+                        else
+                        {
+                            errorList.Add($"{typeName}: 无法加载精灵 {relativePath}");
+                        }
+                    }
+                }
+
+                if (!found)
+                {
+                    missingList.Add($"生物卡: {typeName}");
                 }
             }
-        }
-        EditorGUILayout.EndHorizontal();
 
-        // 显示已有的图标
-        List<int> keysToRemove = new List<int>();
-        foreach (var pair in cardAttributeDB.cardIcons[cardType])
+            EditorUtility.SetDirty(cardIconsDB);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            DisplayResults("生物卡图标", successCount, creatureTypes.Count() - 2);
+        }
+        catch (System.Exception ex)
         {
-            EditorGUILayout.BeginHorizontal();
-            
-            // 显示子类型名称（如果可以找到）
-            string subTypeName = pair.Key.ToString();
-            foreach (var value in subTypeValues)
+            EditorUtility.DisplayDialog("导入错误", $"导入生物卡图标过程中出现错误: {ex.Message}", "确定");
+            Debug.LogException(ex);
+        }
+    }
+
+    private void ImportResourceIcons()
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(resourceIconPath))
             {
-                if ((int)value == pair.Key)
+                EditorUtility.DisplayDialog("错误", "请选择资源卡图标文件夹！", "确定");
+                return;
+            }
+
+            if (!Directory.Exists(resourceIconPath))
+            {
+                EditorUtility.DisplayDialog("错误", "指定的资源卡图标路径不存在！", "确定");
+                return;
+            }
+
+            Undo.RecordObject(cardIconsDB, "Import Resource Icons");
+            
+            if (cardIconsDB.resourcesCardIcons == null)
+                cardIconsDB.resourcesCardIcons = new List<CardIconsDB.ResourcesCardIcons>();
+            
+            cardIconsDB.resourcesCardIcons.Clear();
+            errorList.Clear();
+            missingList.Clear();
+
+            int successCount = 0;
+            string[] supportedExtensions = new[] { "*.png", "*.jpg", "*.jpeg" };
+
+            // 获取所有ResourceCardType枚举值
+            var resourceTypes = System.Enum.GetValues(typeof(ResourceCardType)).Cast<ResourceCardType>();
+
+            foreach (var resourceType in resourceTypes)
+            {
+                if (resourceType == ResourceCardType.None)
+                    continue;
+                string typeName = resourceType.ToString();
+                bool found = false;
+
+                // 搜索所有支持的图片格式
+                foreach (var extension in supportedExtensions)
                 {
-                    subTypeName = System.Enum.GetName(subTypeEnum, value);
-                    break;
+                    string[] files = Directory.GetFiles(resourceIconPath, $"{typeName}{extension.Replace("*", "")}");
+                    
+                    if (files.Length > 0)
+                    {
+                        string relativePath = GetRelativePath(files[0]);
+                        if (string.IsNullOrEmpty(relativePath))
+                        {
+                            errorList.Add($"{typeName}: 无法获取文件相对路径");
+                            continue;
+                        }
+
+                        Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(relativePath);
+                        if (sprite != null)
+                        {
+                            CardIconsDB.ResourcesCardIcons resourceIcon = new CardIconsDB.ResourcesCardIcons
+                            {
+                                resourceCardType = resourceType,
+                                icon = sprite
+                            };
+                            cardIconsDB.resourcesCardIcons.Add(resourceIcon);
+                            successCount++;
+                            found = true;
+                            break;
+                        }
+                        else
+                        {
+                            errorList.Add($"{typeName}: 无法加载精灵 {relativePath}");
+                        }
+                    }
+                }
+
+                if (!found)
+                {
+                    missingList.Add($"资源卡: {typeName}");
                 }
             }
-            
-            // 图标字段
-            Sprite newIcon = (Sprite)EditorGUILayout.ObjectField(
-                subTypeName, 
-                pair.Value, 
-                typeof(Sprite), 
-                false,
-                GUILayout.Height(64)
-            );
-            
-            if (newIcon != pair.Value)
-            {
-                cardAttributeDB.cardIcons[cardType][pair.Key] = newIcon;
-                EditorUtility.SetDirty(cardAttributeDB);
-            }
-            
-            // 移除按钮
-            if (GUILayout.Button("X", GUILayout.Width(20), GUILayout.Height(64)))
-            {
-                keysToRemove.Add(pair.Key);
-            }
-            
-            EditorGUILayout.EndHorizontal();
+
+            EditorUtility.SetDirty(cardIconsDB);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            DisplayResults("资源卡图标", successCount, resourceTypes.Count() - 1);
         }
-        
-        // 移除标记的项
-        foreach (int key in keysToRemove)
+        catch (System.Exception ex)
         {
-            cardAttributeDB.cardIcons[cardType].Remove(key);
-            EditorUtility.SetDirty(cardAttributeDB);
-        }
-        
-        // 添加新图标
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("添加新图标", GUILayout.Width(100));
-        
-        // 子类型下拉菜单
-        EditorGUI.BeginChangeCheck();
-        int newSubTypeIndex = EditorGUILayout.Popup(-1, subTypeNames, GUILayout.Width(100));
-        if (EditorGUI.EndChangeCheck() && newSubTypeIndex >= 0)
-        {
-            int newValue = (int)subTypeValues.GetValue(newSubTypeIndex);
-            if (!cardAttributeDB.cardIcons[cardType].ContainsKey(newValue))
-            {
-                cardAttributeDB.cardIcons[cardType][newValue] = null;
-                EditorUtility.SetDirty(cardAttributeDB);
-            }
-        }
-        
-        EditorGUILayout.EndHorizontal();
-    }
-
-    private System.Type GetSubTypeEnum(CardType cardType)
-    {
-        switch (cardType)
-        {
-            case CardType.Creatures:
-                return typeof(CreatureCardType);
-            case CardType.Resources:
-                return typeof(ResourceCardType);
-            case CardType.Events:
-                return typeof(EventCardType);
-            default:
-                return null;
-        }
-    }
-
-    private void BatchImportIcons()
-    {
-        string folderPath = EditorUtility.OpenFolderPanel("选择图标文件夹", "", "");
-        if (string.IsNullOrEmpty(folderPath)) return;
-
-        // 处理所选文件夹
-        foreach (CardType cardType in System.Enum.GetValues(typeof(CardType)))
-        {
-            string cardTypeFolder = Path.Combine(folderPath, cardType.ToString());
-            if (Directory.Exists(cardTypeFolder))
-            {
-                ProcessCardTypeFolder(cardType, cardTypeFolder);
-            }
-        }
-
-        AssetDatabase.Refresh();
-        EditorUtility.SetDirty(cardAttributeDB);
-    }
-
-    private void ProcessCardTypeFolder(CardType cardType, string folderPath)
-    {
-        if (!cardAttributeDB.cardIcons.ContainsKey(cardType))
-        {
-            cardAttributeDB.cardIcons[cardType] = new Dictionary<int, Sprite>();
-        }
-
-        System.Type subTypeEnum = GetSubTypeEnum(cardType);
-        if (subTypeEnum == null) return;
-
-        // 获取相对路径（相对于Assets文件夹）
-        DirectoryInfo dirInfo = new DirectoryInfo(folderPath);
-        foreach (FileInfo file in dirInfo.GetFiles("*.png"))
-        {
-            // 尝试从文件名解析子类型
-            string fileName = Path.GetFileNameWithoutExtension(file.Name);
-            
-            // 尝试将文件名解析为枚举值
-            object subTypeValue = null;
-            try
-            {
-                subTypeValue = System.Enum.Parse(subTypeEnum, fileName, true);
-            }
-            catch
-            {
-                // 无法解析，跳过
-                Debug.LogWarning($"无法将文件名 {fileName} 解析为 {subTypeEnum.Name} 的值");
-                continue;
-            }
-            
-            // 获取相对路径（相对于Assets文件夹）
-            string relativePath = GetRelativePath(file.FullName);
-            if (string.IsNullOrEmpty(relativePath)) continue;
-
-            // 加载精灵
-            Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(relativePath);
-            if (sprite != null)
-            {
-                int enumValue = (int)subTypeValue;
-                cardAttributeDB.cardIcons[cardType][enumValue] = sprite;
-            }
-            else
-            {
-                Debug.LogWarning($"无法加载精灵: {relativePath}");
-            }
+            EditorUtility.DisplayDialog("导入错误", $"导入资源卡图标过程中出现错误: {ex.Message}", "确定");
+            Debug.LogException(ex);
         }
     }
 
@@ -276,25 +294,47 @@ public class CardIconImporter : EditorWindow
         string assetsFolder = Application.dataPath;
         if (fullPath.StartsWith(assetsFolder))
         {
-            return "Assets" + fullPath.Substring(assetsFolder.Length);
+            return "Assets" + fullPath.Substring(assetsFolder.Length).Replace("\\", "/");
         }
         
-        // 如果文件在Assets外部，需要先将其导入项目
-        string fileName = Path.GetFileName(fullPath);
-        string destPath = Path.Combine(Application.dataPath, "Imported Icons", fileName);
+        Debug.LogError($"文件不在Assets文件夹内: {fullPath}");
+        return null;
+    }
+
+    private void DisplayResults(string iconType, int successCount, int totalCount)
+    {
+        System.Text.StringBuilder message = new System.Text.StringBuilder();
+        message.AppendLine($"成功导入 {successCount}/{totalCount} 个{iconType}");
         
-        // 确保目标目录存在
-        Directory.CreateDirectory(Path.GetDirectoryName(destPath));
-        
-        try
+        if (missingList.Count > 0)
         {
-            File.Copy(fullPath, destPath, true);
-            return "Assets/Imported Icons/" + fileName;
+            message.AppendLine($"\n未找到以下 {missingList.Count} 个卡牌的图标:");
+            foreach (var missing in missingList)
+            {
+                message.AppendLine($"  • {missing}");
+            }
         }
-        catch (System.Exception e)
+        
+        if (errorList.Count > 0)
         {
-            Debug.LogError($"复制文件失败: {e.Message}");
-            return null;
+            message.AppendLine($"\n导入时出现以下 {errorList.Count} 个错误:");
+            foreach (var error in errorList)
+            {
+                message.AppendLine($"  • {error}");
+            }
+        }
+
+        EditorUtility.DisplayDialog("导入完成", message.ToString(), "确定");
+        
+        // 同时输出到Console
+        if (missingList.Count > 0)
+        {
+            Debug.LogWarning($"[{iconType}] 未找到的卡牌:\n" + string.Join("\n", missingList));
+        }
+        
+        if (errorList.Count > 0)
+        {
+            Debug.LogWarning($"[{iconType}] 导入错误:\n" + string.Join("\n", errorList));
         }
     }
 }

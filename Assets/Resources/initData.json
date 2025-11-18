@@ -1,7 +1,7 @@
 {
     "curCardID": 10,
-    "curCardSlotID": 35,
-    "curGameTime": 38.4643440246582,
+    "curCardSlotID": 39,
+    "curGameTime": 45.813232421875,
     "currentWaveIndex": 1,
     "allCardData": [
         {
@@ -28,21 +28,23 @@
     "allCardSlotData": [
         {
             "cardIDs": [
-                9
-            ],
-            "position": {
-                "x": 1146.9710693359375,
-                "y": 562.9237060546875
-            }
-        },
-        {
-            "cardIDs": [
                 8
             ],
             "position": {
                 "x": 795.9525756835938,
                 "y": 560.0582885742188
             }
+        },
+        {
+            "cardIDs": [
+                9
+            ],
+            "position": {
+                "x": 1146.9710693359375,
+                "y": 562.9237060546875
+            }
         }
-    ]
+    ],
+    "musicVolume": 0.7,
+    "fxVolume": 0.7
 }

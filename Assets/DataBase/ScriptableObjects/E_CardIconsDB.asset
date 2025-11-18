@@ -64,19 +64,132 @@ MonoBehaviour:
   cardIllustrations:
   - cardDescription: 2
     illustration: {fileID: 21300000, guid: b51bed8707f85a14ba24c152bce1a230, type: 3}
-  - cardDescription: 7
-    illustration: {fileID: 21300000, guid: 1c1a5748a1c398442b76fa0ddef656a9, type: 3}
-  - cardDescription: 10
-    illustration: {fileID: 21300000, guid: 44055d92804e2c74ba8f2af68c72fc88, type: 3}
-  - cardDescription: 5
-    illustration: {fileID: 21300000, guid: 8dcfe5bec10f4c9438533b2f22340ffa, type: 3}
   - cardDescription: 4
     illustration: {fileID: 21300000, guid: 08de8d27f3bf98d4aa5225ac464d3f8d, type: 3}
-  - cardDescription: 9
-    illustration: {fileID: 21300000, guid: 5a82dd2c26ea886438b3054c34f4e25d, type: 3}
+  - cardDescription: 5
+    illustration: {fileID: 21300000, guid: 8dcfe5bec10f4c9438533b2f22340ffa, type: 3}
   - cardDescription: 6
     illustration: {fileID: 21300000, guid: 9eea50a08c5733c48b7bffd2de4319ae, type: 3}
-  - cardDescription: 11
-    illustration: {fileID: 21300000, guid: 39d9051f125965f4ebc147379bab1dc1, type: 3}
+  - cardDescription: 7
+    illustration: {fileID: 21300000, guid: 1c1a5748a1c398442b76fa0ddef656a9, type: 3}
   - cardDescription: 8
     illustration: {fileID: 21300000, guid: 614437c55998cd14897257dbae0495f5, type: 3}
+  - cardDescription: 9
+    illustration: {fileID: 21300000, guid: 5a82dd2c26ea886438b3054c34f4e25d, type: 3}
+  - cardDescription: 10
+    illustration: {fileID: 21300000, guid: 44055d92804e2c74ba8f2af68c72fc88, type: 3}
+  - cardDescription: 11
+    illustration: {fileID: 21300000, guid: 39d9051f125965f4ebc147379bab1dc1, type: 3}
+  - cardDescription: 12
+    illustration: {fileID: 21300000, guid: 0b256211b221d7341bf17557245fd977, type: 3}
+  - cardDescription: 13
+    illustration: {fileID: 21300000, guid: 900164f3f48d1364ea6239c0a6cf35e4, type: 3}
+  - cardDescription: 14
+    illustration: {fileID: 21300000, guid: f5b65d1a7fa10d64fb76eadf14613f04, type: 3}
+  - cardDescription: 17
+    illustration: {fileID: 21300000, guid: de75e8d3ef36fa9438fd084d895e6e73, type: 3}
+  resourcesCardIcons:
+  - resourceCardType: 1
+    icon: {fileID: 21300000, guid: 97e86e6ad3dd2f94cab9fe5e4f8e23e8, type: 3}
+  - resourceCardType: 2
+    icon: {fileID: 21300000, guid: 73a2bfd19ca90c84e87e290257225497, type: 3}
+  - resourceCardType: 3
+    icon: {fileID: 21300000, guid: 70aad3d7d159c174ab32cc697bc84e5b, type: 3}
+  - resourceCardType: 4
+    icon: {fileID: 21300000, guid: cce978340a41dec40b1c3bc5f4bb0521, type: 3}
+  - resourceCardType: 5
+    icon: {fileID: 21300000, guid: 15fa3c151d3d753438cba81fdd053c94, type: 3}
+  - resourceCardType: 6
+    icon: {fileID: 21300000, guid: f64d55705a1ba8740bc505f4b45c2fcb, type: 3}
+  - resourceCardType: 7
+    icon: {fileID: 21300000, guid: 1eb039c3708f66f48a0ca777478f7776, type: 3}
+  - resourceCardType: 8
+    icon: {fileID: 21300000, guid: cd96ed5b0960c254d90dab6335dcd69e, type: 3}
+  - resourceCardType: 10
+    icon: {fileID: 21300000, guid: f3441ea14213abc4798884741d98ffc0, type: 3}
+  - resourceCardType: 11
+    icon: {fileID: 21300000, guid: 2cbed00edacd14f46bc6089b1f04c6d2, type: 3}
+  - resourceCardType: 12
+    icon: {fileID: 21300000, guid: 14e17c5747b5d2046b57ad7aab4f493e, type: 3}
+  - resourceCardType: 13
+    icon: {fileID: 21300000, guid: 956c067b05a9e0a4bb4d213a8c061cdc, type: 3}
+  - resourceCardType: 14
+    icon: {fileID: 21300000, guid: 002b01b868502524686cc2601cc24725, type: 3}
+  - resourceCardType: 15
+    icon: {fileID: 21300000, guid: 300547f650981e040bec8f1e16d1abc3, type: 3}
+  - resourceCardType: 16
+    icon: {fileID: 21300000, guid: c705b39186ff3534a93d4e3ebd02e380, type: 3}
+  - resourceCardType: 17
+    icon: {fileID: 21300000, guid: c228f436640c63047ae593c2a52d0644, type: 3}
+  - resourceCardType: 18
+    icon: {fileID: 21300000, guid: c522ac77792eeab4a86ad1740d69eba8, type: 3}
+  - resourceCardType: 19
+    icon: {fileID: 21300000, guid: f20796c1aed132b44aa3e0777231e1e3, type: 3}
+  - resourceCardType: 20
+    icon: {fileID: 21300000, guid: 5eea875340ee66641b44b8e85341f1d7, type: 3}
+  - resourceCardType: 21
+    icon: {fileID: 21300000, guid: cdd1bca854fcb5b4fb92097b249bd64e, type: 3}
+  - resourceCardType: 22
+    icon: {fileID: 21300000, guid: 28133664552b83c49990563798d0963b, type: 3}
+  - resourceCardType: 23
+    icon: {fileID: 21300000, guid: 028adabe13ab37c418a1753ac9c58a10, type: 3}
+  - resourceCardType: 24
+    icon: {fileID: 21300000, guid: adf5ba5458f810144a80190779e85890, type: 3}
+  - resourceCardType: 25
+    icon: {fileID: 21300000, guid: 44799f5c017f3e744b8231093f048a78, type: 3}
+  - resourceCardType: 26
+    icon: {fileID: 21300000, guid: 3d696c10119da2846a20cc744aa9d7c1, type: 3}
+  - resourceCardType: 27
+    icon: {fileID: 21300000, guid: 666f7f80801689a49a83e88e79047647, type: 3}
+  - resourceCardType: 28
+    icon: {fileID: 21300000, guid: a3a54bfacee49dc4597da3bcea098291, type: 3}
+  - resourceCardType: 29
+    icon: {fileID: 21300000, guid: 27d97221a3b48da41a595a60472925a6, type: 3}
+  - resourceCardType: 30
+    icon: {fileID: 21300000, guid: cdf6c8bb2c22f8a4f982177dd4f995d2, type: 3}
+  - resourceCardType: 31
+    icon: {fileID: 21300000, guid: 4e325444a86f4df4b8af36bcda7d40a2, type: 3}
+  - resourceCardType: 32
+    icon: {fileID: 21300000, guid: 462614c5b00f21f4d913e30c828ecbf6, type: 3}
+  - resourceCardType: 33
+    icon: {fileID: 21300000, guid: cb29d4807ac5d6d4bbe2b820fef8d96d, type: 3}
+  - resourceCardType: 34
+    icon: {fileID: 21300000, guid: a3389847e22aab44489a68df7d31a4d3, type: 3}
+  - resourceCardType: 35
+    icon: {fileID: 21300000, guid: 417b9ef7b2497d740a8d0cb6167ba6b7, type: 3}
+  - resourceCardType: 36
+    icon: {fileID: 21300000, guid: 508bb078a3fcc8a4bb5a21bce24a9156, type: 3}
+  - resourceCardType: 37
+    icon: {fileID: 21300000, guid: 0642f301d36fe1b48b8cc8912fcb4e6d, type: 3}
+  - resourceCardType: 38
+    icon: {fileID: 21300000, guid: 3a228d837dd49a24cbe3d8b119d2b4a3, type: 3}
+  - resourceCardType: 39
+    icon: {fileID: 21300000, guid: bcf5a927178698648b4795d89e0abe8d, type: 3}
+  - resourceCardType: 40
+    icon: {fileID: 21300000, guid: c83c1f8b8767934488c86e6799946791, type: 3}
+  - resourceCardType: 41
+    icon: {fileID: 21300000, guid: 106b4670c1a18a84d9b8cfa51318b0df, type: 3}
+  - resourceCardType: 42
+    icon: {fileID: 21300000, guid: 4b661c65eaa725c40835dc1149aa91cf, type: 3}
+  - resourceCardType: 43
+    icon: {fileID: 21300000, guid: 743c86495be45ad4ab82f97897935ffb, type: 3}
+  - resourceCardType: 44
+    icon: {fileID: 21300000, guid: 5ca3e23ef81f3b8418dc535d5fb6e675, type: 3}
+  - resourceCardType: 45
+    icon: {fileID: 21300000, guid: b4745e53d2ae7364f92e44493b4510e4, type: 3}
+  - resourceCardType: 46
+    icon: {fileID: 21300000, guid: c27d2d132b6ec8a498674e803c9a9638, type: 3}
+  - resourceCardType: 47
+    icon: {fileID: 21300000, guid: eeee85113027a8749ba50e47384d8460, type: 3}
+  - resourceCardType: 48
+    icon: {fileID: 21300000, guid: 27b64341743d7e74882087646497289b, type: 3}
+  - resourceCardType: 49
+    icon: {fileID: 21300000, guid: 6d23b06a4628fe34cb7606758cbecf72, type: 3}
+  - resourceCardType: 51
+    icon: {fileID: 21300000, guid: ba35f42c0ed5ff6448f451b696b7736d, type: 3}
+  - resourceCardType: 52
+    icon: {fileID: 21300000, guid: 8b10f13d107927844bc6575433a7f9f7, type: 3}
+  - resourceCardType: 53
+    icon: {fileID: 21300000, guid: 4f0ce9888e0fdf54aa9b82cdd7a8bf52, type: 3}
+  - resourceCardType: 54
+    icon: {fileID: 21300000, guid: 330de06e8da91444e8fb280129b097bd, type: 3}

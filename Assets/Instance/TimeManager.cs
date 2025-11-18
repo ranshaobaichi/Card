@@ -1,6 +1,7 @@
 using UnityEngine;
 using Category;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class TimeManager : MonoBehaviour
 {
@@ -140,6 +141,5 @@ public class TimeManager : MonoBehaviour
             Time.timeScale = speedUpScale;
             timescalelevelText.text = $"当前速度倍率：{speedUpLevel[currentSpeedUpLevel]}";
         }
-
     }
 }
