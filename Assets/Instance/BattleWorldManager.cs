@@ -28,6 +28,7 @@ public class BattleWorldManager : MonoBehaviour
     public static int currentWaveIndex = -1;
     public EnemyWaveData currentWaveData;
     private List<CreatureCardType> testAddEnemyTypes = new List<CreatureCardType>();
+    private bool showFirstTimeBattleTutorial = true;
     
     [Header("Battle World Prefabs")]
     public GameObject BattleCreaturePrefab;
@@ -45,6 +46,7 @@ public class BattleWorldManager : MonoBehaviour
     public Transform DraggingSlot;
     public GameObject PlayerTraitGameobject;
     public GameObject EnemyTraitGameobject;
+    public GameObject BattleTutorialPanel;
     public Button StartBattleButton;
     [Header("Reward Panel")]
     public GameObject rewardPanel;
@@ -218,6 +220,12 @@ public class BattleWorldManager : MonoBehaviour
             Debug.LogError($"BattleWorldManager: currentWaveIndex {currentWaveIndex} is invalid.");    
         }
 
+        // show battle tutorial if first time
+        if (showFirstTimeBattleTutorial)
+        {
+            BattleTutorialPanel.SetActive(true);
+            showFirstTimeBattleTutorial = false;
+        }
 
         OnCreatureDead += _ => EndBattle();
         StartBattleButton.onClick.AddListener(StartBattle);
