@@ -8,7 +8,7 @@ public class ProgressBar : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 {
     public Image fillImage;
     public Text progressText;
-
+    public Text tooltipText;
     
     public float progress = 0f;
     private bool isRunning = false;
@@ -26,6 +26,14 @@ public class ProgressBar : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         fillImage.fillAmount = 0f; // Initialize the fill amount to 0
     }
 
+    public void SetTooltipText(string text)
+    {
+        if (tooltipText != null)
+        {
+            tooltipText.text = text;
+        }
+    }
+
     public void StartProgressBar(float totalTime, Action onComplete, float curTime = 0f)
     {
         gameObject.SetActive(true);
@@ -39,6 +47,8 @@ public class ProgressBar : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         permanentDisplayProgress = false;
         if (progressText != null)
             progressText.gameObject.SetActive(false);
+        if (tooltipText != null)
+            tooltipText.gameObject.SetActive(false);
     }
 
     public void StopProgressBar()
@@ -89,16 +99,19 @@ public class ProgressBar : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerEnter(PointerEventData eventData)
     {
         isHovered = true;
-        if (progressText == null) return;
-        progressText.gameObject.SetActive(true);
+        if (progressText != null && !string.IsNullOrEmpty(progressText.text))
+            progressText.gameObject.SetActive(true);
+        if (tooltipText != null && !string.IsNullOrEmpty(tooltipText.text))
+            tooltipText.gameObject.SetActive(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         isHovered = false;
-        if (progressText == null) return;
-        if (!permanentDisplayProgress)
+        if (progressText != null && !permanentDisplayProgress)
             progressText.gameObject.SetActive(false);
+        if (tooltipText != null && !permanentDisplayProgress)
+            tooltipText.gameObject.SetActive(false);
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -110,7 +123,10 @@ public class ProgressBar : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rt, eventData.position, eventData.pressEventCamera, out Vector2 localPoint))
             {
                 permanentDisplayProgress = !permanentDisplayProgress;
-                progressText.gameObject.SetActive(permanentDisplayProgress);
+                if (progressText != null)
+                    progressText.gameObject.SetActive(permanentDisplayProgress);
+                if (tooltipText != null)
+                    tooltipText.gameObject.SetActive(permanentDisplayProgress);
             }
         }
     }

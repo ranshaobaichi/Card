@@ -84,7 +84,7 @@ public class TooltipText : MonoBehaviour
 
     private IEnumerator Disappear(float appear, float duration)
     {
-        yield return new WaitForSeconds(appear);
+        yield return new WaitForSecondsRealtime(appear);
         float alpha = tooltipText.color.a;
         float elapsed = 0f;
         while (elapsed < duration)

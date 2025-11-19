@@ -87,6 +87,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     public GameObject craftTooltipPanel;
     public Text craftTooltipNameText;
     public Text asInputText, asOutputText;
+    public static GameObject activeCraftTooltipPanel = null;
 
     [Header("卡牌设置")]
     public CardDescription cardDescription;
@@ -176,8 +177,43 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
                 if (drop.cardDescription == cardDescription)
                 {
                     output += $"- {recipe.recipeName}\n";
+                    break;
                 }
-                break;
+            }
+        }
+
+        foreach (var (eventCardType, attr) in DataBaseManager.Instance.GetAllEventUIAttributes())
+        {
+            // as input
+            bool asInputFinded = false;
+            foreach (var option in attr.options)
+            {
+                foreach (var cost in option.cost.cardsCost)
+                {
+                    if (cost == cardDescription)
+                    {
+                        output += $"- {eventCardType}事件\n";
+                        asInputFinded = true;
+                        break;
+                    }
+                }
+                if (asInputFinded) break;
+            }
+
+            // as output
+            bool asOutputFinded = false;
+            foreach (var option in attr.options)
+            {
+                foreach (var reward in option.rewards)
+                {
+                    if (reward.cardDescription == cardDescription)
+                    {
+                        output += $"- {eventCardType}事件\n";
+                        asOutputFinded = true;
+                        break;
+                    }
+                }
+                if (asOutputFinded) break;
             }
         }
         asInputText.text = input == "" ? "无" : input.TrimEnd('\n');
@@ -228,8 +264,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         {
             // Debug.Log($"Card {cardDescription} reached target position.");
             transform.position = targetPosition;
-            isMoving = false;
-            cardImage.raycastTarget = true;
+            ChangeMovingState(false);
         }
     }
 
@@ -335,6 +370,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
             setShadow();
             // Debug.Log($"Card {cardDescription} stopped moving.");
             isMoving = false;
+            cardImage.raycastTarget = true;
         }
     }
 
@@ -438,6 +474,11 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         {
             case CardType.Resources:
                 craftTooltipPanel.SetActive(true);
+                if (activeCraftTooltipPanel != null && activeCraftTooltipPanel != craftTooltipPanel)
+                {
+                    activeCraftTooltipPanel.SetActive(false);
+                }
+                activeCraftTooltipPanel = craftTooltipPanel;
                 if (firstShow)
                 {
                     firstShow = false;
@@ -465,7 +506,8 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         var eventUIAttribute = DataBaseManager.Instance.GetEventUIAttribute(cardDescription.eventCardType) ?? default;
         cardSlot.StartProgressBar(eventUIAttribute.options[optionIndex].cost.timeCost, () => {
             OnEndEvent(eventUI);
-        });
+        },
+        tooltipText: cardDescription.ToString());
         cardSlot.progressBar.SetProgressValue(progress);
     }
     public void EndEvent()

@@ -52,4 +52,19 @@ public class ChangeButtonSprites : MonoBehaviour, IPointerDownHandler, IPointerU
             }
         }
     }
+
+    public void ChangeButtonState()
+    {
+        if (button != null && button.interactable)
+        {
+            if (changeType == ChangeType.改变按下图标)
+            {
+                button.image.sprite = normalSprite;
+            }
+            else if (changeType == ChangeType.切换图标)
+            {
+                button.image.sprite = button.image.sprite == normalSprite ? pressedSprite : normalSprite;
+            }
+        }
+    }
 }

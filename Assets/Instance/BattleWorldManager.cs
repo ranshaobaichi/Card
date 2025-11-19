@@ -352,7 +352,8 @@ public class BattleWorldManager : MonoBehaviour
     public void AddBattleEquipment(B_Equipment equipment)
     {
         var equipmentSlot = Instantiate(EquipmentSlotPrefab, EquipmentAreaContent.transform);
-        equipment.transform.SetParent(equipmentSlot.transform, false);
+        equipment.transform.SetParent(equipmentSlot.transform);
+        equipment.transform.position = equipmentSlot.transform.position;
         equipment.equipmentSlot = equipmentSlot;
     }
 

@@ -71,8 +71,8 @@ public class HexNodeManager : MonoBehaviour
             to.occupant = obj;
             to.walkable = false;
             // TODO: Add some animation here
-            obj.transform.SetParent(to.transform, false);
-            obj.transform.position = new Vector3(to.transform.position.x, to.transform.position.y, obj.transform.position.z);
+            obj.transform.SetParent(to.transform);
+            obj.transform.position = new Vector3(to.transform.position.x, to.transform.position.y, 0f);
         }
         // Debug.Log($"Moved object {obj.name} to node at position {to}");
     }

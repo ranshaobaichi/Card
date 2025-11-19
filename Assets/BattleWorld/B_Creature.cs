@@ -69,8 +69,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public List<AttackEffetct> attackEffetcts = new List<AttackEffetct>();
     public B_Equipment equipment;
 
-    private Vector2 oriPosition;
-    private GameObject oriParent;
+    private HexNode oriHexNode;
     private bool isDragging = false;
     
     void Awake()
@@ -371,8 +370,8 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             return;
         }
         image.raycastTarget = false;
-        oriPosition = transform.position;
-        oriParent = transform.parent.gameObject;
+        oriHexNode = hexNode;
+        HexNodeManager.MoveObject(this, hexNode, null);
         transform.SetParent(BattleWorldManager.Instance.DraggingSlot, false);
         displayCard.SetOnlyDisplayIllustration(false);
         isDragging = true;
@@ -414,15 +413,29 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             {
                 Debug.Log("Dropped on Preparation Area");
                 succPut = true;
-                transform.SetParent(BattleWorldManager.Instance.PreparationAreaContent.transform, false);
+                transform.SetParent(BattleWorldManager.Instance.PreparationAreaContent.transform);
                 HexNodeManager.MoveObject(this, hexNode, null);
+                RectTransform rectTransform = GetComponent<RectTransform>();
+                Vector3 localPos = rectTransform.position;
+                localPos.z = 0f;
+                rectTransform.position = localPos;
             }
         }
 
         if (!succPut)
         {
-            transform.SetParent(oriParent.transform, false);
-            transform.position = oriPosition;
+            if (oriHexNode != null)
+            {
+                HexNodeManager.MoveObject(this, hexNode, oriHexNode);
+            }
+            else
+            {
+                transform.SetParent(BattleWorldManager.Instance.PreparationAreaContent.transform);
+                RectTransform rectTransform = GetComponent<RectTransform>();
+                Vector3 localPos = rectTransform.position;
+                localPos.z = 0f;
+                rectTransform.position = localPos;
+            }
         }
 
         if (inBattle)

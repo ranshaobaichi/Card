@@ -66,22 +66,22 @@ public class CraftTableDB : ScriptableObject
     {
         if (fromList == null)
             fromList = recipeList;
+        List<(Recipe, List<int>)> matchedRecipes = new List<(Recipe, List<int>)>();
         foreach (var recipe in fromList)
         {
             var cardDescs = inputCards.Select(card => card.cardDescription).ToList();
             var usedCardIndices = CanCraftRecipeWithIndices(recipe, cardDescs);
-
             if (usedCardIndices != null)
             {
-                // 根据索引创建使用的卡牌列表
-                List<Card> usedCards = new List<Card>();
-                foreach (var index in usedCardIndices)
-                {
-                    usedCards.Add(inputCards[index]);
-                }
-
-                return (usedCards, recipe);
+                matchedRecipes.Add((recipe, usedCardIndices));
             }
+        }
+
+        if (matchedRecipes.Count > 0)
+        {
+            var (bestRecipe, usedIndices) = matchedRecipes.OrderByDescending(r => r.Item1.inputCards.Count).First();
+            List<Card> usedCards = usedIndices.Select(index => inputCards[index]).ToList();
+            return (usedCards, bestRecipe);
         }
         return null;
     }

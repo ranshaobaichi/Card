@@ -174,7 +174,7 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 16
+          resourceCardType: 17
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -214,7 +214,7 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 16
+          resourceCardType: 17
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -254,7 +254,7 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 16
+          resourceCardType: 17
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -294,7 +294,7 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 16
+          resourceCardType: 17
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -334,7 +334,7 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 16
+          resourceCardType: 17
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -374,7 +374,7 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 16
+          resourceCardType: 17
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -414,7 +414,7 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 16
+          resourceCardType: 17
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -454,7 +454,7 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 16
+          resourceCardType: 17
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -494,14 +494,14 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 23
+          resourceCardType: 21
           creatureCardType: 0
           eventCardType: 0
         dropCount: 2
         dropWeight: 10
       - cardDescription:
           cardType: 1
-          resourceCardType: 23
+          resourceCardType: 21
           creatureCardType: 0
           eventCardType: 0
         dropCount: 2
@@ -541,14 +541,14 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 23
+          resourceCardType: 21
           creatureCardType: 0
           eventCardType: 0
         dropCount: 2
         dropWeight: 10
       - cardDescription:
           cardType: 1
-          resourceCardType: 23
+          resourceCardType: 21
           creatureCardType: 0
           eventCardType: 0
         dropCount: 2
@@ -588,7 +588,7 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 16
+          resourceCardType: 17
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -628,7 +628,7 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 16
+          resourceCardType: 17
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -668,7 +668,7 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 16
+          resourceCardType: 17
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -708,7 +708,7 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 16
+          resourceCardType: 17
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -748,21 +748,21 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 16
+          resourceCardType: 17
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
         dropWeight: 4
       - cardDescription:
           cardType: 1
-          resourceCardType: 53
+          resourceCardType: 54
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
         dropWeight: 3
       - cardDescription:
           cardType: 1
-          resourceCardType: 29
+          resourceCardType: 19
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -802,21 +802,21 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 16
+          resourceCardType: 17
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
         dropWeight: 5
       - cardDescription:
           cardType: 1
-          resourceCardType: 53
+          resourceCardType: 54
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
         dropWeight: 2
       - cardDescription:
           cardType: 1
-          resourceCardType: 29
+          resourceCardType: 19
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -856,28 +856,21 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 16
+          resourceCardType: 17
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
         dropWeight: 4
       - cardDescription:
           cardType: 1
-          resourceCardType: 4
+          resourceCardType: 53
           creatureCardType: 0
           eventCardType: 0
-        dropCount: 2
+        dropCount: 1
         dropWeight: 4
       - cardDescription:
           cardType: 1
-          resourceCardType: 4
-          creatureCardType: 0
-          eventCardType: 0
-        dropCount: 2
-        dropWeight: 4
-      - cardDescription:
-          cardType: 1
-          resourceCardType: 29
+          resourceCardType: 19
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -917,24 +910,17 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 54
+          resourceCardType: 16
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
         dropWeight: 4
       - cardDescription:
           cardType: 1
-          resourceCardType: 4
+          resourceCardType: 53
           creatureCardType: 0
           eventCardType: 0
-        dropCount: 2
-        dropWeight: 6
-      - cardDescription:
-          cardType: 1
-          resourceCardType: 4
-          creatureCardType: 0
-          eventCardType: 0
-        dropCount: 2
+        dropCount: 1
         dropWeight: 6
       traits: 
     levelUpAttributes:
@@ -971,7 +957,7 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 50
+          resourceCardType: 52
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -1011,7 +997,7 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 45
+          resourceCardType: 51
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -1051,7 +1037,7 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 37
+          resourceCardType: 14
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -1091,21 +1077,21 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 16
+          resourceCardType: 17
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
         dropWeight: 5
       - cardDescription:
           cardType: 1
-          resourceCardType: 37
+          resourceCardType: 14
           creatureCardType: 0
           eventCardType: 0
         dropCount: 2
         dropWeight: 5
       - cardDescription:
           cardType: 1
-          resourceCardType: 37
+          resourceCardType: 14
           creatureCardType: 0
           eventCardType: 0
         dropCount: 2
@@ -1145,70 +1131,70 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 29
+          resourceCardType: 19
           creatureCardType: 0
           eventCardType: 0
         dropCount: 4
         dropWeight: 5
       - cardDescription:
           cardType: 1
-          resourceCardType: 29
+          resourceCardType: 19
           creatureCardType: 0
           eventCardType: 0
         dropCount: 4
         dropWeight: 5
       - cardDescription:
           cardType: 1
-          resourceCardType: 29
+          resourceCardType: 19
           creatureCardType: 0
           eventCardType: 0
         dropCount: 4
         dropWeight: 5
       - cardDescription:
           cardType: 1
-          resourceCardType: 29
+          resourceCardType: 19
           creatureCardType: 0
           eventCardType: 0
         dropCount: 4
         dropWeight: 5
       - cardDescription:
           cardType: 1
-          resourceCardType: 37
+          resourceCardType: 14
           creatureCardType: 0
           eventCardType: 0
         dropCount: 6
         dropWeight: 5
       - cardDescription:
           cardType: 1
-          resourceCardType: 37
+          resourceCardType: 14
           creatureCardType: 0
           eventCardType: 0
         dropCount: 6
         dropWeight: 5
       - cardDescription:
           cardType: 1
-          resourceCardType: 37
+          resourceCardType: 14
           creatureCardType: 0
           eventCardType: 0
         dropCount: 6
         dropWeight: 5
       - cardDescription:
           cardType: 1
-          resourceCardType: 37
+          resourceCardType: 14
           creatureCardType: 0
           eventCardType: 0
         dropCount: 6
         dropWeight: 5
       - cardDescription:
           cardType: 1
-          resourceCardType: 37
+          resourceCardType: 14
           creatureCardType: 0
           eventCardType: 0
         dropCount: 6
         dropWeight: 5
       - cardDescription:
           cardType: 1
-          resourceCardType: 37
+          resourceCardType: 14
           creatureCardType: 0
           eventCardType: 0
         dropCount: 6
@@ -1248,14 +1234,14 @@ MonoBehaviour:
       dropItem:
       - cardDescription:
           cardType: 1
-          resourceCardType: 29
+          resourceCardType: 19
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
         dropWeight: 8
       - cardDescription:
           cardType: 1
-          resourceCardType: 4
+          resourceCardType: 53
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -1280,26 +1266,26 @@ MonoBehaviour:
     priceValue: 1
   - resourceCardType: 2
     resourceClassification: 3
-    durability: 1
+    durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 3
-    resourceClassification: 1
-    durability: 1
-    satietyValue: 1
+    resourceClassification: 3
+    durability: 999
+    satietyValue: 0
     priceValue: 1
   - resourceCardType: 4
-    resourceClassification: 4
-    durability: 1
+    resourceClassification: 3
+    durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 5
-    resourceClassification: 4
-    durability: 1
+    resourceClassification: 3
+    durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 6
-    resourceClassification: 4
+    resourceClassification: 3
     durability: 1
     satietyValue: 0
     priceValue: 1
@@ -1310,33 +1296,33 @@ MonoBehaviour:
     priceValue: 1
   - resourceCardType: 8
     resourceClassification: 3
-    durability: 3
+    durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 9
-    resourceClassification: 3
-    durability: 3
-    satietyValue: 0
+    resourceClassification: 1
+    durability: 1
+    satietyValue: 1
     priceValue: 1
   - resourceCardType: 10
-    resourceClassification: 4
+    resourceClassification: 1
     durability: 1
-    satietyValue: 0
+    satietyValue: 1
     priceValue: 1
   - resourceCardType: 11
-    resourceClassification: 4
+    resourceClassification: 1
     durability: 1
-    satietyValue: 0
+    satietyValue: 1
     priceValue: 1
   - resourceCardType: 12
-    resourceClassification: 4
+    resourceClassification: 1
     durability: 1
-    satietyValue: 0
+    satietyValue: 3
     priceValue: 1
   - resourceCardType: 13
     resourceClassification: 1
     durability: 1
-    satietyValue: 2
+    satietyValue: 3
     priceValue: 1
   - resourceCardType: 14
     resourceClassification: 1
@@ -1345,13 +1331,13 @@ MonoBehaviour:
     priceValue: 1
   - resourceCardType: 15
     resourceClassification: 1
-    durability: 3
-    satietyValue: 1
+    durability: 1
+    satietyValue: 3
     priceValue: 1
   - resourceCardType: 16
-    resourceClassification: 4
+    resourceClassification: 1
     durability: 1
-    satietyValue: 0
+    satietyValue: 3
     priceValue: 1
   - resourceCardType: 17
     resourceClassification: 4
@@ -1365,12 +1351,12 @@ MonoBehaviour:
     priceValue: 1
   - resourceCardType: 19
     resourceClassification: 4
-    durability: 999
+    durability: 1
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 20
     resourceClassification: 4
-    durability: 999
+    durability: 1
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 21
@@ -1389,28 +1375,28 @@ MonoBehaviour:
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 24
-    resourceClassification: 2
-    durability: 999
+    resourceClassification: 4
+    durability: 1
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 25
-    resourceClassification: 2
+    resourceClassification: 4
     durability: 1
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 26
-    resourceClassification: 2
-    durability: 999
+    resourceClassification: 3
+    durability: 3
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 27
     resourceClassification: 3
-    durability: 999
+    durability: 3
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 28
-    resourceClassification: 3
-    durability: 999
+    resourceClassification: 4
+    durability: 1
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 29
@@ -1419,8 +1405,8 @@ MonoBehaviour:
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 30
-    resourceClassification: 2
-    durability: 999
+    resourceClassification: 4
+    durability: 1
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 31
@@ -1439,8 +1425,8 @@ MonoBehaviour:
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 34
-    resourceClassification: 4
-    durability: 1
+    resourceClassification: 3
+    durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 35
@@ -1454,28 +1440,28 @@ MonoBehaviour:
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 37
-    resourceClassification: 1
-    durability: 2
-    satietyValue: 2
+    resourceClassification: 4
+    durability: 999
+    satietyValue: 0
     priceValue: 1
   - resourceCardType: 38
-    resourceClassification: 3
+    resourceClassification: 4
     durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 39
-    resourceClassification: 2
+    resourceClassification: 4
     durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 40
-    resourceClassification: 2
+    resourceClassification: 4
     durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 41
     resourceClassification: 2
-    durability: 999
+    durability: 1
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 42
@@ -1499,38 +1485,38 @@ MonoBehaviour:
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 46
-    resourceClassification: 3
+    resourceClassification: 2
     durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 47
-    resourceClassification: 3
+    resourceClassification: 2
     durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 48
-    resourceClassification: 3
+    resourceClassification: 2
     durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 49
-    resourceClassification: 4
-    durability: 1
+    resourceClassification: 2
+    durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 50
-    resourceClassification: 4
-    durability: 1
+    resourceClassification: 2
+    durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 51
-    resourceClassification: 4
+    resourceClassification: 2
     durability: 999
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 52
     resourceClassification: 4
-    durability: 999
+    durability: 1
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 53
@@ -1539,19 +1525,19 @@ MonoBehaviour:
     satietyValue: 0
     priceValue: 1
   - resourceCardType: 54
-    resourceClassification: 1
+    resourceClassification: 4
     durability: 1
-    satietyValue: 3
+    satietyValue: 0
     priceValue: 1
   equipmentCardAttributes:
-  - equipmentCardType: 26
-  - equipmentCardType: 24
-  - equipmentCardType: 30
-  - equipmentCardType: 25
-  - equipmentCardType: 39
-  - equipmentCardType: 40
-  - equipmentCardType: 41
   - equipmentCardType: 42
   - equipmentCardType: 43
   - equipmentCardType: 44
+  - equipmentCardType: 41
   - equipmentCardType: 45
+  - equipmentCardType: 46
+  - equipmentCardType: 47
+  - equipmentCardType: 48
+  - equipmentCardType: 49
+  - equipmentCardType: 50
+  - equipmentCardType: 51

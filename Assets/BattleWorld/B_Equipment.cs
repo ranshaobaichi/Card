@@ -8,42 +8,36 @@ using static CardAttributeDB;
 public class B_Equipment : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     public Image image;
-    [Header("卡牌图像列表 - 顺序为：类型、背景、顶部装饰、立绘、底部装饰、侧边装饰")]
-    public List<Image> cardImages = new List<Image>();
-    public Text nameText;
     public EquipmentCardAttribute equipmentAttribute;
     public GameObject equipmentSlot;
     public B_Creature ownerCreature;
     private B_Creature oriCreature;
     public long cardID;
+    private bool dragging = false;
 
     public void Init(long cardID, GameObject equipmentSlot)
     {
         this.equipmentSlot = equipmentSlot;
-        var attr = CardManager.Instance.GetCardAttribute<EquipmentCardAttribute>(cardID);
-        equipmentAttribute = attr;
-
+        var attr = CardManager.Instance.GetCardAttribute<ResourceCardAttribute>(cardID);
+        equipmentAttribute = CardManager.Instance.GetEquipmentCardAttributes()[cardID];
+        
         // Set the card images
-        var succ = CardManager.Instance.TryGetCardIconAttribute(CardType.Resources, out var cardIconAttrribute, ResourceCardClassification.Equipment);
-        if (succ)
+        if (CardManager.Instance.TryGetResourcesCardIcon(attr.resourceCardType, out var illustration))
         {
-            nameText.text = equipmentAttribute.equipmentCardType.ToString();
-            cardImages[0].sprite = cardIconAttrribute.type;
-            cardImages[1].sprite = cardIconAttrribute.background;
-            cardImages[2].sprite = cardIconAttrribute.top;
-            cardImages[3].sprite = cardIconAttrribute.illustration;
-            cardImages[4].sprite = cardIconAttrribute.bottom;
-            cardImages[5].sprite = cardIconAttrribute.side;
+            image.sprite = illustration.icon;
         }
         else
         {
             Debug.LogError($"Card icon attribute not found for card ID {cardID} of type {CardType.Creatures}.");
         }
-
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (BattleWorldManager.Instance.InBattle)
+            return;
+        
+        dragging = true;
         transform.SetParent(BattleWorldManager.Instance.DraggingSlot);
         image.raycastTarget = false;
 
@@ -62,11 +56,14 @@ public class B_Equipment : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (!dragging) return;
         transform.position = Input.mousePosition;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (!dragging) return;
+        dragging = false;
         bool hitObj = eventData.pointerCurrentRaycast.gameObject != null;
         if (oriCreature != null)
         {

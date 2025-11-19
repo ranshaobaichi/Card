@@ -24,4 +24,5 @@ Assets/StreamingAssets/*.unitypackage
 *.opendb
 *.VC.db
 *.ide
+Assets/TODO.md
 sysinfo.txt

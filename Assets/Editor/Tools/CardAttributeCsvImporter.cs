@@ -149,6 +149,9 @@ public class CardAttributeDBCsvImporter : EditorWindow
             int successCount = 0;
             int valNums = 26;
 
+            // 收集已导入的类型
+            HashSet<CreatureCardType> importedTypes = new HashSet<CreatureCardType>();
+
             // 从第二行开始处理数据
             for (int i = 1; i < lines.Length; i++)
             {
@@ -395,10 +398,11 @@ public class CardAttributeDBCsvImporter : EditorWindow
                     if (valCount >= valNums)
                     {
                         successCount++;
+                        importedTypes.Add(creatureType);
                         Debug.Log($"导入生物卡属性: {creatureType}");
                     }
                     else
-                        errorList.Add($"第{i + 1}行: 生物卡 {creatureType} 属性值不完整，仅设置了 {valCount}/{valNums} 个属性值");
+                        errorList.Add($"第{i + 1}行: 生物卡 {creatureType} 属性值不完整,仅设置了 {valCount}/{valNums} 个属性值");
                 }
                 catch (Exception ex)
                 {
@@ -409,6 +413,9 @@ public class CardAttributeDBCsvImporter : EditorWindow
 
             EditorUtility.SetDirty(cardAttributeDB);
             AssetDatabase.SaveAssets();
+
+            // 输出未导入的生物卡类型
+            LogMissingTypes(importedTypes, "生物卡");
 
             DisplayResults("生物卡", successCount);
         }
@@ -475,6 +482,9 @@ public class CardAttributeDBCsvImporter : EditorWindow
             errorList.Clear();
 
             int successCount = 0;
+
+            // 收集已导入的类型
+            HashSet<ResourceCardType> importedTypes = new HashSet<ResourceCardType>();
 
             // 从第二行开始处理数据
             for (int i = 1; i < lines.Length; i++)
@@ -556,6 +566,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
 
                         // 添加到字典
                         cardAttributeDB.resourceCardAttributes.Add(attribute);
+                        importedTypes.Add(resourceType);
                         successCount++;
                         // if (classification != ResourceCardClassification.Food)
                         //     Debug.Log($"成功导入资源卡属性: {resourceType} 分类: {attribute.resourceClassification} 耐久值: {attribute.durability}");
@@ -576,6 +587,9 @@ public class CardAttributeDBCsvImporter : EditorWindow
 
             EditorUtility.SetDirty(cardAttributeDB);
             AssetDatabase.SaveAssets();
+
+            // 输出未导入的资源卡类型
+            LogMissingTypes(importedTypes, "资源卡");
 
             DisplayResults("资源卡", successCount);
         }
@@ -635,6 +649,9 @@ public class CardAttributeDBCsvImporter : EditorWindow
             errorList.Clear();
 
             int successCount = 0;
+
+            // 收集已导入的类型
+            HashSet<ResourceCardType> importedTypes = new HashSet<ResourceCardType>();
 
             // 从第二行开始处理数据
             for (int i = 1; i < lines.Length; i++)
@@ -725,6 +742,7 @@ public class CardAttributeDBCsvImporter : EditorWindow
 
                     // 添加到列表
                     cardAttributeDB.equipmentCardAttributes.Add(attribute);
+                    importedTypes.Add(equipmentType);
                     successCount++;
                     Debug.Log($"导入装备卡属性: {equipmentType}");
                 }
@@ -737,6 +755,9 @@ public class CardAttributeDBCsvImporter : EditorWindow
 
             EditorUtility.SetDirty(cardAttributeDB);
             AssetDatabase.SaveAssets();
+
+            // 输出未导入的装备卡类型
+            LogMissingTypes(importedTypes, "装备卡");
 
             DisplayResults("装备卡", successCount);
         }
@@ -889,5 +910,26 @@ public class CardAttributeDBCsvImporter : EditorWindow
         }
 
         return cards;
+    }
+
+    // 新增方法:输出未导入的卡牌类型
+    private void LogMissingTypes<T>(HashSet<T> importedTypes, string cardTypeName) where T : Enum
+    {
+        var allTypes = Enum.GetValues(typeof(T)).Cast<T>();
+        var missingTypes = allTypes.Where(t => !importedTypes.Contains(t)).ToList();
+
+        if (missingTypes.Count > 0)
+        {
+            StringBuilder sb = new StringBuilder($"以下{cardTypeName}类型未导入:\n");
+            foreach (var type in missingTypes)
+            {
+                sb.AppendLine($"  - {type}");
+            }
+            Debug.LogWarning(sb.ToString());
+        }
+        else
+        {
+            Debug.Log($"所有{cardTypeName}类型均已导入。");
+        }
     }
 }

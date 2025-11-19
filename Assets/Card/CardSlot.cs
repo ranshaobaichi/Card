@@ -391,7 +391,7 @@ public class CardSlot : MonoBehaviour
                                     currentWorkingCreatureCards.Max(card => CardManager.Instance.GetWorkEfficiencyValue(card)) :
                                     CardManager.Instance.GetWorkEfficiencyValue(Category.Production.WorkEfficiencyType.Normal);
 
-        StartProgressBar(currentRecipe.workload / workloadEfficiency, OnEndProduct);
+        StartProgressBar(currentRecipe.workload / workloadEfficiency, OnEndProduct, tooltipText: currentRecipe.recipeName);
         CardManager.Instance.DisplayTooltip(
             $"开始生产配方：{currentRecipe.recipeName}\n" +
             $"预计工作时间：{(currentRecipe.workload / workloadEfficiency):F2} 秒\n",
@@ -466,7 +466,7 @@ public class CardSlot : MonoBehaviour
             EndProduction();
     }
 
-    public void StartProgressBar(float totalTime, Action onComplete, float progress = 0f)
+    public void StartProgressBar(float totalTime, Action onComplete, float progress = 0f, string tooltipText = "")
     {
         if (progressBar == null)
         {
@@ -478,6 +478,10 @@ public class CardSlot : MonoBehaviour
             Debug.Log($"Total time: {totalTime} too short, completing immediately.");
             onComplete?.Invoke();
             return;
+        }
+        if (!string.IsNullOrEmpty(tooltipText) && progressBar != null)
+        {
+            progressBar.SetTooltipText(tooltipText);
         }
         progressBar.StartProgressBar(totalTime, onComplete, progress);
     }
