@@ -1,21 +1,21 @@
 {
-    "curCardID": 10,
-    "curCardSlotID": 39,
-    "curGameTime": 45.813232421875,
+    "curCardID": 12,
+    "curCardSlotID": 47,
+    "curGameTime": 62.50336837768555,
     "currentWaveIndex": 1,
     "allCardData": [
         {
-            "cardID": 8,
+            "cardID": 10,
             "cardDescription": {
                 "cardType": 2,
                 "resourceCardType": 0,
                 "creatureCardType": 24,
                 "eventCardType": 0
             },
-            "attribute": "{\"levelUpExpIncreasePercent\":99999,\"creatureCardType\":24,\"basicAttributes\":{\"workEfficiencyAttributes\":{\"craftWorkEfficiency\":2,\"exploreWorkEfficiency\":2,\"interactWorkEfficiency\":2},\"EXP\":0,\"level\":1,\"satiety\":0,\"health\":40.0,\"attackPower\":6.0,\"spellPower\":15.0,\"normalAttackDamageType\":2,\"armor\":80.0,\"spellResistance\":80.0,\"moveSpeed\":18,\"dodgeRate\":0.05000000074505806,\"attackSpeed\":6,\"attackRange\":1,\"dropItem\":[],\"traits\":[2,8]},\"levelUpAttributes\":{\"satietyGrowth\":0,\"healthGrowth\":0.0,\"attackPowerGrowth\":0.0,\"spellPowerGrowth\":0.0,\"armorGrowth\":0.0,\"spellResistanceGrowth\":0.0,\"moveSpeedGrowth\":0,\"dodgeRateGrowth\":0.0,\"attackSpeedGrowth\":0,\"attackRangeGrowth\":0}}"
+            "attribute": "{\"levelUpExpIncreasePercent\":99999,\"creatureCardType\":24,\"basicAttributes\":{\"workEfficiencyAttributes\":{\"craftWorkEfficiency\":2,\"exploreWorkEfficiency\":2,\"interactWorkEfficiency\":2},\"EXP\":0,\"level\":1,\"satiety\":1,\"health\":40.0,\"attackPower\":6.0,\"spellPower\":15.0,\"normalAttackDamageType\":2,\"armor\":80.0,\"spellResistance\":80.0,\"moveSpeed\":18,\"dodgeRate\":0.05000000074505806,\"attackSpeed\":6,\"attackRange\":1,\"dropItem\":[],\"traits\":[4,5]},\"levelUpAttributes\":{\"satietyGrowth\":0,\"healthGrowth\":0.0,\"attackPowerGrowth\":0.0,\"spellPowerGrowth\":0.0,\"armorGrowth\":0.0,\"spellResistanceGrowth\":0.0,\"moveSpeedGrowth\":0,\"dodgeRateGrowth\":0.0,\"attackSpeedGrowth\":0,\"attackRangeGrowth\":0}}"
         },
         {
-            "cardID": 9,
+            "cardID": 11,
             "cardDescription": {
                 "cardType": 3,
                 "resourceCardType": 0,
@@ -28,23 +28,23 @@
     "allCardSlotData": [
         {
             "cardIDs": [
-                8
+                10
             ],
             "position": {
-                "x": 795.9525756835938,
-                "y": 560.0582885742188
+                "x": 738.9559326171875,
+                "y": 469.9598693847656
             }
         },
         {
             "cardIDs": [
-                9
+                11
             ],
             "position": {
-                "x": 1146.9710693359375,
-                "y": 562.9237060546875
+                "x": 1087.22900390625,
+                "y": 466.10443115234377
             }
         }
     ],
-    "musicVolume": 0.7,
-    "fxVolume": 0.7
+    "musicVolume": 0.699999988079071,
+    "fxVolume": 0.699999988079071
 }

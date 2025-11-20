@@ -41,14 +41,14 @@ MonoBehaviour:
         dropWeight: 1
       - cardDescription:
           cardType: 1
-          resourceCardType: 2
+          resourceCardType: 6
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
         dropWeight: 1
       - cardDescription:
           cardType: 1
-          resourceCardType: 3
+          resourceCardType: 9
           creatureCardType: 0
           eventCardType: 0
         dropCount: 2
@@ -74,14 +74,14 @@ MonoBehaviour:
       rewards:
       - cardDescription:
           cardType: 1
-          resourceCardType: 7
+          resourceCardType: 2
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
         dropWeight: 1
       - cardDescription:
           cardType: 1
-          resourceCardType: 38
+          resourceCardType: 5
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -97,15 +97,15 @@ MonoBehaviour:
           creatureCardType: 24
           eventCardType: 0
         - cardType: 1
-          resourceCardType: 29
+          resourceCardType: 19
           creatureCardType: 0
           eventCardType: 0
         - cardType: 1
-          resourceCardType: 29
+          resourceCardType: 19
           creatureCardType: 0
           eventCardType: 0
         - cardType: 1
-          resourceCardType: 29
+          resourceCardType: 19
           creatureCardType: 0
           eventCardType: 0
         timeCost: 80

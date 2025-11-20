@@ -69,6 +69,8 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     private CardSlot movingCardSlot;
     private GameObject canvas;
     public GameObject cardSlotPrefab;
+    public bool isPopingOut = false;
+    public Vector3 popOutTargetPosition;
 
     [Header("拖拽与对齐设置")]
     [Tooltip("卡牌跟随速度")] public float followSpeed;
@@ -235,6 +237,17 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
             bool isPointerOver = RectTransformUtility.RectangleContainsScreenPoint(rect, Input.mousePosition, cam);
             if (!isPointerOver) craftTooltipPanel.SetActive(false);
         }
+
+        if (isPopingOut)
+        {
+            var pos = Vector3.Lerp(transform.position, popOutTargetPosition, Time.unscaledDeltaTime * followSpeed);
+            transform.position = pos;
+            if (Vector3.Distance(transform.position, popOutTargetPosition) <= 2f)
+            {
+                transform.position = popOutTargetPosition;
+                isPopingOut = false;
+            }
+        }
     }
 
     void OnEnable()
@@ -272,6 +285,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     {
         if (canBeDragged == false || CardManager.Instance.isDragging == true || isMoving == true)
             return;
+        isPopingOut = false;
         // Set the self state and global dragging state
         cardImage.raycastTarget = false;
         CardManager.Instance.draggingCard = this;
@@ -314,6 +328,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
             if (hitObject.CompareTag("Card"))
             {
+                SoundManager.Instance.PlayPutCardDown();
                 endOnCard = true;
                 // Debug.Log($"Hit card: {hitObject.name}");
                 Card card = hitObject.GetComponent<Card>();

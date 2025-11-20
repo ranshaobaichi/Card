@@ -122,7 +122,7 @@ public class CardManager : MonoBehaviour
                 CardType.Resources => JsonUtility.FromJson<ResourceCardAttribute>(cardData.attribute),
                 _ => null,
             };
-            Card card = CreateCard(cardData.cardDescription, Vector2.zero, cardData.cardID, attribute);
+            Card card = CreateCard(cardData.cardDescription, Vector2.zero, cardData.cardID, attribute, false);
             tmpCardsDict[card.cardID] = card;
         }
 
@@ -176,7 +176,7 @@ public class CardManager : MonoBehaviour
                 _ => null,
             };
             if (attribute == null && cardData.cardDescription.cardType != CardType.Events) continue;
-            Card card = CreateCard(cardData.cardDescription, Vector2.zero, cardData.cardID, attribute);
+            Card card = CreateCard(cardData.cardDescription, Vector2.zero, cardData.cardID, attribute, false);
             tmpCardsDict[card.cardID] = card;
         }
 
@@ -198,7 +198,7 @@ public class CardManager : MonoBehaviour
             CardSlot rewardSlot = null;
             foreach (var cardDesc in battleReward)
             {
-                Card card = CreateCard(cardDesc);
+                Card card = CreateCard(cardDesc, randomPos: false);
                 if (rewardSlot == null)
                 {
                     rewardSlot = CreateCardSlot(card.transform.position);
@@ -249,7 +249,7 @@ public class CardManager : MonoBehaviour
         return newID % long.MaxValue;
     }
 
-    public Card CreateCard(Card.CardDescription cardDescription, Vector2 position = default, long cardID = -1, object attribute = null)
+    public Card CreateCard(Card.CardDescription cardDescription, Vector2 position = default, long cardID = -1, object attribute = null, bool randomPos = true)
     {
         if (!cardDescription.IsValid())
         {
@@ -257,7 +257,14 @@ public class CardManager : MonoBehaviour
             return null;
         }
         Card newCard = Instantiate(cardPrefab, position, Quaternion.identity).GetComponent<Card>();
+        SoundManager.Instance.PlayPopCards();
 
+        newCard.isPopingOut = randomPos;
+        if (randomPos)
+        {
+            Vector2 randomOffset = new Vector2(UnityEngine.Random.Range(-200f, 200f), UnityEngine.Random.Range(-200f, 200f));
+            newCard.popOutTargetPosition = position + randomOffset;
+        }
         // Set the basic attr
         if (cardID == -1) cardID = GetCardIdentityID();
         newCard.cardID = cardID;
@@ -273,7 +280,7 @@ public class CardManager : MonoBehaviour
 
         // Set the card images
         newCard.displayCard.Initialize(cardDescription);
-        
+
         onCardCreated?.Invoke(newCard);
         return newCard;
     }

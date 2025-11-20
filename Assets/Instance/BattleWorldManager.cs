@@ -27,8 +27,8 @@ public class BattleWorldManager : MonoBehaviour
     public float TickInterval = 1.0f;
     public static int currentWaveIndex = -1;
     public EnemyWaveData currentWaveData;
-    private List<CreatureCardType> testAddEnemyTypes = new List<CreatureCardType>();
-    private bool showFirstTimeBattleTutorial = true;
+    // private List<CreatureCardType> testAddEnemyTypes = new List<CreatureCardType>();
+    private static bool showFirstTimeBattleTutorial = true;
     
     [Header("Battle World Prefabs")]
     public GameObject BattleCreaturePrefab;
@@ -47,6 +47,7 @@ public class BattleWorldManager : MonoBehaviour
     public GameObject PlayerTraitGameobject;
     public GameObject EnemyTraitGameobject;
     public GameObject BattleTutorialPanel;
+    public GameObject FailedText;
     public Button StartBattleButton;
     [Header("Reward Panel")]
     public GameObject rewardPanel;
@@ -108,7 +109,7 @@ public class BattleWorldManager : MonoBehaviour
         if (lineUp == LineUp.Enemy)
         {
             enemyCreatures.Add(creature);
-            testAddEnemyTypes.Add(testCreatureCardType);
+            // testAddEnemyTypes.Add(testCreatureCardType);
         }
         else
         {
@@ -166,7 +167,7 @@ public class BattleWorldManager : MonoBehaviour
     void OnEnable()
     {
         traitAttributesDict = DataBaseManager.Instance.GetAllTraitAttributes();
-        testAddEnemyTypes.Clear();
+        // testAddEnemyTypes.Clear();
         // initialize wave index
         if (currentWaveIndex < 0)
         {
@@ -236,6 +237,15 @@ public class BattleWorldManager : MonoBehaviour
         if (InBattle && mannualTickControl && Input.GetKeyDown(KeyCode.Space))
         {
             InvokeTick();
+        }
+
+        if (InBattleCreatures.Count > 0)
+        {
+            StartBattleButton.interactable = true;
+        }
+        else
+        {
+            StartBattleButton.interactable = false;
         }
     }
 
@@ -483,7 +493,7 @@ public class BattleWorldManager : MonoBehaviour
             CardManager.Instance.battleReward.Clear();
             List<CreatureCardType> enemyTypes = new List<CreatureCardType>();
             enemyTypes.AddRange(currentWaveData.creatureType);
-            enemyTypes.AddRange(testAddEnemyTypes);
+            // enemyTypes.AddRange(testAddEnemyTypes);
             foreach (var creature in enemyTypes)
             {
                 Debug.Log($"BattleWorldManager: Processing drop for creature {creature}");
@@ -527,6 +537,7 @@ public class BattleWorldManager : MonoBehaviour
         else
         {
             Debug.Log("BattleWorldManager: Battle Lost!");
+            FailedText.SetActive(true);
         }
         InBattle = false;
         currentWaveIndex++;

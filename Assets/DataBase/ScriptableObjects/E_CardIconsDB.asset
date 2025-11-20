@@ -63,31 +63,61 @@ MonoBehaviour:
     side: {fileID: 21300000, guid: 9257f11516cabf54094b5e93bc337793, type: 3}
   cardIllustrations:
   - cardDescription: 2
-    illustration: {fileID: 21300000, guid: b51bed8707f85a14ba24c152bce1a230, type: 3}
+    illustration: {fileID: 984295304, guid: 4e28d69b74ea2924d9aa3634f0311b5d, type: 3}
+  - cardDescription: 3
+    illustration: {fileID: -1711958817, guid: 384c672291b35bf43929bd5cb07f8b4e, type: 3}
   - cardDescription: 4
-    illustration: {fileID: 21300000, guid: 08de8d27f3bf98d4aa5225ac464d3f8d, type: 3}
+    illustration: {fileID: 21300000, guid: 90840e3f55efc5044a3343b52b274737, type: 3}
   - cardDescription: 5
-    illustration: {fileID: 21300000, guid: 8dcfe5bec10f4c9438533b2f22340ffa, type: 3}
+    illustration: {fileID: 21300000, guid: 026a10bb05e4b0c4abfeea66c8b43431, type: 3}
   - cardDescription: 6
-    illustration: {fileID: 21300000, guid: 9eea50a08c5733c48b7bffd2de4319ae, type: 3}
+    illustration: {fileID: 21300000, guid: 2656c7ba0f15c4346be777f5cd207e52, type: 3}
   - cardDescription: 7
-    illustration: {fileID: 21300000, guid: 1c1a5748a1c398442b76fa0ddef656a9, type: 3}
+    illustration: {fileID: 21300000, guid: fbebd2ee63d546347a16e66a9e9735c5, type: 3}
   - cardDescription: 8
-    illustration: {fileID: 21300000, guid: 614437c55998cd14897257dbae0495f5, type: 3}
+    illustration: {fileID: 21300000, guid: a646d7dd7a34d2e4b8dc5daf0ed06ffa, type: 3}
   - cardDescription: 9
-    illustration: {fileID: 21300000, guid: 5a82dd2c26ea886438b3054c34f4e25d, type: 3}
+    illustration: {fileID: 21300000, guid: df86fa83ef9cb1e488e6b2f4672c8803, type: 3}
   - cardDescription: 10
-    illustration: {fileID: 21300000, guid: 44055d92804e2c74ba8f2af68c72fc88, type: 3}
+    illustration: {fileID: 21300000, guid: 9e0307fadc8c20e4e95364030f09d3cb, type: 3}
   - cardDescription: 11
-    illustration: {fileID: 21300000, guid: 39d9051f125965f4ebc147379bab1dc1, type: 3}
+    illustration: {fileID: 21300000, guid: c9584441a4451314495a9595fd03ca7f, type: 3}
   - cardDescription: 12
-    illustration: {fileID: 21300000, guid: 0b256211b221d7341bf17557245fd977, type: 3}
+    illustration: {fileID: 21300000, guid: 5be292c8ad79e6b4faccaa3f7cbcec25, type: 3}
   - cardDescription: 13
-    illustration: {fileID: 21300000, guid: 900164f3f48d1364ea6239c0a6cf35e4, type: 3}
+    illustration: {fileID: 21300000, guid: c3f34e92af74e7446bea72d6f36cc90d, type: 3}
   - cardDescription: 14
-    illustration: {fileID: 21300000, guid: f5b65d1a7fa10d64fb76eadf14613f04, type: 3}
+    illustration: {fileID: 21300000, guid: 31843a2b3eead0a4b901d4bce029f3a8, type: 3}
+  - cardDescription: 15
+    illustration: {fileID: 21300000, guid: 0e7da5cff5abb624c931087574ba01de, type: 3}
+  - cardDescription: 16
+    illustration: {fileID: 21300000, guid: 19d27445075409446a2e58095ed6a29a, type: 3}
   - cardDescription: 17
-    illustration: {fileID: 21300000, guid: de75e8d3ef36fa9438fd084d895e6e73, type: 3}
+    illustration: {fileID: 21300000, guid: da8d40931c4ba584481b5e24c4bc7809, type: 3}
+  - cardDescription: 18
+    illustration: {fileID: 21300000, guid: ec482cb1ecb5962448f21d2d894b7cdf, type: 3}
+  - cardDescription: 19
+    illustration: {fileID: 21300000, guid: 4df8ff158c3098243bca51a0b65a35a1, type: 3}
+  - cardDescription: 20
+    illustration: {fileID: 21300000, guid: 1f90852d95abd7d44992f4126c9289bf, type: 3}
+  - cardDescription: 21
+    illustration: {fileID: -635956552, guid: fad90f86c4dfe2a48bb7b71acfb1e136, type: 3}
+  - cardDescription: 22
+    illustration: {fileID: -1293188096, guid: a281a5d14b1b7e74b9b5b6f6ae1efa3c, type: 3}
+  - cardDescription: 23
+    illustration: {fileID: 964919116, guid: bb2b7be52d4acfb4d811bd0c1c7b3648, type: 3}
+  - cardDescription: 24
+    illustration: {fileID: 276396252, guid: 53c0b72a8c8f21f4a8b00e4960df8bc9, type: 3}
+  - cardDescription: 25
+    illustration: {fileID: 21300000, guid: 392f4ce404b70e745ad7c909743a9db8, type: 3}
+  - cardDescription: 26
+    illustration: {fileID: 21300000, guid: 141b3d086c1a8324aae53be9b6e604e4, type: 3}
+  - cardDescription: 27
+    illustration: {fileID: 21300000, guid: e820e74adfec0f44596e0f97b509c71a, type: 3}
+  - cardDescription: 28
+    illustration: {fileID: 21300000, guid: 92a11444e6acb014090d5cd85a412b26, type: 3}
+  - cardDescription: 29
+    illustration: {fileID: 21300000, guid: 5018e72ddf220a44eaba2c6733384ea7, type: 3}
   resourcesCardIcons:
   - resourceCardType: 1
     icon: {fileID: 21300000, guid: 97e86e6ad3dd2f94cab9fe5e4f8e23e8, type: 3}

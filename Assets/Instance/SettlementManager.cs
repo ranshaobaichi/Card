@@ -18,15 +18,15 @@ public class SettlementCardManager : MonoBehaviour
     public RectTransform CreaturePanelPutArea;
     private Dictionary<long, int> creatureCardSatietyDict = new Dictionary<long, int>();
     [Header("Battle")]
-    public int maxBattleCreatures = 3;
+    public int maxBattleCreatures = 9;
     public SettlementCardPanel BattleCardPanel;
     public RectTransform BattleCardPanelPutArea;
     public Text BattlePopulationText;
 
     [Header("Dragging State")]
     public GameObject draggingCardSlot;
-    public SettlementCard draggingCard;
-    public SettlementCard hoveredCard;
+    [HideInInspector] public SettlementCard draggingCard;
+    [HideInInspector] public SettlementCard hoveredCard;
 
     [Header("TooltipCanvas")]
     public Canvas tooltipCanvas;
@@ -234,6 +234,7 @@ public class SettlementCardManager : MonoBehaviour
             int actualConsumeSatiety = Mathf.Min(foodCard.satietyValue, creatureCard.satiety);
             if (foodCard.TryConsumeFood(actualConsumeSatiety))
             {
+                SoundManager.Instance.PlayEatFood();
                 creatureCard.EatingFood(actualConsumeSatiety);
                 creatureCardSatietyDict[creatureCard.cardID] = creatureCard.satiety;
                 if (foodCard.satietyValue <= 0)

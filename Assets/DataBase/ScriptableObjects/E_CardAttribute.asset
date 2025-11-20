@@ -28,7 +28,7 @@ MonoBehaviour:
         interactWorkEfficiency: 2
       EXP: 0
       level: 1
-      satiety: 0
+      satiety: 1
       health: 40
       attackPower: 6
       spellPower: 15
@@ -40,7 +40,7 @@ MonoBehaviour:
       attackSpeed: 6
       attackRange: 1
       dropItem: []
-      traits: 0200000008000000
+      traits: 0400000005000000
     levelUpAttributes:
       satietyGrowth: 0
       healthGrowth: 0
@@ -497,14 +497,28 @@ MonoBehaviour:
           resourceCardType: 21
           creatureCardType: 0
           eventCardType: 0
-        dropCount: 2
+        dropCount: 4
         dropWeight: 10
       - cardDescription:
           cardType: 1
           resourceCardType: 21
           creatureCardType: 0
           eventCardType: 0
-        dropCount: 2
+        dropCount: 4
+        dropWeight: 10
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 21
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 4
+        dropWeight: 10
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 21
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 4
         dropWeight: 10
       traits: 0200000000000000
     levelUpAttributes:
@@ -544,14 +558,28 @@ MonoBehaviour:
           resourceCardType: 21
           creatureCardType: 0
           eventCardType: 0
-        dropCount: 2
+        dropCount: 4
         dropWeight: 10
       - cardDescription:
           cardType: 1
           resourceCardType: 21
           creatureCardType: 0
           eventCardType: 0
-        dropCount: 2
+        dropCount: 4
+        dropWeight: 10
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 21
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 4
+        dropWeight: 10
+      - cardDescription:
+          cardType: 1
+          resourceCardType: 21
+          creatureCardType: 0
+          eventCardType: 0
+        dropCount: 4
         dropWeight: 10
       traits: 02000000
     levelUpAttributes:
@@ -752,17 +780,10 @@ MonoBehaviour:
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
-        dropWeight: 4
+        dropWeight: 6
       - cardDescription:
           cardType: 1
           resourceCardType: 54
-          creatureCardType: 0
-          eventCardType: 0
-        dropCount: 1
-        dropWeight: 3
-      - cardDescription:
-          cardType: 1
-          resourceCardType: 19
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -806,17 +827,10 @@ MonoBehaviour:
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
-        dropWeight: 5
+        dropWeight: 4
       - cardDescription:
           cardType: 1
           resourceCardType: 54
-          creatureCardType: 0
-          eventCardType: 0
-        dropCount: 1
-        dropWeight: 2
-      - cardDescription:
-          cardType: 1
-          resourceCardType: 19
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
@@ -868,13 +882,6 @@ MonoBehaviour:
           eventCardType: 0
         dropCount: 1
         dropWeight: 4
-      - cardDescription:
-          cardType: 1
-          resourceCardType: 19
-          creatureCardType: 0
-          eventCardType: 0
-        dropCount: 1
-        dropWeight: 3
       traits: 
     levelUpAttributes:
       satietyGrowth: 0
@@ -1084,17 +1091,10 @@ MonoBehaviour:
         dropWeight: 5
       - cardDescription:
           cardType: 1
-          resourceCardType: 14
+          resourceCardType: 19
           creatureCardType: 0
           eventCardType: 0
-        dropCount: 2
-        dropWeight: 5
-      - cardDescription:
-          cardType: 1
-          resourceCardType: 14
-          creatureCardType: 0
-          eventCardType: 0
-        dropCount: 2
+        dropCount: 1
         dropWeight: 5
       traits: 
     levelUpAttributes:
@@ -1238,14 +1238,7 @@ MonoBehaviour:
           creatureCardType: 0
           eventCardType: 0
         dropCount: 1
-        dropWeight: 8
-      - cardDescription:
-          cardType: 1
-          resourceCardType: 53
-          creatureCardType: 0
-          eventCardType: 0
-        dropCount: 1
-        dropWeight: 2
+        dropWeight: 10
       traits: 
     levelUpAttributes:
       satietyGrowth: 0
@@ -1531,13 +1524,134 @@ MonoBehaviour:
     priceValue: 1
   equipmentCardAttributes:
   - equipmentCardType: 42
+    basicAttributesBonus:
+      health: 0
+      attackPower: 2
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 0
+      spellResistance: 0
+      moveSpeed: 0
+      dodgeRate: 0
+      attackSpeed: -2
+      attackRange: 0
   - equipmentCardType: 43
+    basicAttributesBonus:
+      health: 7
+      attackPower: 0
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 0
+      spellResistance: 0
+      moveSpeed: 0
+      dodgeRate: 0
+      attackSpeed: 0
+      attackRange: 0
   - equipmentCardType: 44
+    basicAttributesBonus:
+      health: 0
+      attackPower: 0
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 12
+      spellResistance: 0
+      moveSpeed: 0
+      dodgeRate: 0
+      attackSpeed: 0
+      attackRange: 0
   - equipmentCardType: 41
+    basicAttributesBonus:
+      health: 0
+      attackPower: 1
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 0
+      spellResistance: 0
+      moveSpeed: 0
+      dodgeRate: 0
+      attackSpeed: 1
+      attackRange: 0
   - equipmentCardType: 45
+    basicAttributesBonus:
+      health: 15
+      attackPower: 0
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 0
+      spellResistance: 0
+      moveSpeed: 0
+      dodgeRate: 0
+      attackSpeed: 0
+      attackRange: 0
   - equipmentCardType: 46
+    basicAttributesBonus:
+      health: 0
+      attackPower: 5
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 0
+      spellResistance: 0
+      moveSpeed: 0
+      dodgeRate: 0
+      attackSpeed: 0
+      attackRange: 0
   - equipmentCardType: 47
+    basicAttributesBonus:
+      health: 0
+      attackPower: 0
+      spellPower: 15
+      normalAttackDamageType: 0
+      armor: 0
+      spellResistance: 0
+      moveSpeed: 0
+      dodgeRate: 0
+      attackSpeed: 0
+      attackRange: 0
   - equipmentCardType: 48
+    basicAttributesBonus:
+      health: 0
+      attackPower: 0
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 20
+      spellResistance: 0
+      moveSpeed: 0
+      dodgeRate: 0
+      attackSpeed: 0
+      attackRange: 0
   - equipmentCardType: 49
+    basicAttributesBonus:
+      health: 0
+      attackPower: 0
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 0
+      spellResistance: 20
+      moveSpeed: 0
+      dodgeRate: 0
+      attackSpeed: 0
+      attackRange: 0
   - equipmentCardType: 50
+    basicAttributesBonus:
+      health: 0
+      attackPower: 0
+      spellPower: 5
+      normalAttackDamageType: 0
+      armor: 5
+      spellResistance: 5
+      moveSpeed: 0
+      dodgeRate: 0
+      attackSpeed: 3
+      attackRange: 0
   - equipmentCardType: 51
+    basicAttributesBonus:
+      health: 0
+      attackPower: 10
+      spellPower: 0
+      normalAttackDamageType: 0
+      armor: 10
+      spellResistance: 10
+      moveSpeed: 0
+      dodgeRate: 0
+      attackSpeed: -4
+      attackRange: 1

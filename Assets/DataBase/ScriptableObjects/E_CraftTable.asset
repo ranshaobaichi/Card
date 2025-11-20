@@ -34,28 +34,28 @@ MonoBehaviour:
         creatureCardType: 0
         eventCardType: 0
       dropCount: 1
-      dropWeight: 30
+      dropWeight: 35
     - cardDescription:
         cardType: 1
         resourceCardType: 22
         creatureCardType: 0
         eventCardType: 0
       dropCount: 1
-      dropWeight: 25
+      dropWeight: 10
     - cardDescription:
         cardType: 1
         resourceCardType: 6
         creatureCardType: 0
         eventCardType: 0
       dropCount: 1
-      dropWeight: 20
+      dropWeight: 25
     - cardDescription:
         cardType: 1
         resourceCardType: 18
         creatureCardType: 0
         eventCardType: 0
       dropCount: 1
-      dropWeight: 1
+      dropWeight: 2
   - recipeID: 2
     recipeName: "\u6D45\u5C42\u63A2\u7D22"
     recipeDescription: 
@@ -77,14 +77,14 @@ MonoBehaviour:
         creatureCardType: 0
         eventCardType: 0
       dropCount: 1
-      dropWeight: 65
+      dropWeight: 75
     - cardDescription:
         cardType: 1
         resourceCardType: 25
         creatureCardType: 0
         eventCardType: 0
       dropCount: 1
-      dropWeight: 25
+      dropWeight: 15
     - cardDescription:
         cardType: 1
         resourceCardType: 17
@@ -807,7 +807,7 @@ MonoBehaviour:
         creatureCardType: 0
         eventCardType: 0
       dropCount: 1
-      dropWeight: 3
+      dropWeight: 1
     - cardDescription:
         cardType: 1
         resourceCardType: 53

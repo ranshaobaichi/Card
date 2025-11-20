@@ -11,7 +11,10 @@ public class SoundManager : MonoBehaviour
     public AudioClip battleSceneMusic;
     [Header("Sound Effects")]
     public List<AudioClip> clickSoundEffects = new List<AudioClip>();
+    public AudioClip putCardDownSoundEffect;
     public AudioClip sceneChangeSoundEffect;
+    public AudioClip popCardsSoundEffect;
+    public AudioClip eatFoodSoundEffect;
 
     [Header("Settings")]
     public int fxPoolSize = 8;
@@ -66,12 +69,18 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    public void PlaySceneChange() { PlayFX(sceneChangeSoundEffect); }
+    public void PlayPutCardDown() { PlayFX(putCardDownSoundEffect); }
+    public void PlayPopCards() { PlayFX(popCardsSoundEffect); }
+    public void PlayEatFood() { PlayFX(eatFoodSoundEffect); }
+
+
     public void OnSceneLoaded()
     {
         // 场景切换时播放场景切换音效并重选背景音乐（如果需要）
         PlaySceneChange();
         if (SceneManager.currentScene == SceneManager.BattleScene || SceneManager.currentScene == SceneManager.ProductionScene)
-            StartBackgroundMusicLoop();
+            StartBackgroundMusicLoop(SceneManager.currentScene);
     }
 
     public void StartBackgroundMusicLoop(string sceneName = null)
@@ -100,14 +109,12 @@ public class SoundManager : MonoBehaviour
             SceneManager.BattleScene => battleSceneMusic,
             _ => mainSceneMusic,
         };
+        Debug.Log($"SoundManager: Playing background music for scene {sceneName ?? SceneManager.currentScene}, clip: {clip?.name ?? "null"}");
         while (true)
         {
-            
-
             if (clip == null)
             {
-                yield return null;
-                continue;
+                yield break;
             }
             musicSource.clip = clip;
             musicSource.volume = musicVolume;
@@ -121,13 +128,6 @@ public class SoundManager : MonoBehaviour
         if (clickSoundEffects == null || clickSoundEffects.Count == 0) return;
         AudioClip clip = clickSoundEffects[Random.Range(0, clickSoundEffects.Count)];
         PlayFX(clip);
-    }
-
-    // 播放场景切换音效
-    public void PlaySceneChange()
-    {
-        if (sceneChangeSoundEffect == null) return;
-        PlayFX(sceneChangeSoundEffect);
     }
 
     // 通用音效播放：从池中拿一个空闲 source 或按轮替覆盖

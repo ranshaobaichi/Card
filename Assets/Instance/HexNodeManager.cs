@@ -72,7 +72,7 @@ public class HexNodeManager : MonoBehaviour
             to.walkable = false;
             // TODO: Add some animation here
             obj.transform.SetParent(to.transform);
-            obj.transform.position = new Vector3(to.transform.position.x, to.transform.position.y, 0f);
+            obj.transform.position = new Vector3(to.transform.position.x, to.transform.position.y - 50, 0f);
         }
         // Debug.Log($"Moved object {obj.name} to node at position {to}");
     }

@@ -372,7 +372,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         image.raycastTarget = false;
         oriHexNode = hexNode;
         HexNodeManager.MoveObject(this, hexNode, null);
-        transform.SetParent(BattleWorldManager.Instance.DraggingSlot, false);
+        transform.SetParent(BattleWorldManager.Instance.DraggingSlot);
         displayCard.SetOnlyDisplayIllustration(false);
         isDragging = true;
     }
@@ -416,9 +416,6 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
                 transform.SetParent(BattleWorldManager.Instance.PreparationAreaContent.transform);
                 HexNodeManager.MoveObject(this, hexNode, null);
                 RectTransform rectTransform = GetComponent<RectTransform>();
-                Vector3 localPos = rectTransform.position;
-                localPos.z = 0f;
-                rectTransform.position = localPos;
             }
         }
 
@@ -431,10 +428,6 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             else
             {
                 transform.SetParent(BattleWorldManager.Instance.PreparationAreaContent.transform);
-                RectTransform rectTransform = GetComponent<RectTransform>();
-                Vector3 localPos = rectTransform.position;
-                localPos.z = 0f;
-                rectTransform.position = localPos;
             }
         }
 

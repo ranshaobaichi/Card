@@ -3316,7 +3316,7 @@ MonoBehaviour:
   FoodPanel: {fileID: 1171590955}
   CreaturePanel: {fileID: 1775534163}
   CreaturePanelPutArea: {fileID: 1732031412}
-  maxBattleCreatures: 3
+  maxBattleCreatures: 9
   BattleCardPanel: {fileID: 1762290824}
   BattleCardPanelPutArea: {fileID: 673773848}
   BattlePopulationText: {fileID: 1291519078}
@@ -4234,7 +4234,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1504424414}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.91796684
+  m_Size: 0.85079855
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4602,7 +4602,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 159.075, y: -185}
+  m_AnchoredPosition: {x: 159.075, y: -200}
   m_SizeDelta: {x: 298.15, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2077820163
@@ -4638,7 +4638,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u4E0D\u7BA1\u662F\u5730\u4E0B\u57CE\u9886\u4E3B\u8FD8\u662F\u5C0F\u9B3C\uFF0C\u4EA6\u6216\u8005\u5176\u4ED6\u540C\u7C7B\u578B\u5361\u724C\u90FD\u9700\u8981\u6D88\u8017\u98DF\u7269\u3002\r\n\u5C31\u9910\u4EBA\u5458\u4E00\u680F\uFF0C\u6BCF\u5F20\u9700\u8981\u98DF\u7269\u5361\u724C\u7684\u5DE6\u4E0A\u89D2\u663E\u793A\u7740\u4ED6\u4EEC\u7684\u9965\u997F\u503C\uFF0C\u5C06\u4E0B\u65B9\u5361\u724C\u62D6\u52A8\u81F3\u9700\u8981\u98DF\u7269\u7684\u5361\u724C\u4E0A\u76F4\u5230\u9965\u997F\u503C\u5F52\u96F6\u3002\r\n\u82E5\u65E0\u6CD5\u6EE1\u8DB3\u5361\u724C\u7684\u98DF\u7269\u9700\u6C42\uFF0C\u4ED6\u4EEC\u5C06\u6B7B\u53BB\uFF0C\u56E0\u6B64\u5728\u83B7\u5F97\u66F4\u591A\u751F\u7269\u5361\u4E4B\u524D\u8BF7\u8003\u8651\u98DF\u7269\u662F\u5426\u5145\u8DB3\uFF01"
+  m_Text: "\u4E0D\u7BA1\u662F\u5730\u4E0B\u57CE\u9886\u4E3B\u8FD8\u662F\u5C0F\u9B3C\uFF0C\u4EA6\u6216\u8005\u5176\u4ED6\u540C\u7C7B\u578B\u5361\u724C\u90FD\u9700\u8981\u6D88\u8017\u98DF\u7269\u3002\r\n\u5C31\u9910\u4EBA\u5458\u4E00\u680F\uFF0C\u6BCF\u5F20\u9700\u8981\u98DF\u7269\u5361\u724C\u7684\u5DE6\u4E0A\u89D2\u663E\u793A\u7740\u4ED6\u4EEC\u7684\u9965\u997F\u503C\u3002\r\n\u5C06\u4E0B\u65B9\u5361\u724C\u62D6\u52A8\u81F3\u9700\u8981\u98DF\u7269\u7684\u5361\u724C\u4E0A\u76F4\u5230\u9965\u997F\u503C\u5F52\u96F6\u3002\r\n\u82E5\u65E0\u6CD5\u6EE1\u8DB3\u5361\u724C\u7684\u98DF\u7269\u9700\u6C42\uFF0C\u4ED6\u4EEC\u5C06\u6B7B\u53BB\u3002\r\n\u56E0\u6B64\u5728\u83B7\u5F97\u66F4\u591A\u751F\u7269\u5361\u4E4B\u524D\u8BF7\u8003\u8651\u98DF\u7269\u662F\u5426\u5145\u8DB3\uFF01"
 --- !u!222 &2077820164
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class CardSlot : MonoBehaviour
 {
-    public int maxCardCount;
+    public const int maxCardCount = 6;
     public List<Card> cards = new List<Card>();
     public ProgressBar progressBar;
     public GameObject craftCardPanel;
@@ -500,7 +500,6 @@ public class CardSlot : MonoBehaviour
         List<CraftTableDB.Recipe> possibleRecipes = CardManager.Instance.GetRecipes(cardsToCheck);
         if (possibleRecipes.Count != 0)
         {
-            craftCardPanel.SetActive(true);
             string recipes = "";
             foreach (var recipe in possibleRecipes)
             {
@@ -508,6 +507,8 @@ public class CardSlot : MonoBehaviour
             }
             recipes = recipes.TrimEnd('\n');
             craftingRecipeText.text = recipes;
+            craftCardPanel.SetActive(true);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(craftCardPanel.GetComponent<RectTransform>());
         }
     }
     

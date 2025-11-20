@@ -176,6 +176,7 @@ public class CardAttributeDB : ScriptableObject
     [Serializable]
     public class EquipmentCardAttribute : System.ICloneable
     {
+        [Serializable]
         public struct EquipmentBasicAttributesBonus : System.ICloneable
         {
             public float health; // 生命值

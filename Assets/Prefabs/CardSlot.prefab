@@ -125,7 +125,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ae3a676bfdee5d4bacdef769f1539cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxCardCount: 5
   cards: []
   progressBar: {fileID: 4096897034962561003}
   craftCardPanel: {fileID: 6684258442787910847}

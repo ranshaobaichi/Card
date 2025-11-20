@@ -57,6 +57,7 @@ public class SceneManager : MonoBehaviour
 
     public static void LoadScene(string sceneName)
     {
+        Time.timeScale = 1f;
         Instance.StartCoroutine(LoadSceneWithTransition(sceneName));
     }
 
@@ -70,8 +71,9 @@ public class SceneManager : MonoBehaviour
             yield return Instance.StartCoroutine(SceneTransition.Instance.TransitionOut());
         }
 
-        SoundManager.Instance.OnSceneLoaded();
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+        currentScene = sceneName;
+        SoundManager.Instance.OnSceneLoaded();
         
         // 等待一帧确保场景加载完成
         yield return null;
