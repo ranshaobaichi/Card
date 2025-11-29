@@ -37,17 +37,6 @@ public class HexNodeManager : MonoBehaviour
         foreach (var tile in Tiles.Values) tile.CacheNeighbors();
     }
 
-    public void UpdateWalkableState()
-    {
-        foreach (var tile in Tiles.Values)
-        {
-            if (tile.occupant == null)
-                tile.walkable = true;
-            else
-                tile.walkable = false;
-        }
-    }
-
     public static void ReserveObject(B_Creature obj, HexNode node)
     {
         if (node.occupant != null)
@@ -55,6 +44,7 @@ public class HexNodeManager : MonoBehaviour
             Debug.LogError($"Node at {node.coord} is already occupied by {node.occupant.name}");
             return;
         }
+        obj.hexNode.walkable = true;
         node.walkable = false;
     }
 

@@ -3,37 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public static class Pathfinding {
-    private class HexNodeComparer : IComparer<HexNode>
-    {
-        public int Compare(HexNode x, HexNode y)
-        {
-            if (ReferenceEquals(x, y)) return 0;
-            if (x == null) return -1;
-            if (y == null) return 1;
-
-            int f = x.F.CompareTo(y.F);
-            if (f != 0) return f;
-
-            int h = x.H.CompareTo(y.H);
-            if (h != 0) return h;
-
-            // Tie-break：使用坐标（假设 AxialCoordinate 有 Q / R），再用哈希
-            int qCmp = x.coord.Q.CompareTo(y.coord.Q);
-            if (qCmp != 0) return qCmp;
-            int rCmp = x.coord.R.CompareTo(y.coord.R);
-            if (rCmp != 0) return rCmp;
-
-            return x.GetHashCode().CompareTo(y.GetHashCode());
-        }
-    }
-
-    // 可选：初始化一个不可达初始值
+public static class Pathfinding
+{
+    // 初始化一个不可达初始值
     private const int INF = int.MaxValue / 4;
 
     private static void ResetNodes()
     {
-        // 需要能访问全部节点；假设 HexNodeManager.Instance 已初始化
         foreach (var node in HexNodeManager.Instance.Tiles.Values)
         {
             node.SetG(INF);
@@ -58,18 +34,17 @@ public static class Pathfinding {
 
         ResetNodes();
 
-        var open = new SortedSet<HexNode>(new HexNodeComparer());
+        var open = new PriorityQueue<HexNode>();
         var closed = new HashSet<HexNode>();
         var cameFrom = new Dictionary<HexNode, HexNode>();
 
         startNode.SetG(0);
         startNode.SetH(startNode.GetDistance(targetNode));
-        open.Add(startNode);
+        open.Enqueue(startNode, startNode.F);
 
         while (open.Count > 0)
         {
-            var current = open.Min;
-            open.Remove(current);
+            var current = open.Dequeue();
             closed.Add(current);
 
             // Debug.Log($"当前节点 {current.coord} G={current.G} H={current.H} F={current.F}");
@@ -122,13 +97,11 @@ public static class Pathfinding {
 
                     if (notInOpen)
                     {
-                        open.Add(neighbor);
+                        open.Enqueue(neighbor, neighbor.F);
                     }
                     else
                     {
-                        // 需要强制重排：移除再加
-                        open.Remove(neighbor);
-                        open.Add(neighbor);
+                        open.UpdatePriority(neighbor, neighbor.F);
                     }
                 }
             }

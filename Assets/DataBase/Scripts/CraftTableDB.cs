@@ -117,23 +117,6 @@ public class CraftTableDB : ScriptableObject
                 requiredTypes[key] = 1;
         }
 
-        // Debug.Log($"配方 {recipe.recipeName} 需要以下卡牌：");
-        // foreach (var type in requiredTypes)
-        // {
-        //     switch (type.Key.Item1)
-        //     {
-        //         case CardType.Resources:
-        //             Debug.Log($"需要资源卡 {((ResourceCardType)type.Key.Item2).ToString()} x {type.Value}");
-        //             break;
-        //         case CardType.Creatures:
-        //             Debug.Log($"需要生物卡 {((CreatureCardType)type.Key.Item2).ToString()} x {type.Value}");
-        //             break;
-        //         case CardType.Events:
-        //             Debug.Log($"需要事件卡 {((EventCardType)type.Key.Item2).ToString()} x {type.Value}");
-        //             break;
-        //     }
-        // }
-
         // 创建可用卡牌的跟踪列表
         var usedIndices = new List<int>();
         var remainingRequirements = new Dictionary<(CardType, int), int>(requiredTypes);
@@ -154,13 +137,6 @@ public class CraftTableDB : ScriptableObject
             {
                 usedIndices.Add(i);
                 remainingRequirements[key]--;
-                // Debug.Log($@"Use {availableCards[i].cardType}, {availableCards[i].cardType switch
-                // {
-                //     CardType.Resources => ((ResourceCardType)availableCards[i].resourceCardType).ToString(),
-                //     CardType.Creatures => ((CreatureCardType)availableCards[i].creatureCardType).ToString(),
-                //     CardType.Events => ((EventCardType)availableCards[i].eventCardType).ToString(),
-                //     _ => "未知类型"
-                // }}, remaining {remainingRequirements[key]}");
                 if (remainingRequirements[key] == 0)
                 {
                     remainingRequirements.Remove(key);

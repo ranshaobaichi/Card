@@ -112,13 +112,15 @@ public class HexNode : MonoBehaviour
 
     public void CacheNeighbors()
     {
-        neighbors?.Clear();
+        if (neighbors == null)
+            neighbors = new List<HexNode>();
+        else
+            neighbors.Clear();
         foreach (var dir in directions[coord.R & 1])
         {
             var neighborCoord = new AxialCoordinate(coord.R + dir.Item1, coord.Q + dir.Item2);
             if (HexNodeManager.Instance.Tiles.TryGetValue(neighborCoord, out var neighborNode))
             {
-                neighbors ??= new List<HexNode>();
                 neighbors.Add(neighborNode);
             }
         }

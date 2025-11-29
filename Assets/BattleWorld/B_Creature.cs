@@ -96,6 +96,10 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
     public void Tick()
     {
+        if (!inBattle || curAttribute.health <= 0)
+            return;
+
+
         var opponents = lineUp == LineUp.Player ?
             BattleWorldManager.Instance.GetInBattleCreatures(LineUp.Enemy) :
             BattleWorldManager.Instance.GetInBattleCreatures(LineUp.Player);
@@ -103,6 +107,9 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         int closestDistance = int.MaxValue;
         foreach (var enemy in opponents)
         {
+            // 跳过已销毁或无效的敌人
+            if (enemy == null || enemy.curAttribute.health <= 0 || enemy.hexNode == null) continue;
+            
             if (hexNode == null)
             {
                 Debug.LogError($"{transform.name} is not on any hex node!");
@@ -157,6 +164,8 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
     private System.Collections.IEnumerator AttackAnimation(B_Creature target, float duration)
     {
+        if (target == null) yield break;
+
         bool hasAttacked = false;
         Vector3 originalPosition = transform.position;
         Vector3 targetPosition = target.transform.position;
@@ -164,9 +173,17 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         float halfDuration = duration / 2f;
         while (elapsed < duration)
         {
+            // 检查目标是否在动画过程中被销毁
+            if (target == null)
+            {
+                transform.position = originalPosition;
+                yield break;
+            }
             if (!hasAttacked && elapsed >= duration / 2f)
             {
-                Attack(target);
+                // 攻击前再次检查目标是否存在
+                if (target != null)
+                    Attack(target);
                 hasAttacked = true;
             }
             if (elapsed < halfDuration)
@@ -264,12 +281,20 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
         foreach (var (dt, d, t) in damageList)
         {
+            // 跳过已被销毁的目标
+            if (t == null) continue;
             t.TakeDamage(d, dt, true);
         }
     }
 
     public bool TakeDamage(float damage, DamageType damageType, bool isNormalAttack)
     {
+        if (curAttribute.health <= 0)
+        {
+            Debug.LogWarning($"{transform.name} is already defeated and cannot take more damage.");
+            return true;
+        }
+
         // first check whether can dodge
         if (isNormalAttack)
         {
@@ -280,7 +305,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             if (roll <= dodgeChance)
             {
                 Debug.Log($"{transform.name} dodged the attack!");
-                DamageTextPool.Instance?.ShowDamageText(transform.position, "闪避!", DamageText.PresetColors.Dodge, BattleWorldManager.Instance?.DraggingSlot);
+                DamageTextPool.Instance?.ShowDamageText(transform.position, "闪避!", DamageText.PresetColors.Dodge);
                 return false;
             }
         }
@@ -316,7 +341,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         {
             Debug.Log($"{transform.name} has been defeated!");
             // Handle death (e.g., remove from battle world)
-            BattleWorldManager.Instance.RemoveObj(this);
+            // BattleWorldManager.Instance.RemoveObj(this);
         }
 
         return true;

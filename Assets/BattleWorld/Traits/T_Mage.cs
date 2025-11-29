@@ -15,7 +15,7 @@ public class T_Mage : B_Trait, ITraitHolder
             float bonus1 = spellDamageBonusPerLevel[level];
             float bonus2 = spellBonusPerSoulPerLevel[level] * activeTraitDict[Trait.精魂].currentTraitCreatureCount;
             float spellPower = baseAttributes.spellPower;
-            spellPower *= (1 + bonus1 + bonus2);
+            spellPower *= 1 + bonus1 + bonus2;
             baseAttributes.spellPower = Mathf.Round(spellPower * 100f) / 100f;
         }
     }

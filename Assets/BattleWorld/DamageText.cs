@@ -15,6 +15,9 @@ public class DamageText : MonoBehaviour
     [SerializeField] private AnimationCurve fadeCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
     [SerializeField] private AnimationCurve moveCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
+    private Vector2 defaultSizeDelta;
+    private Vector3 defaultScale;
+
     // 预设颜色
     public static class PresetColors
     {
@@ -55,10 +58,17 @@ public class DamageText : MonoBehaviour
         
         if (rectTransform == null)
             rectTransform = GetComponent<RectTransform>();
-        
+
         // 如果没有CanvasGroup则添加
         if (canvasGroup == null)
             canvasGroup = gameObject.AddComponent<CanvasGroup>();
+            
+        if (rectTransform == null)
+            rectTransform = GetComponent<RectTransform>();
+
+        defaultSizeDelta = rectTransform.sizeDelta;
+        defaultScale = rectTransform.localScale;
+
     }
 
     /// <summary>
@@ -124,11 +134,14 @@ public class DamageText : MonoBehaviour
     public void ResetState()
     {
         canvasGroup.alpha = 1f;
-        
+
         if (animationCoroutine != null)
         {
             StopCoroutine(animationCoroutine);
             animationCoroutine = null;
         }
+        
+        rectTransform.sizeDelta = defaultSizeDelta;
+        rectTransform.localScale = defaultScale;
     }
 }

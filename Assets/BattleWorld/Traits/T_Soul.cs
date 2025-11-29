@@ -10,7 +10,7 @@ public class T_Soul : B_Trait, ITraitHolder
     public List<float> healthBonusPerLevel = new List<float> { 0, 0.01f, 0.02f, 0.04f, 0.06f, 0.06f }; // the health bonus provided at each level
     public List<float> attackBonusPerLevel = new List<float> { 0, 0, 0.01f, 0.02f, 0.03f, 0.03f }; // the attack bonus provided at each level
     public int expBonus = 25;
-    private void AddDeathCount(B_Creature _) => deathCount++;
+    private void AddDeathCount(B_Creature creature) { if (creature.lineUp != lineUp) deathCount++;}
     void Start() => traitType = Trait.精魂;
 
     public void OnBattleStart()

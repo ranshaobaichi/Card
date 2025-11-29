@@ -38,7 +38,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 213, y: 99}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 67}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2312051824779363694
 CanvasRenderer:
@@ -81,7 +81,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 26
+  m_Text: "\u95EA\u907F\u6210\u529F\uFF01"
 --- !u!114 &8507215060899346268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,4 +172,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
-  m_VerticalFit: 2
+  m_VerticalFit: 0

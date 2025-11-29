@@ -228,7 +228,6 @@ public class BattleWorldManager : MonoBehaviour
             showFirstTimeBattleTutorial = false;
         }
 
-        OnCreatureDead += _ => EndBattle();
         StartBattleButton.onClick.AddListener(StartBattle);
     }
 
@@ -237,15 +236,6 @@ public class BattleWorldManager : MonoBehaviour
         if (InBattle && mannualTickControl && Input.GetKeyDown(KeyCode.Space))
         {
             InvokeTick();
-        }
-
-        if (InBattleCreatures.Count > 0)
-        {
-            StartBattleButton.interactable = true;
-        }
-        else
-        {
-            StartBattleButton.interactable = false;
         }
     }
 
@@ -339,7 +329,7 @@ public class BattleWorldManager : MonoBehaviour
         {
             HexNodeManager.MoveObject(creature, hexNode, null);
         }
-        OnCreatureDead?.Invoke(creature);
+        creature.StopAllCoroutines();
         Destroy(creature.gameObject);
     }
 
@@ -452,16 +442,43 @@ public class BattleWorldManager : MonoBehaviour
     #region Life cycle Methods
     private void InvokeTick()
     {
+        if (enemyCreatures.Count == 0 || InBattleCreatures.Count == 0)
+            EndBattle();
+
         // Debug.Log("BattleWorldManager Invoke Tick");
         PlayerTick?.Invoke();
         EnemyTick?.Invoke();
 
         NormalActions?.Invoke();
+        // Debug.Log("BattleWorldManager: DamageActions invoked.");
         DamageActions?.Invoke();
+        // Debug.Log("BattleWorldManager: DamageActions finished.");
 
         NormalActions = null;
         DamageActions = null;
         // Debug.Log("BattleWorldManager Tick End");
+
+        // Check whether battle end
+        if (enemyCreatures.Count == 0 || InBattleCreatures.Count == 0)
+            EndBattle();
+
+        // Remove dead creatures
+        foreach (var creature in InBattleCreatures.ToList())
+        {
+            if (creature.curAttribute.health <= 0)
+            {
+                OnCreatureDead?.Invoke(creature);
+                RemoveObj(creature);
+            }
+        }
+        foreach (var creature in enemyCreatures.ToList())
+        {
+            if (creature.curAttribute.health <= 0)
+            {
+                OnCreatureDead?.Invoke(creature);
+                RemoveObj(creature);
+            }
+        }
     }
 
     public void OnCardClicked(B_Creature card)
@@ -475,7 +492,8 @@ public class BattleWorldManager : MonoBehaviour
 
     public void EndBattle()
     {
-        if (enemyCreatures.Count > 0 && InBattleCreatures.Count > 0) return;
+        PlayerTick = null;
+        EnemyTick = null;
 
         OnBattleEnd?.Invoke();
         rewardPanel.SetActive(true);
@@ -511,6 +529,11 @@ public class BattleWorldManager : MonoBehaviour
                 {
                     totalWeight += dropcard.dropWeight;
                 }
+                if (totalWeight <= 0)
+                {
+                    Debug.LogWarning($"BattleWorldManager: Creature {creature} has total drop weight = 0, skipping drop.");
+                    continue;
+                }
                 int randomWeight = UnityEngine.Random.Range(0, totalWeight);
                 int currentWeight = 0;
                 Debug.Log($"BattleWorldManager: Dropping card for creature {creature}, Total weight {totalWeight}, Random weight {randomWeight}");
@@ -518,7 +541,7 @@ public class BattleWorldManager : MonoBehaviour
                 {
                     currentWeight += dropcard.dropWeight;
                     Debug.Log($"BattleWorldManager: Current weight {currentWeight}, Random weight {randomWeight}");
-                    if (randomWeight <= currentWeight)
+                    if (randomWeight < currentWeight)
                     {
                         Debug.Log($"BattleWorldManager: Dropped card {dropcard.cardDescription} from creature {creature}");
                         // Create reward card

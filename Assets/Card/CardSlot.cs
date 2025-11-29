@@ -274,7 +274,7 @@ public class CardSlot : MonoBehaviour
     /// Remove multiple cards from this slot, which must be continuous
     /// </summary>
     /// <param name="removeCards"></param>
-    public static void RemoveCards(CardSlot cardSlot, List<Card> removeCards, bool destroyCards = true)
+    public static void RemoveCards(CardSlot cardSlot, List<Card> removeCards, bool destroyCards = true, bool startProduction = true)
     {
         // Validate input check
         if (removeCards == null || removeCards.Count == 0 || cardSlot == null) return;
@@ -327,7 +327,8 @@ public class CardSlot : MonoBehaviour
         cardSlot.UpdateLastCardPlacementState();
 
         // Detect whether need to start production
-        cardSlot.BeginProduction();
+        if (startProduction)
+            cardSlot.BeginProduction();
     }
     #endregion
 
@@ -364,7 +365,7 @@ public class CardSlot : MonoBehaviour
         var result = CardManager.Instance.GetRecipe(cards);
         if (result.HasValue)
         {
-            Debug.Log($"Found matching recipe: {result.Value.Item2.recipeName}");
+            // Debug.Log($"Found matching recipe: {result.Value.Item2.recipeName}");
             currentCraftingCards = result.Value.Item1;
             currentRecipe = result.Value.Item2;
             OnBeginProduct();
@@ -391,7 +392,7 @@ public class CardSlot : MonoBehaviour
                                     currentWorkingCreatureCards.Max(card => CardManager.Instance.GetWorkEfficiencyValue(card)) :
                                     CardManager.Instance.GetWorkEfficiencyValue(Category.Production.WorkEfficiencyType.Normal);
 
-        StartProgressBar(currentRecipe.workload / workloadEfficiency, OnEndProduct, tooltipText: currentRecipe.recipeName);
+        StartProgressBar(currentRecipe.workload / workloadEfficiency, OnEndProduct, 0f, tooltipText: currentRecipe.recipeName);
         CardManager.Instance.DisplayTooltip(
             $"开始生产配方：{currentRecipe.recipeName}\n" +
             $"预计工作时间：{(currentRecipe.workload / workloadEfficiency):F2} 秒\n",
@@ -407,17 +408,16 @@ public class CardSlot : MonoBehaviour
 
     public void OnEndProduct()
     {
+        Debug.Log($"Production {currentRecipe.recipeName} complete, processing results...");
         List<Card> removeCards = new List<Card>();
         foreach (var card in currentCraftingCards)
         {
-            card.durability--;
-            int durability = card.durability;
-            if (durability <= 0)
+            if (--card.durability <= 0)
             {
                 removeCards.Add(card);
             }
         }
-        if (removeCards.Count > 0) RemoveCards(this, removeCards, true);
+        if (removeCards.Count > 0) RemoveCards(this, removeCards, true, false);
 
         // 从配方中掉落一张卡牌，根据权重决定
         if (currentRecipe.outputCards != null && currentRecipe.outputCards.Count > 0)
@@ -460,7 +460,7 @@ public class CardSlot : MonoBehaviour
         Debug.Log($"Produced {currentRecipe.outputCards.Count} cards, which are:");
         foreach (var craftingCard in currentRecipe.outputCards)
         {
-            Debug.Log($"- {craftingCard.GetType()}");
+            Debug.Log($"- {craftingCard.cardDescription}");
         }
         if (!BeginProduction())
             EndProduction();
