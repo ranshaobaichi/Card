@@ -22,6 +22,7 @@ public class MainUIManager : MonoBehaviour
     public GameObject PopulationPanel;
     public UI_PopulationPanel populationPanel;
     [Header("设置面板")]
+    public bool isPausedBefore = false;
     public Button SettingsBtn;
     public GameObject SettingsPanel;
     public Button CloseSettingsBtn;
@@ -39,12 +40,14 @@ public class MainUIManager : MonoBehaviour
         SettingsBtn.onClick.AddListener(() =>
         {
             SettingsPanel.SetActive(true);
-            TimeManager.Instance.ChangePauseGameState();
+            isPausedBefore = TimeManager.Instance.isPaused;
+            TimeManager.Instance.PauseGame();
         });
         CloseSettingsBtn.onClick.AddListener(() =>
         {
             SettingsPanel.SetActive(false);
-            TimeManager.Instance.ChangePauseGameState();
+            if (!isPausedBefore)
+                TimeManager.Instance.ResumeGame();
         });
         ExitButton.onClick.AddListener(SceneManager.QuitToDesktop);
         BackToStartBtn.onClick.AddListener(SceneManager.QuitToStartScene);

@@ -121,6 +121,7 @@ public class B_Equipment : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
             }
         }
 
+        transform.localScale = Vector3.one * 0.8f;
         oriCreature = null;
         image.raycastTarget = true;
     }

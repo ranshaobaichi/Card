@@ -78,10 +78,20 @@ public class DisplayCard : MonoBehaviour
     public void SetOnlyDisplayIllustration(bool value)
     {
         cardImagesContainer.type.gameObject.SetActive(!value);
+        // cardImagesContainer.type.raycastTarget = !value;
+
         cardImagesContainer.background.gameObject.SetActive(!value);
+        // cardImagesContainer.background.raycastTarget = !value;
+
         cardImagesContainer.top.gameObject.SetActive(!value);
+        // cardImagesContainer.top.raycastTarget = !value;
+
         cardImagesContainer.bottom.gameObject.SetActive(!value);
+        // cardImagesContainer.bottom.raycastTarget = !value;
+
         cardImagesContainer.side.gameObject.SetActive(!value);
+        // cardImagesContainer.side.raycastTarget = !value;
+
         nameText.gameObject.SetActive(!value);
         if (resourceClassification == ResourceCardClassification.Food)
             foodText.gameObject.SetActive(!value);

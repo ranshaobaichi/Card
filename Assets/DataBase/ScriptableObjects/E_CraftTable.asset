@@ -34,21 +34,21 @@ MonoBehaviour:
         creatureCardType: 0
         eventCardType: 0
       dropCount: 1
-      dropWeight: 35
+      dropWeight: 30
     - cardDescription:
         cardType: 1
         resourceCardType: 22
         creatureCardType: 0
         eventCardType: 0
       dropCount: 1
-      dropWeight: 10
+      dropWeight: 25
     - cardDescription:
         cardType: 1
         resourceCardType: 6
         creatureCardType: 0
         eventCardType: 0
       dropCount: 1
-      dropWeight: 25
+      dropWeight: 20
     - cardDescription:
         cardType: 1
         resourceCardType: 18
@@ -84,7 +84,7 @@ MonoBehaviour:
         creatureCardType: 0
         eventCardType: 0
       dropCount: 1
-      dropWeight: 15
+      dropWeight: 25
     - cardDescription:
         cardType: 1
         resourceCardType: 17
@@ -579,6 +579,10 @@ MonoBehaviour:
     - cardType: 1
       resourceCardType: 34
       creatureCardType: 0
+      eventCardType: 0
+    - cardType: 2
+      resourceCardType: 0
+      creatureCardType: 1
       eventCardType: 0
     - cardType: 2
       resourceCardType: 0

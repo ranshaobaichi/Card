@@ -114,7 +114,7 @@ public class SaveDataManager : MonoBehaviour
             curCardID = CardManager.Instance.CurCardID,
             curCardSlotID = CardManager.Instance.CurCardSlotID,
             curGameTime = TimeManager.Instance.curGameTime,
-            currentWaveIndex = BattleWorldManager.currentWaveIndex <= 0 ? 1 : BattleWorldManager.currentWaveIndex,
+            currentWaveIndex = CardManager.Instance.currentWave,
             allCardData = allCardData,
             allCardSlotData = allCardSlotData,
             musicVolume = SoundManager.Instance.musicVolume,

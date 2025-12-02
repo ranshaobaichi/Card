@@ -25,7 +25,6 @@ public class BattleWorldManager : MonoBehaviour
     public bool mannualTickControl = false;
     public bool canDragEnemy = false;
     public float TickInterval = 1.0f;
-    public static int currentWaveIndex = -1;
     public EnemyWaveData currentWaveData;
     // private List<CreatureCardType> testAddEnemyTypes = new List<CreatureCardType>();
     private static bool showFirstTimeBattleTutorial = true;
@@ -151,7 +150,7 @@ public class BattleWorldManager : MonoBehaviour
 
     private void UpdateSaveDataWaveIndex()
     {
-        SaveDataManager.currentSaveData.currentWaveIndex = currentWaveIndex;
+        SaveDataManager.currentSaveData.currentWaveIndex = CardManager.Instance.currentWave;
     }
 
     void Start()
@@ -168,11 +167,6 @@ public class BattleWorldManager : MonoBehaviour
     {
         traitAttributesDict = DataBaseManager.Instance.GetAllTraitAttributes();
         // testAddEnemyTypes.Clear();
-        // initialize wave index
-        if (currentWaveIndex < 0)
-        {
-            currentWaveIndex = SaveDataManager.currentSaveData.currentWaveIndex;
-        }
 
         // initialize battle objects from CardManager
         foreach (var id in CardManager.Instance.battleSceneCreatureCardIDs)
@@ -211,14 +205,14 @@ public class BattleWorldManager : MonoBehaviour
         }
 
         // load current wave
-        if (currentWaveIndex >= 0)
+        if (CardManager.Instance.currentWave >= 0)
         {
-            Debug.Log($"BattleWorldManager: Loading wave index {currentWaveIndex}");
-            StartCoroutine(delayedLoadWave(3, currentWaveIndex));
+            Debug.Log($"BattleWorldManager: Loading wave index {CardManager.Instance.currentWave}");
+            StartCoroutine(delayedLoadWave(3, CardManager.Instance.currentWave));
         }
         else
         {
-            Debug.LogError($"BattleWorldManager: currentWaveIndex {currentWaveIndex} is invalid.");    
+            Debug.LogError($"BattleWorldManager: currentWaveIndex {CardManager.Instance.currentWave} is invalid.");    
         }
 
         // show battle tutorial if first time
@@ -442,9 +436,6 @@ public class BattleWorldManager : MonoBehaviour
     #region Life cycle Methods
     private void InvokeTick()
     {
-        if (enemyCreatures.Count == 0 || InBattleCreatures.Count == 0)
-            EndBattle();
-
         // Debug.Log("BattleWorldManager Invoke Tick");
         PlayerTick?.Invoke();
         EnemyTick?.Invoke();
@@ -514,7 +505,7 @@ public class BattleWorldManager : MonoBehaviour
             // enemyTypes.AddRange(testAddEnemyTypes);
             foreach (var creature in enemyTypes)
             {
-                Debug.Log($"BattleWorldManager: Processing drop for creature {creature}");
+                // Debug.Log($"BattleWorldManager: Processing drop for creature {creature}");
                 Card.CardDescription creatureDescription = new Card.CardDescription
                 {
                     cardType = CardType.Creatures,
@@ -536,11 +527,11 @@ public class BattleWorldManager : MonoBehaviour
                 }
                 int randomWeight = UnityEngine.Random.Range(0, totalWeight);
                 int currentWeight = 0;
-                Debug.Log($"BattleWorldManager: Dropping card for creature {creature}, Total weight {totalWeight}, Random weight {randomWeight}");
+                // Debug.Log($"BattleWorldManager: Dropping card for creature {creature}, Total weight {totalWeight}, Random weight {randomWeight}");
                 foreach (var dropcard in dropcards)
                 {
                     currentWeight += dropcard.dropWeight;
-                    Debug.Log($"BattleWorldManager: Current weight {currentWeight}, Random weight {randomWeight}");
+                    // Debug.Log($"BattleWorldManager: Current weight {currentWeight}, Random weight {randomWeight}");
                     if (randomWeight < currentWeight)
                     {
                         Debug.Log($"BattleWorldManager: Dropped card {dropcard.cardDescription} from creature {creature}");
@@ -556,6 +547,8 @@ public class BattleWorldManager : MonoBehaviour
                     }
                 }
             }
+
+            CardManager.Instance.currentWave++;
         }
         else
         {
@@ -563,7 +556,6 @@ public class BattleWorldManager : MonoBehaviour
             FailedText.SetActive(true);
         }
         InBattle = false;
-        currentWaveIndex++;
     }
     #endregion
 

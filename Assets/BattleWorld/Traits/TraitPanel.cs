@@ -75,6 +75,7 @@ public class TraitPanel : MonoBehaviour, IBeginDragHandler, IDragHandler
             levelDescriptions[i].color = color;
         }
 
+        LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
         gameObject.SetActive(true);
     }
 

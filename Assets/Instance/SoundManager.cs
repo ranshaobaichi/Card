@@ -36,7 +36,7 @@ public class SoundManager : MonoBehaviour
 
             // 音乐播放器
             musicSource = gameObject.AddComponent<AudioSource>();
-            musicSource.loop = false;
+            musicSource.loop = true;
             musicSource.playOnAwake = false;
             musicSource.volume = musicVolume;
 

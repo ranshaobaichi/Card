@@ -19,7 +19,7 @@ public class TimeManager : MonoBehaviour
     }
     public ProgressBar timeProgressBar;
     public float speedUpScale = 2f;
-    private bool isPaused = false;
+    public bool isPaused = false;
     private Button pauseButton, speedUpButton;
     private int currentSpeedUpLevel = 0;
     private int[] speedUpLevel = new int[] { 1, 2, 3, 5 };
@@ -33,6 +33,7 @@ public class TimeManager : MonoBehaviour
     private Text timescalelevelText;
 
     public GameTimeState GetCurrentState() => gameTimeState;
+    public float GetLeftTime() => productionStateDuration - timeProgressBar.progress;
 
     private void Awake()
     {
@@ -140,6 +141,22 @@ public class TimeManager : MonoBehaviour
         {
             Time.timeScale = speedUpScale;
             timescalelevelText.text = $"当前速度倍率：{speedUpLevel[currentSpeedUpLevel]}";
+        }
+    }
+
+    public void PauseGame()
+    {
+        if (!isPaused)
+        {
+            ChangePauseGameState();
+        }
+    }
+
+    public void ResumeGame()
+    {
+        if (isPaused)
+        {
+            ChangePauseGameState();
         }
     }
 }

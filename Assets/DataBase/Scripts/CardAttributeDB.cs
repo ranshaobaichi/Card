@@ -140,7 +140,7 @@ public class CardAttributeDB : ScriptableObject
             };
         }
 
-        public static int maxLevel; // 最大等级
+        public static int maxLevel = 4; // 最大等级
         public int levelUpExpIncreasePercent; // 每次升级所需经验提高的百分比
         public int levelUpExpNeeded
         {

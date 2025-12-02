@@ -9,6 +9,7 @@ using System;
 public class CardManager : MonoBehaviour
 {
     public static CardManager Instance;
+    public int currentWave = -1;
     public GameObject cardPrefab;
     public GameObject cardSlotPrefab;
     public GameObject tooltipPrefab;
@@ -105,6 +106,9 @@ public class CardManager : MonoBehaviour
         if (!SaveDataManager.Instance.TryGetSaveData(fileName, out SaveDataManager.SaveData saveData))
             return;
         Dictionary<long, Card> tmpCardsDict = new Dictionary<long, Card>();
+
+        // Init wave
+        currentWave = saveData.currentWaveIndex;
 
         // Set all identity IDs
         CurCardID = saveData.curCardID;
@@ -203,10 +207,7 @@ public class CardManager : MonoBehaviour
                 {
                     rewardSlot = CreateCardSlot(card.transform.position);
                 }
-                else
-                {
-                    CardSlot.ChangeCardToSlot(card.cardSlot, rewardSlot, card, null, true);
-                }
+                CardSlot.ChangeCardToSlot(card.cardSlot, rewardSlot, card, null, true);
             }
             battleReward.Clear();
         }
@@ -521,7 +522,7 @@ public class CardManager : MonoBehaviour
         }
         creatureAttribute.basicAttributes.EXP += exp;
         int experience = (1 + creatureAttribute.basicAttributes.level) * creatureAttribute.levelUpExpIncreasePercent;
-        if (creatureAttribute.basicAttributes.EXP >= experience)
+        if (creatureAttribute.basicAttributes.level < CreatureCardAttribute.maxLevel && creatureAttribute.basicAttributes.EXP >= experience)
         {
             creatureAttribute.basicAttributes.level += 1;
             creatureAttribute.basicAttributes.EXP -= experience;

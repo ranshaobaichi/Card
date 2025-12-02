@@ -92,7 +92,8 @@ public class DamageTextPool : MonoBehaviour
     /// </summary>
     public void ShowDamageText(Vector3 uiPosition, string text, Color color, Transform parent = null)
     {
-        DamageText damageText = GetFromPool(uiPosition, parent);
+        // DamageText damageText = GetFromPool(uiPosition, parent);
+        DamageText damageText = Instantiate(damageTextPrefab, uiPosition, Quaternion.identity, poolParent);
         damageText.Initialize(text, color);
     }
 
@@ -101,7 +102,8 @@ public class DamageTextPool : MonoBehaviour
     /// </summary>
     public void ShowDamageText(Vector3 uiPosition, float damage, Color color, Transform parent = null)
     {
-        DamageText damageText = GetFromPool(uiPosition, parent);
+        // DamageText damageText = GetFromPool(uiPosition, parent);
+        DamageText damageText = Instantiate(damageTextPrefab, uiPosition, Quaternion.identity, poolParent);
         damageText.Initialize(damage, color);
     }
 }
