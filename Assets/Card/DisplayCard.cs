@@ -26,8 +26,10 @@ public class DisplayCard : MonoBehaviour
     public bool Initialize(Card.CardDescription cardDescription)
     {
         this.cardDescription = cardDescription;
-        resourceClassification = cardDescription.cardType == CardType.Resources ? DataBaseManager.Instance.GetCardAttribute<CardAttributeDB.ResourceCardAttribute>(cardDescription).resourceClassification : ResourceCardClassification.None;
-        var succ = CardManager.Instance.TryGetCardIconAttribute(cardDescription.cardType, out var cardIconAttrribute, resourceClassification);
+        resourceClassification = cardDescription.cardType == CardType.Resources ? 
+            DataBaseManager.Instance.GetCardAttribute<CardAttributeDB.ResourceCardAttribute>(cardDescription).resourceClassification : 
+            ResourceCardClassification.None;
+        var succ = DataBaseManager.Instance.TryGetCardIconAttribute(cardDescription.cardType, out var cardIconAttrribute, resourceClassification);
         if (succ)
         {
             cardImagesContainer.type.sprite = cardIconAttrribute.type;
@@ -38,14 +40,14 @@ public class DisplayCard : MonoBehaviour
             switch (cardDescription.cardType)
             {
                 case CardType.Creatures:
-                    succSetIllustration = CardManager.Instance.TryGetCardIllustration(cardDescription.creatureCardType, out var cardIllustration);
+                    succSetIllustration = DataBaseManager.Instance.TryGetCardIllustration(cardDescription.creatureCardType, out var cardIllustration);
                     if (succSetIllustration)
                     {
                         cardImagesContainer.illustration.sprite = cardIllustration.illustration;
                     }
                     break;
                 case CardType.Resources:
-                    succSetIllustration = CardManager.Instance.TryGetResourcesCardIcon(cardDescription.resourceCardType, out var resourceIcon);
+                    succSetIllustration = DataBaseManager.Instance.TryGetResourcesCardIcon(cardDescription.resourceCardType, out var resourceIcon);
                     if (succSetIllustration)
                     {
                         cardImagesContainer.illustration.sprite = resourceIcon.icon;

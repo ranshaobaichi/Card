@@ -13753,7 +13753,6 @@ MonoBehaviour:
   eventUIPrefab: {fileID: 7318367420118309221, guid: 59d7fc63fa983a44d98d0092be321849, type: 3}
   cardSlotSet: {fileID: 1939459570}
   canvas: {fileID: 590917606}
-  cardIconsDB: {fileID: 11400000, guid: 0147f83c5a2d2e0479f8d2cfc1c3242b, type: 2}
   isDragging: 0
   draggingCard: {fileID: 0}
   eventUIoffset: {x: 20, y: 20}
@@ -16497,6 +16496,7 @@ MonoBehaviour:
   cardAttributeDB: {fileID: 11400000, guid: 2f736eb8c5441b4489ad68188b52cb83, type: 2}
   eventCardUIDB: {fileID: 11400000, guid: b88a307235af6ea478ed22dae9fe4b84, type: 2}
   traitDB: {fileID: 11400000, guid: 2e38cb0a9a9cedf45ac23b0ddfc45b3e, type: 2}
+  cardIconsDB: {fileID: 11400000, guid: 0147f83c5a2d2e0479f8d2cfc1c3242b, type: 2}
 --- !u!4 &1859616075
 Transform:
   m_ObjectHideFlags: 0

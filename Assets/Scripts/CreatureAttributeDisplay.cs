@@ -123,7 +123,7 @@ public class CreatureAttributeDisplay : MonoBehaviour, IDragHandler, IBeginDragH
         attackRangeText.text = basicAttributes.attackRange.ToString();
 
         // Set the illustration image
-        if (CardManager.Instance.TryGetCardIllustration(creatureAttribute.creatureCardType, out var illustration))
+        if (DataBaseManager.Instance.TryGetCardIllustration(creatureAttribute.creatureCardType, out var illustration))
         {
             illustrationImage.sprite = illustration.illustration;
         }

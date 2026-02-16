@@ -22,7 +22,7 @@ public class B_Equipment : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
         equipmentAttribute = CardManager.Instance.GetEquipmentCardAttributes()[cardID];
         
         // Set the card images
-        if (CardManager.Instance.TryGetResourcesCardIcon(attr.resourceCardType, out var illustration))
+        if (DataBaseManager.Instance.TryGetResourcesCardIcon(attr.resourceCardType, out var illustration))
         {
             image.sprite = illustration.icon;
         }

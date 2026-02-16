@@ -42,6 +42,21 @@ public class CraftTableDB : ScriptableObject
             workload = 0f;
             workType = Category.Production.WorkType.None;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Recipe other)
+            {
+                return recipeID == other.recipeID &&
+                       recipeName == other.recipeName &&
+                       recipeDescription == other.recipeDescription &&
+                       Mathf.Approximately(workload, other.workload) &&
+                       workType == other.workType &&
+                       inputCards.Equals(other.inputCards) &&
+                       outputCards.Equals(other.outputCards);
+            }
+            return false;
+        }
     }
 
     [Header("配方列表")]

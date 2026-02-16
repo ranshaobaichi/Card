@@ -42,7 +42,7 @@ public class CardIconsDB : ScriptableObject
     private Dictionary<CreatureCardType, CardIllustration> cardIllustrationsDict;
     private Dictionary<ResourceCardType, ResourcesCardIcons> resourcesCardIconsDict;
 
-    public void Initialize()
+    public void InitializeCardIconDict()
     {
         InitCardIconAttributes();
         InitCardIllustrations();
