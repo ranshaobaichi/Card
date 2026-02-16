@@ -18,7 +18,6 @@ public class CardManager : MonoBehaviour
 
     public Transform cardSlotSet;
     public Canvas canvas;
-    public CardIconsDB cardIconsDB;
     public Dictionary<CardType, List<Card>> allCards = new Dictionary<CardType, List<Card>>();
     public Dictionary<long, CardSlot> allCardSlots = new Dictionary<long, CardSlot>();
     [HideInInspector] public event Action<Card> onCardCreated;
@@ -113,10 +112,7 @@ public class CardManager : MonoBehaviour
         // Set all identity IDs
         CurCardID = saveData.curCardID;
         CurCardSlotID = saveData.curCardSlotID;
-
-        // Init CardIconsDB
-        cardIconsDB.Initialize();
-
+        
         // first create all cards
         foreach (var cardData in saveData.allCardData)
         {
@@ -546,16 +542,7 @@ public class CardManager : MonoBehaviour
     #region 事件卡
     public Dictionary<long, (int index, float progress)> eventCardProgress = new Dictionary<long, (int index, float progress)>();
     #endregion
-
-    #region 卡牌图标
-    public bool TryGetCardIconAttribute(CardType cardType, out CardIconsDB.CardIconAttribute attribute, ResourceCardClassification resourceCardClassification = ResourceCardClassification.None)
-        => cardIconsDB.TryGetCardIconAttribute(cardType, out attribute, resourceCardClassification);
-    public bool TryGetCardIllustration(CreatureCardType cardDescription, out CardIconsDB.CardIllustration illustration)
-        => cardIconsDB.TryGetCardIllustration(cardDescription, out illustration);
-    public bool TryGetResourcesCardIcon(ResourceCardType resourceCardType, out CardIconsDB.ResourcesCardIcons resourceIcon)
-        => cardIconsDB.TryGetResourcesCardIcon(resourceCardType, out resourceIcon);
-    #endregion
-
+    
     #endregion
 
     # region 战斗场景数据

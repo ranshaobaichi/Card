@@ -327,7 +327,7 @@ public class CardAttributeDB : ScriptableObject
     # endregion
 
     #region APIs
-    public void Initialize()
+    public void InitializeCardAttributeDict()
     {
         Debug.Log("Initializing CardAttributeDB...");
         InitializeWorkEfficiencyValues();

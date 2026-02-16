@@ -18,9 +18,10 @@ public class DataBaseManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        cardAttributeDB.Initialize();
+        cardAttributeDB.InitializeCardAttributeDict();
         traitDB.InitializeTraitDict();
         eventCardUIDB.InitializeEventUIDict();
+        cardIconsDB.InitializeCardIconDict();
     }
 
     #region 合成表管理
@@ -73,5 +74,15 @@ public class DataBaseManager : MonoBehaviour
     public TraitDB traitDB;
     public ReadOnlyDictionary<Category.Battle.Trait, TraitDB.TraitAttribute> GetAllTraitAttributes()
         => traitDB.GetAllTraitAttributes();
+    #endregion
+
+    #region 卡牌图标管理
+    public CardIconsDB cardIconsDB;
+    public bool TryGetCardIconAttribute(CardType cardType, out CardIconsDB.CardIconAttribute attribute, ResourceCardClassification resourceCardClassification = ResourceCardClassification.None)
+        => cardIconsDB.TryGetCardIconAttribute(cardType, out attribute, resourceCardClassification);
+    public bool TryGetCardIllustration(CreatureCardType cardDescription, out CardIconsDB.CardIllustration illustration)
+        => cardIconsDB.TryGetCardIllustration(cardDescription, out illustration);
+    public bool TryGetResourcesCardIcon(ResourceCardType resourceCardType, out CardIconsDB.ResourcesCardIcons resourceIcon)
+        => cardIconsDB.TryGetResourcesCardIcon(resourceCardType, out resourceIcon);
     #endregion
 }

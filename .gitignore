@@ -9,6 +9,7 @@
 UserSettings/
 .vs/
 .idea/
+.vscode/
 *.sln.iml
 Packages/manifest.tmp
 Assets/StreamingAssets/*.unitypackage
@@ -19,6 +20,7 @@ Assets/StreamingAssets/*.unitypackage
 *.tmp
 *.user
 *.userprefs
+*.sln.DotSettings.user
 *.pidb
 *.booproj
 *.svd
@@ -29,3 +31,5 @@ Assets/StreamingAssets/*.unitypackage
 *.ide
 Assets/TODO.md
 sysinfo.txt
+Obj/
+obj/
