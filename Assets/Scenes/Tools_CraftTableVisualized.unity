@@ -563,7 +563,6 @@ MonoBehaviour:
   craftTableDB: {fileID: 11400000, guid: 8a5bcd2e137e13443b764f9a23720a12, type: 2}
   cardAttributeDB: {fileID: 11400000, guid: 2f736eb8c5441b4489ad68188b52cb83, type: 2}
   eventCardUIDB: {fileID: 11400000, guid: b88a307235af6ea478ed22dae9fe4b84, type: 2}
-  traitDB: {fileID: 11400000, guid: 2e38cb0a9a9cedf45ac23b0ddfc45b3e, type: 2}
   cardIconsDB: {fileID: 11400000, guid: 0147f83c5a2d2e0479f8d2cfc1c3242b, type: 2}
 --- !u!4 &736052028
 Transform:
@@ -729,6 +728,7 @@ GameObject:
   - component: {fileID: 942304036}
   - component: {fileID: 942304033}
   - component: {fileID: 942304034}
+  - component: {fileID: 942304038}
   - component: {fileID: 942304037}
   m_Layer: 9
   m_Name: Node Camera
@@ -861,15 +861,78 @@ MonoBehaviour:
   m_GameObject: {fileID: 942304032}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0231b2041e3844b2acb314d7d86dbe02, type: 3}
+  m_Script: {fileID: 11500000, guid: 26ab295f3a844dcf9286797aeb8c633e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 942304033}
-  moveSpeed: 850
-  zoomSpeed: 0.5
-  minOrthoSize: 100
-  maxOrthoSize: 1000
-  zoomLerpSpeed: 10
+  camTransform: {fileID: 942304036}
+  moveSpeed: 100
+  zoomSpeed: 5
+  minOrthoSize: 200
+  maxOrthoSize: 1500
+  zoomLerpSpeed: 12
+--- !u!114 &942304038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942304032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 2a1e532577b85314daf25009363b5f7a, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 942304037}
+        m_TargetAssemblyTypeName: CraftTableVisualized.CT_CameraInputReceiver, Assembly-CSharp
+        m_MethodName: OnMove
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 47c46522-5617-4082-a027-a19b907d304d
+    m_ActionName: camera/move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 942304037}
+        m_TargetAssemblyTypeName: CraftTableVisualized.CT_CameraInputReceiver, Assembly-CSharp
+        m_MethodName: OnZoom
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: fd764f80-6c90-41cf-b8f1-59ae1b73ecbc
+    m_ActionName: camera/zoom[/Mouse/scroll/y]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: camera
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 942304033}
 --- !u!1 &1149239933
 GameObject:
   m_ObjectHideFlags: 0
