@@ -448,6 +448,8 @@ MonoBehaviour:
   laterCard: {fileID: 0}
   cardSlot: {fileID: 0}
   cardSlotPrefab: {fileID: 863495346659058865, guid: a6710db8f3c334d459cc800f7576a81b, type: 3}
+  isPopingOut: 0
+  popOutTargetPosition: {x: 0, y: 0, z: 0}
   followSpeed: 6
   yAlignedDistance: 40
   dragScaleFactor: 1.05
@@ -485,7 +487,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: -12, y: -10}
+  m_EffectDistance: {x: 12, y: -10}
   m_UseGraphicAlpha: 1
 --- !u!61 &4508148370610698549
 BoxCollider2D:
