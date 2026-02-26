@@ -1,18 +1,22 @@
-[Bb]uild/
-[Bb]uilds/
+########################
+# Unity Generated
+########################
+
 [Ll]ibrary/
 [Tt]emp/
-[obj]/
-[Bb]in/
+[Oo]bj/
+[Bb]uild*/
 [Ll]ogs/
 [Mm]emoryCaptures/
 UserSettings/
+
+########################
+# IDE
+########################
+
 .vs/
 .idea/
 .vscode/
-*.sln.iml
-Packages/manifest.tmp
-Assets/StreamingAssets/*.unitypackage
 *.csproj
 *.unityproj
 *.sln
@@ -20,16 +24,48 @@ Assets/StreamingAssets/*.unitypackage
 *.tmp
 *.user
 *.userprefs
+*.sln.iml
 *.sln.DotSettings.user
 *.pidb
 *.booproj
 *.svd
-*.pdb
-*.mdb
 *.opendb
 *.VC.db
 *.ide
-Assets/TODO.md
+
+########################
+# OS
+########################
+
+.DS_Store
+Thumbs.db
+
+########################
+# Unity / Build
+########################
+
+TestResults/
+.gradle/
+ExportedObj/
+ServerData/
+*.stacktrace
+*.dmp
+
+########################
+# Packages
+########################
+
+Packages/manifest.tmp
+
+########################
+# Exported Packages
+########################
+
+*.unitypackage
+
+########################
+# Misc
+########################
+
 sysinfo.txt
-Obj/
-obj/
+Assets/TODO.md
