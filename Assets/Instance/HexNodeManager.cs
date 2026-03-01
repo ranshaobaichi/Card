@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Category;
+using Category.BattleWorld;
 using UnityEngine;
 
 public class HexNodeManager : MonoBehaviour
@@ -37,7 +38,7 @@ public class HexNodeManager : MonoBehaviour
         foreach (var tile in Tiles.Values) tile.CacheNeighbors();
     }
 
-    public static void ReserveObject(B_Creature obj, HexNode node)
+    public static void ReserveObject(B_Obj obj, HexNode node)
     {
         if (node.occupant != null)
         {
@@ -48,7 +49,7 @@ public class HexNodeManager : MonoBehaviour
         node.walkable = false;
     }
 
-    public static void MoveObject(B_Creature obj, HexNode from, HexNode to)
+    public static void MoveObject(B_Obj obj, HexNode from, HexNode to)
     {
         if (from != null)
         {
@@ -60,7 +61,6 @@ public class HexNodeManager : MonoBehaviour
         {
             to.occupant = obj;
             to.walkable = false;
-            // TODO: Add some animation here
             obj.transform.SetParent(to.transform);
             obj.transform.position = new Vector3(to.transform.position.x, to.transform.position.y - 50, 0f);
         }

@@ -53,7 +53,7 @@ namespace CraftTableVisualized {
 
       // 1) WASD 平移：Move 是 Vector2，x=左右，y=上下
       Vector3 delta = new Vector3(_moveInput.x, _moveInput.y, 0f) * (moveSpeed * Time.unscaledDeltaTime);
-      transform.position += delta;
+      camTransform.position += delta;
 
       // 2) 滚轮缩放：Zoom 是 float（Axis）
       if (Mathf.Abs(_scrollInput) > 0.0001f || Mathf.Abs(cam.orthographicSize - _targetOrthoSize) > 0.0001f)
@@ -76,7 +76,7 @@ namespace CraftTableVisualized {
     // Zoom(performed) 绑到这个
     public void OnZoom(InputAction.CallbackContext ctx) {
       _scrollInput = ctx.ReadValue<float>(); // <Mouse>/scroll/y
-      if (Mathf.Abs(_scrollInput) < 0.0001f) {
+      if (ctx.canceled || Mathf.Abs(_scrollInput) < 0.0001f) {
         _scrollInput = 0f;
       }
     }
