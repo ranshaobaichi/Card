@@ -5,69 +5,30 @@ using UnityEngine.EventSystems;
 using Category.Battle;
 using static CardAttributeDB.CreatureCardAttribute;
 using System.Collections.Generic;
+using Category.BattleWorld;
 using Random = UnityEngine.Random;
 
-public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler {
-  // 组件
-  private Image image;
-
-  // 引用
-  public HexNode hexNode;
-  public bool inBattle => hexNode != null;
-  public Transform equiptmentSlot;
-  public DisplayCard displayCard;
-
-  // 属性
+public class B_Creature : B_Obj,
+    IBattleCreature, IBattleDamageable,
+    IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler {
   public long cardID;
-
-  // private readonly bool OnBattle => hexNode != null;
-  public int cd;
+  public DisplayCard displayCard;
+  [NonSerialized]
   public CardAttributeDB.CreatureCardAttribute creatureCardAttribute; // readonly attribute from CardAttributeDB
+  [NonSerialized]
+  public BasicAttributes curAttribute; // the real-time attribute that will change during battle,
+                                       // and reset to creatureCardAttribute.basicAttributes at the beginning of each battle
+  [NonSerialized]
+  public List<AttackEffetct> attackEffects = new List<AttackEffetct>();
 
-  public BasicAttributes curAttribute; // the attr that apply before traits and buffs
-
-  // will be replaced with actActtribute when the game is running 
-  private BasicAttributes _actAttribute;
-
-  public BasicAttributes actAttribute // the attr that apply after equipment and buffs
-  {
-    get {
-      if (!BattleWorldManager.Instance.InBattle) {
-        var totalAttr = (BasicAttributes)curAttribute.Clone();
-        if (equipment != null) {
-          var equipmentCardAttribute = equipment.equipmentAttribute.basicAttributesBonus;
-          totalAttr.health += equipmentCardAttribute.health;
-          totalAttr.attackPower += equipmentCardAttribute.attackPower;
-          totalAttr.spellPower += equipmentCardAttribute.spellPower;
-          totalAttr.armor += equipmentCardAttribute.armor;
-          totalAttr.spellResistance += equipmentCardAttribute.spellResistance;
-          totalAttr.moveSpeed += equipmentCardAttribute.moveSpeed;
-          totalAttr.dodgeRate += equipmentCardAttribute.dodgeRate;
-          totalAttr.attackSpeed += equipmentCardAttribute.attackSpeed;
-          totalAttr.attackRange += equipmentCardAttribute.attackRange;
-        }
-        
-        _actAttribute = totalAttr;
-      }
-
-      if (_actAttribute == null) {
-        Debug.LogError($"actAttribute is null for {transform.name}");
-      }
-
-      return _actAttribute;
-    }
-    set => _actAttribute = value;
-  }
-
-  public LineUp lineUp;
-  public List<AttackEffetct> attackEffetcts = new List<AttackEffetct>();
-  public B_Equipment equipment;
-
-  private HexNode oriHexNode;
+  private Image m_image;
+  private HexNode m_oriHexNode;
   private bool isDragging = false;
 
+  public bool IsDead() => curAttribute.health <= 0;
+
   private void Awake() {
-    image = GetComponent<Image>();
+    m_image = GetComponent<Image>();
   }
 
   public void Init(long cardID, LineUp lineUp) {
@@ -75,58 +36,38 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     this.lineUp = lineUp;
     var attr = CardManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(cardID);
     curAttribute = (BasicAttributes)attr.basicAttributes.Clone();
-    _actAttribute = (BasicAttributes)curAttribute.Clone();
 
     var cardDescription = new Card.CardDescription {
         cardType = Category.CardType.Creatures,
         creatureCardType = attr.creatureCardType
     };
     displayCard.Initialize(cardDescription);
-    // Debug.Log("Attack Range: " + attr.basicAttributes.attackRange + " Basic is " + curAttribute.attackRange);
   }
 
+  public void OnBattleStart() {
+    // Reset current attributes to basic attributes at the beginning of each battle
+    curAttribute = (BasicAttributes)creatureCardAttribute.basicAttributes.Clone();
+  }
+  
   public void Tick() {
     if (!inBattle || curAttribute.health <= 0) {
       return;
     }
-
-
-    var opponents = lineUp == LineUp.Player
-        ? BattleWorldManager.Instance.GetInBattleCreatures(LineUp.Enemy)
-        : BattleWorldManager.Instance.GetInBattleCreatures(LineUp.Player);
-    B_Creature closestOpponents = null;
-    var closestDistance = int.MaxValue;
-    foreach (var enemy in opponents) {
-      // 跳过已销毁或无效的敌人
-      if (enemy == null || enemy.curAttribute.health <= 0 || enemy.hexNode == null) {
-        continue;
-      }
-
-      if (hexNode == null) {
-        Debug.LogError($"{transform.name} is not on any hex node!");
-        return;
-      }
-
-      var distance = hexNode.GetDistance(enemy.hexNode);
-      if (distance < closestDistance) {
-        closestOpponents = enemy;
-        closestDistance = distance;
-      }
-    }
-
-    cd = closestDistance;
-
-    if (closestOpponents == null) {
+    
+    if (!BattleWorldManager.Instance.GetClosestDamageableOpponents(this, out var closestOpponents)
+        ||
+        !(closestOpponents is B_Obj closestOpponentObj)) {
       return;
     }
 
+    var closestDistance = hexNode.GetDistance(closestOpponentObj.hexNode);
     if (closestDistance <= curAttribute.attackRange) {
       // Check whether there is any enemy in attack range and decrease curAttr's attack speed
       // if already to attack, add DamageActions to BattleWorldManager
       if (curAttribute.attackSpeed == 0) {
         BattleWorldManager.Instance.DamageActions += () =>
             StartCoroutine(AttackAnimation(closestOpponents, BattleWorldManager.Instance.TickInterval));
-        curAttribute.attackSpeed = actAttribute.attackSpeed;
+        curAttribute.attackSpeed = creatureCardAttribute.basicAttributes.attackSpeed;
       }
       else {
         curAttribute.attackSpeed -= 1;
@@ -136,14 +77,14 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
       // Find the closest enemy and decrease the move speed 
       // if already to move, find path and add NormalActions to BattleWorldManager
       if (curAttribute.moveSpeed == 0) {
-        var path = Pathfinding.FindPath(hexNode, closestOpponents.hexNode);
+        var path = Pathfinding.FindPath(hexNode, closestOpponentObj.hexNode);
         if (path != null && path.Count > 1) {
           HexNodeManager.ReserveObject(this, path[index: 1]);
           BattleWorldManager.Instance.NormalActions += () =>
               StartCoroutine(MoveAnimation(path[index: 1], BattleWorldManager.Instance.TickInterval));
         }
 
-        curAttribute.moveSpeed = actAttribute.moveSpeed;
+        curAttribute.moveSpeed = creatureCardAttribute.basicAttributes.moveSpeed;
       }
       else {
         curAttribute.moveSpeed -= 1;
@@ -151,23 +92,26 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     }
   }
 
-  private System.Collections.IEnumerator AttackAnimation(B_Creature target, float duration) {
+  public void OnBattleEnd() {
+    
+  }
+
+  private System.Collections.IEnumerator AttackAnimation(IBattleDamageable target, float duration) {
     if (target == null) {
+      yield break;
+    }
+
+    if (target is not B_Obj bObj) {
+      Attack(target);
       yield break;
     }
 
     var hasAttacked = false;
     var originalPosition = transform.position;
-    var targetPosition = target.transform.position;
+    var targetPosition = bObj.transform.position;
     var elapsed = 0f;
     var halfDuration = duration / 2f;
     while (elapsed < duration) {
-      // 检查目标是否在动画过程中被销毁
-      if (target == null) {
-        transform.position = originalPosition;
-        yield break;
-      }
-
       if (!hasAttacked && elapsed >= duration / 2f) {
         // 攻击前再次检查目标是否存在
         if (target != null) {
@@ -177,12 +121,9 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         hasAttacked = true;
       }
 
-      if (elapsed < halfDuration) {
-        transform.position = Vector3.Lerp(originalPosition, targetPosition, elapsed / halfDuration);
-      }
-      else {
-        transform.position = Vector3.Lerp(targetPosition, originalPosition, (elapsed - halfDuration) / halfDuration);
-      }
+      transform.position = elapsed < halfDuration ? 
+          Vector3.Lerp(originalPosition, targetPosition, elapsed / halfDuration) : 
+          Vector3.Lerp(targetPosition, originalPosition, (elapsed - halfDuration) / halfDuration);
 
       elapsed += Time.deltaTime;
       yield return null;
@@ -191,22 +132,22 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     transform.position = originalPosition;
   }
 
-  public void Attack(B_Creature target) {
+  private void Attack(IBattleDamageable target) {
     var damage = curAttribute.attackPower;
     var damageType = curAttribute.normalAttackDamageType;
     var damageList =
-        new List<(DamageType damageType, float damage, B_Creature target)>();
-    damageList.Add(new ValueTuple<DamageType, float, B_Creature>(damageType, damage, target));
+        new List<(DamageType damageType, float damage, IBattleDamageable target)> 
+            { new ValueTuple<DamageType, float, IBattleDamageable>(damageType, damage, target) };
 
     /*
      * 这里是删去的攻击效果处理逻辑，原本是直接在攻击时根据attackEffects列表中的效果来修改伤害列表
      * 目前删去羁绊但保留了attackEffects列表，后续可以根据需要重新设计攻击效果的处理方式，但需要重新设计获取数值方式
      */
-    // attackEffetcts.ForEach(effect =>
+    // attackEffects.ForEach(effect =>
     // {
     //     switch (effect)
     //     {
-    //         case AttackEffetct.TrueDamagePercentageOfAttackPower:
+    //         case AttackEffect.TrueDamagePercentageOfAttackPower:
     //             float percentage = BattleWorldManager.Instance.GetTraitObjDict(lineUp)[Trait.部落] is T_Tribe tribeTrait ? 
     //                 tribeTrait.TrueDamagePercentageOfAttackPower : 
     //                 0f;
@@ -214,7 +155,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     //             trueDamage = Mathf.Round(trueDamage * 100f) / 100f;
     //             damageList.Add((DamageType.TrueDamage, trueDamage, target));
     //             break;
-    //         case AttackEffetct.ProbabilityDoubleDamage:
+    //         case AttackEffect.ProbabilityDoubleDamage:
     //             float probability = BattleWorldManager.Instance.GetTraitObjDict(lineUp)[Trait.刺客] is T_Assassin assassinTrait ? assassinTrait.doubleDamageProbability : 0f;
     //             float roll = Random.Range(0f, 1f);
     //             roll = Mathf.Round(Random.Range(0f, 1f) * 100f) / 100f;
@@ -224,17 +165,17 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     //                 Debug.Log($"{transform.name} triggered double damage!");
     //             }
     //             break;
-    //         case AttackEffetct.PhysicalDamagePercentageOftargetHealth:
+    //         case AttackEffect.PhysicalDamagePercentageOfTargetHealth:
     //             if (damageType == DamageType.Physical)
     //             {
-    //                 float healthPercentage = BattleWorldManager.Instance.GetTraitObjDict(lineUp)[Trait.破阵者] is T_Destroyer destroyerTrait ? destroyerTrait.percentageOftargetHealth : 0f;
+    //                 float healthPercentage = BattleWorldManager.Instance.GetTraitObjDict(lineUp)[Trait.破阵者] is T_Destroyer destroyerTrait ? destroyerTrait.percentageOfTargetHealth : 0f;
     //                 float extraDamage = target.actAttribute.health * healthPercentage;
     //                 extraDamage = Mathf.Round(extraDamage * 100f) / 100f;
     //                 damageList.Add((DamageType.Physical, extraDamage, target));
     //                 Debug.Log($"{transform.name} dealt extra {extraDamage} physical damage based on target's health!");
     //             }
     //             break;
-    //         case AttackEffetct.BounceAttack:
+    //         case AttackEffect.BounceAttack:
     //             T_Hunter hunterTrait = BattleWorldManager.Instance.GetTraitObjDict(lineUp)[Trait.猎手] as T_Hunter;
     //             int bounceCount = hunterTrait.bounceTargetCount;
     //             float damageDecrease = hunterTrait.bounceDamageDecrease;
@@ -292,20 +233,19 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
       return true;
     }
 
-    // first check whether can dodge
+    // first check whether it can dodge
     if (isNormalAttack) {
       var dodgeChance = curAttribute.dodgeRate;
       var roll = Random.Range(minInclusive: 0f, maxInclusive: 1f);
       roll = Mathf.Round(Random.Range(minInclusive: 0f, maxInclusive: 1f) * 100f) / 100f;
 
       if (roll <= dodgeChance) {
-        Debug.Log($"{transform.name} dodged the attack!");
         DamageTextPool.Instance?.ShowDamageText(transform.position, "闪避!", DamageText.PresetColors.Dodge);
         return false;
       }
     }
 
-    // if cannot dodge, take damage
+    // if it cannot dodge, take damage
     var actualDamage = damage;
     switch (damageType) {
       case DamageType.Physical:
@@ -340,7 +280,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     return true;
   }
 
-  public System.Collections.IEnumerator MoveAnimation(HexNode targetNode, float duration) {
+  private System.Collections.IEnumerator MoveAnimation(HexNode targetNode, float duration) {
     var startPos = transform.position;
     var endPos = targetNode.transform.position;
     var elapsed = 0f;
@@ -353,15 +293,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
     HexNodeManager.MoveObject(this, hexNode, targetNode);
   }
-
-  public void RemoveEquipment() {
-    equipment = null;
-  }
-
-  public void Equip(B_Equipment equipment) {
-    this.equipment = equipment;
-  }
-
+  
   # region DragAndDrop
   public void OnDrag(PointerEventData eventData) {
     // 只有在真正开始拖拽（OnBeginDrag 允许）时才响应 OnDrag
@@ -385,8 +317,8 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
       return;
     }
 
-    image.raycastTarget = false;
-    oriHexNode = hexNode;
+    m_image.raycastTarget = false;
+    m_oriHexNode = hexNode;
     HexNodeManager.MoveObject(this, hexNode, to: null);
     transform.SetParent(BattleWorldManager.Instance.DraggingSlot);
     displayCard.SetOnlyDisplayIllustration(value: false);
@@ -411,7 +343,7 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
       return RectTransformUtility.RectangleContainsScreenPoint(rect, Input.mousePosition, cam);
     }
 
-    var succPut = false;
+    var successPut = false;
     if (eventData.pointerCurrentRaycast.gameObject != null) {
       bool inBack(AxialCoordinate coord) {
         if (lineUp == LineUp.Player) {
@@ -424,36 +356,29 @@ public class B_Creature : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
       var hitObj = eventData.pointerCurrentRaycast.gameObject;
       if (hitObj.TryGetComponent<HexNode>(out var node) && node.walkable && inBack(node.coord)) {
         Debug.Log("Dropped on HexNode");
-        succPut = true;
+        successPut = true;
         HexNodeManager.MoveObject(this, hexNode, node);
       }
 
       if (IsPointerOverRect(BattleWorldManager.Instance.CreatureScrollView)) {
         Debug.Log("Dropped on Preparation Area");
-        succPut = true;
+        successPut = true;
         transform.SetParent(BattleWorldManager.Instance.PreparationAreaContent.transform);
         HexNodeManager.MoveObject(this, hexNode, to: null);
-        var rectTransform = GetComponent<RectTransform>();
       }
     }
 
-    if (!succPut) {
-      if (oriHexNode != null) {
-        HexNodeManager.MoveObject(this, hexNode, oriHexNode);
+    if (!successPut) {
+      if (m_oriHexNode != null) {
+        HexNodeManager.MoveObject(this, hexNode, m_oriHexNode);
       }
       else {
         transform.SetParent(BattleWorldManager.Instance.PreparationAreaContent.transform);
       }
     }
 
-    if (inBattle) {
-      displayCard.SetOnlyDisplayIllustration(value: true);
-    }
-    else {
-      displayCard.SetOnlyDisplayIllustration(value: false);
-    }
-
-    image.raycastTarget = true;
+    displayCard.SetOnlyDisplayIllustration(value: inBattle);
+    m_image.raycastTarget = true;
   }
 
   public void OnPointerClick(PointerEventData eventData) {

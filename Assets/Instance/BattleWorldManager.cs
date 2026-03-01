@@ -1,13 +1,16 @@
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.UI;
+using Random = UnityEngine.Random;
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
+
 using Category;
 using Category.Battle;
-using UnityEngine;
-using UnityEngine.UI;
+using Category.BattleWorld;
 
 [Serializable]
 public struct EnemyWaveData {
@@ -20,9 +23,12 @@ public class BattleWorldManager : MonoBehaviour {
   public static BattleWorldManager Instance;
   public static readonly string EnemyWavesResourcePath = "EnemyWaves/";
   public static readonly string EnemyWavesResourceName = "EnemyWave";
-  [HideInInspector] public bool InBattle = false;
-  public bool mannualTickControl = false;
-  public bool canDragEnemy = false;
+
+  [HideInInspector]
+  public bool InBattle;
+
+  public bool mannualTickControl;
+  public bool canDragEnemy;
   public float TickInterval = 1.0f;
 
   public EnemyWaveData currentWaveData;
@@ -30,44 +36,37 @@ public class BattleWorldManager : MonoBehaviour {
   // private List<CreatureCardType> testAddEnemyTypes = new List<CreatureCardType>();
   private static bool showFirstTimeBattleTutorial = true;
 
-  [Header("Battle World Prefabs")] public GameObject BattleCreaturePrefab;
-  public GameObject EquipmentSlotPrefab;
-  public GameObject EquipmentPrefab;
+  [Header("Battle World Prefabs")]
+  public GameObject BattleCreaturePrefab;
   public GameObject tooltipPrefab;
   public GameObject attributeDisplayPrefab;
-  public GameObject traitItemnPrefab;
   public GameObject rewardCardPrefab;
 
-  [Header("Battle World Contents")] public GameObject PreparationAreaContent;
-  public GameObject EquipmentAreaContent;
+  [Header("Battle World Contents")]
+  public GameObject PreparationAreaContent;
   public RectTransform CreatureScrollView;
   public Transform DraggingSlot;
-  public GameObject PlayerTraitGameobject;
-  public GameObject EnemyTraitGameobject;
   public GameObject BattleTutorialPanel;
   public GameObject FailedText;
   public Button StartBattleButton;
-  [Header("Reward Panel")] public GameObject rewardPanel;
+
+  [Header("Reward Panel")]
+  public GameObject rewardPanel;
   public GameObject rewardCardPanel;
   public Button nextSceneBtn;
-  [Header("Battle World References")] public List<B_Creature> playerCreatures = new List<B_Creature>();
-  public List<B_Creature> enemyCreatures = new List<B_Creature>();
-  public List<B_Equipment> equipments = new List<B_Equipment>();
-  public List<B_Creature> InBattleCreatures => playerCreatures.FindAll(c => c.inBattle);
+
+  [Header("Battle World References")]
+  private Dictionary<LineUp, List<B_Obj>> battleObjs;
   public List<long> playerDeployedCreatureIDs = new List<long>();
 
   // Tick Events
-  public event Action PlayerTick;
-  public event Action EnemyTick;
+  public EventActionDictionary<LineUp> OnTick;
   public event Action NormalActions;
   public event Action DamageActions;
-  public event Action OnBattleStart;
-  public event Action OnBattleEnd;
-  public event Action<B_Creature> OnCreatureDead;
 
   #region TEST_FUNCTIONS_AND_DATA
   /// <summary>
-  /// TEST FUNCTION, create a tmp battle creature which will not be saved
+  ///   TEST FUNCTION, create a tmp battle creature which will not be saved
   /// </summary>
   /// <param name="lineUp"></param>
   /// <param name="testCreatureCardType"></param>
@@ -88,36 +87,12 @@ public class BattleWorldManager : MonoBehaviour {
     var attr = DataBaseManager.Instance.GetCardAttribute<CardAttributeDB.CreatureCardAttribute>(cardDescription);
     creature.creatureCardAttribute = attr;
     creature.curAttribute = (CardAttributeDB.CreatureCardAttribute.BasicAttributes)attr.basicAttributes.Clone();
-    creature.actAttribute = (CardAttributeDB.CreatureCardAttribute.BasicAttributes)attr.basicAttributes.Clone();
     creature.lineUp = lineUp;
     creature.cardID = -1; // test creature has no valid cardID
     creature.displayCard.Initialize(cardDescription);
 
-    if (lineUp == LineUp.Enemy) {
-      enemyCreatures.Add(creature);
-      // testAddEnemyTypes.Add(testCreatureCardType);
-    }
-    else {
-      playerCreatures.Add(creature);
-    }
-
+    battleObjs[lineUp].Add(creature);
     return creature;
-  }
-
-  public B_Equipment AddEquipment(ResourceCardType equipmentCardType) {
-    if (!DataBaseManager.Instance.IsEquipmentCard(equipmentCardType)) {
-      Debug.LogWarning($"BattleWorldManager: ResourceCardType {equipmentCardType} is not an equipment card.");
-      return null;
-    }
-
-    var equipmentSlot = Instantiate(EquipmentSlotPrefab, EquipmentAreaContent.transform);
-    var equipment = Instantiate(EquipmentPrefab, equipmentSlot.transform).GetComponent<B_Equipment>();
-    var attr = DataBaseManager.Instance.GetEquipmentCardAttribute(equipmentCardType);
-    equipment.equipmentAttribute = attr;
-    equipment.cardID = -1;
-    equipments.Add(equipment);
-    equipment.equipmentSlot = equipmentSlot;
-    return equipment;
   }
   #endregion
 
@@ -130,6 +105,10 @@ public class BattleWorldManager : MonoBehaviour {
     }
 
     nextSceneBtn.onClick.AddListener(() => SceneManager.LoadScene(SceneManager.ProductionScene));
+    
+    battleObjs = new Dictionary<LineUp, List<B_Obj>>();
+    battleObjs.Add(LineUp.Player, new List<B_Obj>());
+    battleObjs.Add(LineUp.Enemy, new List<B_Obj>());
   }
 
   private void UpdateSaveDataWaveIndex() {
@@ -140,29 +119,16 @@ public class BattleWorldManager : MonoBehaviour {
     SceneManager.BeforeSceneChanged += UpdateSaveDataWaveIndex;
   }
 
-  private void OnDestroy() {
-    SceneManager.BeforeSceneChanged -= UpdateSaveDataWaveIndex;
-  }
+  private void OnDestroy() { SceneManager.BeforeSceneChanged -= UpdateSaveDataWaveIndex; }
 
   private void OnEnable() {
-    // testAddEnemyTypes.Clear();
-
     // initialize battle objects from CardManager
     foreach (var id in CardManager.Instance.battleSceneCreatureCardIDs) {
-      // Debug.Log($"BattleWorldManager adding battle object with card ID: {id}");
       AddBattleObject(id);
     }
-
-    // initialize equipments from CardManager
-    foreach (var (id, attr) in CardManager.Instance.GetResourceCardAttributes()) {
-      if (attr.resourceClassification == ResourceCardClassification.Equipment) {
-        AddBattleEquipment(id);
-      }
-    }
-
+    
     // load current wave
     if (CardManager.Instance.currentWave >= 0) {
-      Debug.Log($"BattleWorldManager: Loading wave index {CardManager.Instance.currentWave}");
       StartCoroutine(delayedLoadWave(frameCount: 3, CardManager.Instance.currentWave));
     }
     else {
@@ -174,46 +140,44 @@ public class BattleWorldManager : MonoBehaviour {
       BattleTutorialPanel.SetActive(value: true);
       showFirstTimeBattleTutorial = false;
     }
-
-    StartBattleButton.onClick.AddListener(StartBattle);
   }
-
+  
   private void Update() {
     if (InBattle && mannualTickControl && Input.GetKeyDown(KeyCode.Space)) {
       InvokeTick();
     }
   }
 
-  private void StartBattle() {
+  public void StartBattle() {
     InBattle = true;
     Debug.Log("Battle Started");
     playerDeployedCreatureIDs.Clear();
-    PlayerTick = null;
-    EnemyTick = null;
+    OnTick?.ClearAllHandlers();
 
-    foreach (var creature in GetInBattleCreatures(LineUp.Player)) {
-      playerDeployedCreatureIDs.Add(creature.cardID);
-      // Debug.Log("player creature added to tick: " + creature.name);
-      PlayerTick += creature.Tick;
+    foreach (var creature in battleObjs[LineUp.Player]) {
+      if (creature is B_Creature playerCard) {
+        playerDeployedCreatureIDs.Add(playerCard.cardID);
+      }
     }
 
-    foreach (var creature in enemyCreatures) {
-      // Debug.Log("enemy creature added to tick: " + creature.name);
-      EnemyTick += creature.Tick;
+    foreach (var (lineUp, bObjs) in battleObjs) {
+      foreach (var bObj in bObjs) {
+        if (bObj is IBattleUpdateable battleObj) {
+          OnTick?.Add(lineUp, battleObj.Tick);
+        }
+      }
     }
-
+    
     // make sure the OnBattleStart event is invoked before all creatures set their curAttribute
     // because some traits may modify the attributes at the start of battle
-    OnBattleStart?.Invoke();
-
-    foreach (var creature in playerCreatures) {
-      creature.curAttribute.CopyFrom(creature.actAttribute);
+    foreach (var (_, bObjs) in battleObjs) {
+      foreach (var bObj in bObjs) {
+        if (bObj is IBattleObj battleObj) {
+          battleObj.OnBattleStart();
+        }
+      }
     }
-
-    foreach (var creature in enemyCreatures) {
-      creature.curAttribute.CopyFrom(creature.actAttribute);
-    }
-
+    
     if (!mannualTickControl) {
       StartCoroutine(ReapeatTick());
     }
@@ -234,42 +198,30 @@ public class BattleWorldManager : MonoBehaviour {
   }
 
   # region BATTLEWORLD OBJS APIS
-  public List<B_Creature> GetCreatures(LineUp lineUp) {
-    return lineUp == LineUp.Player ? playerCreatures : enemyCreatures;
-  }
-
-  public List<B_Creature> GetInBattleCreatures(LineUp lineUp) {
-    return lineUp == LineUp.Player ? InBattleCreatures : enemyCreatures;
-  }
-
   /// <summary>
-  /// Remove a creature from battle world, including from hex node and relevant lists
-  /// Must use in battle
+  ///   Remove a creature from battle world, including from hex node and relevant lists
+  ///   Must use in battle
   /// </summary>
-  /// <param name="creature"></param>
-  public void RemoveObj(B_Creature creature) {
+  /// <param name="obj"></param>
+  public void RemoveObj(B_Obj obj) {
     if (!InBattle) {
       Debug.LogError("BattleWorldManager RemoveObj: Cannot remove creature when not in battle.");
       return;
     }
 
-    if (creature.lineUp == LineUp.Player) {
-      playerCreatures.Remove(creature);
-      PlayerTick -= creature.Tick;
-      // CardManager.Instance.RemoveCardAttribute(creature.cardID);
+    LineUp lineUp = obj.lineUp;
+    battleObjs[lineUp].Remove(obj);
+    if (obj is IBattleUpdateable updateableObj) {
+      OnTick.Remove(lineUp, updateableObj.Tick);
     }
-    else {
-      enemyCreatures.Remove(creature);
-      EnemyTick -= creature.Tick;
-    }
-
-    var hexNode = creature.hexNode;
+    
+    var hexNode = obj.hexNode;
     if (hexNode != null) {
-      HexNodeManager.MoveObject(creature, hexNode, to: null);
+      HexNodeManager.MoveObject(obj, hexNode, to: null);
     }
 
-    creature.StopAllCoroutines();
-    Destroy(creature.gameObject);
+    obj.StopAllCoroutines();
+    Destroy(obj.gameObject);
   }
 
   public void AddBattleObject(long cardID) {
@@ -279,30 +231,11 @@ public class BattleWorldManager : MonoBehaviour {
 
     var creature = creatureGO.GetComponent<B_Creature>();
     creature.creatureCardAttribute = attr;
-    playerCreatures.Add(creature);
+    battleObjs[LineUp.Player].Add(creature);
 
     creature.Init(cardID, LineUp.Player);
   }
-
-  public B_Equipment AddBattleEquipment(long cardID) {
-    var equipmentSlot = Instantiate(EquipmentSlotPrefab, EquipmentAreaContent.transform);
-    var equipment = Instantiate(EquipmentPrefab, equipmentSlot.transform).GetComponent<B_Equipment>();
-    equipment.Init(cardID, equipmentSlot);
-    equipments.Add(equipment);
-    return equipment;
-  }
-
-  /// <summary>
-  /// Add a equipment to battle equipment area, which has been added to equipment list
-  /// </summary>
-  /// <param name="equipment"></param>
-  public void AddBattleEquipment(B_Equipment equipment) {
-    var equipmentSlot = Instantiate(EquipmentSlotPrefab, EquipmentAreaContent.transform);
-    equipment.transform.SetParent(equipmentSlot.transform);
-    equipment.transform.position = equipmentSlot.transform.position;
-    equipment.equipmentSlot = equipmentSlot;
-  }
-
+  
   private IEnumerator delayedLoadWave(int frameCount, int waveIdx) {
     for (var i = 0; i < frameCount; i++) {
       yield return null;
@@ -343,9 +276,12 @@ public class BattleWorldManager : MonoBehaviour {
         totalExpGain = expGain
     };
 
-    foreach (var enemy in enemyCreatures) {
-      waveData.creatureType.Add(enemy.creatureCardAttribute.creatureCardType);
-      waveData.spawnCoord.Add(enemy.hexNode.coord);
+    foreach (var enemyObj in battleObjs[LineUp.Enemy]) {
+      var enemy = enemyObj as B_Creature;
+      if (enemy != null) {
+        waveData.creatureType.Add(enemy.creatureCardAttribute.creatureCardType);
+        waveData.spawnCoord.Add(enemy.hexNode.coord);
+      }
     }
 
     var json = JsonUtility.ToJson(waveData);
@@ -361,72 +297,85 @@ public class BattleWorldManager : MonoBehaviour {
 
     var fullPath = Path.Combine(resourcesDir, filename);
     File.WriteAllText(fullPath, json);
-    UnityEditor.AssetDatabase.Refresh();
+    AssetDatabase.Refresh();
 
     Debug.Log($"Saved enemy wave to: {fullPath}");
 #else
         Debug.LogWarning("SaveCurBattleWave: 仅在编辑器下将文件写入 Assets/Resources。运行时请使用 Application.persistentDataPath。");
 #endif
   }
+
+  public bool GetClosestDamageableOpponents(B_Obj thisObj, out IBattleDamageable opponent) {
+    var thisLineUp = thisObj.lineUp;
+    var thisHexNode = thisObj.hexNode;
+    var closestDistance = int.MaxValue;
+    opponent = null;
+    foreach (var (lineUp, enemies) in battleObjs) {
+      if (lineUp == thisLineUp || enemies == null || enemies.Count < 0) {
+        continue;
+      }
+
+      foreach (var enemy in enemies) {
+        var distance = thisHexNode.GetDistance(enemy.hexNode);
+        if (distance < closestDistance && enemy is IBattleDamageable damageableEnemy && !damageableEnemy.IsDead()) {
+          opponent = damageableEnemy;
+          closestDistance = distance;
+        }
+      }
+    }
+    return opponent != null;
+  }
   #endregion
 
   #region Life cycle Methods
   private void InvokeTick() {
-    // Debug.Log("BattleWorldManager Invoke Tick");
-    PlayerTick?.Invoke();
-    EnemyTick?.Invoke();
+    OnTick?[LineUp.Player].Invoke();
+    OnTick?[LineUp.Enemy].Invoke();
 
     NormalActions?.Invoke();
-    // Debug.Log("BattleWorldManager: DamageActions invoked.");
     DamageActions?.Invoke();
-    // Debug.Log("BattleWorldManager: DamageActions finished.");
 
     NormalActions = null;
     DamageActions = null;
-    // Debug.Log("BattleWorldManager Tick End");
-
-    // Check whether battle end
-    if (enemyCreatures.Count == 0 || InBattleCreatures.Count == 0) {
-      EndBattle();
-    }
-
+    
     // Remove dead creatures
-    foreach (var creature in InBattleCreatures.ToList()) {
-      if (creature.curAttribute.health <= 0) {
-        OnCreatureDead?.Invoke(creature);
-        RemoveObj(creature);
+    foreach (var (_, bObjs) in battleObjs) {
+      foreach (var bObj in bObjs) {
+        if (bObj is IBattleDamageable damageableObj && damageableObj.IsDead()) {
+          RemoveObj(bObj);
+        }
       }
     }
-
-    foreach (var creature in enemyCreatures.ToList()) {
-      if (creature.curAttribute.health <= 0) {
-        OnCreatureDead?.Invoke(creature);
-        RemoveObj(creature);
-      }
+    
+    // Check whether battle end
+    if ((battleObjs.TryGetValue(LineUp.Enemy, out var enemyObjs) && enemyObjs.Count == 0)
+        ||
+        (battleObjs.TryGetValue(LineUp.Player, out var playerObjs) && playerObjs.Count == 0)) {
+      EndBattle();
     }
   }
 
   public void OnCardClicked(B_Creature card) {
     var panel = Instantiate(attributeDisplayPrefab, GetComponentInParent<Canvas>().transform)
         .GetComponent<CreatureAttributeDisplay>();
-    if (!InBattle) {
-      panel.UpdateAttributes(card.creatureCardAttribute, card.actAttribute);
-    }
-    else {
-      panel.UpdateAttributes(card.creatureCardAttribute, card.curAttribute);
-    }
+    panel?.UpdateAttributes(card.creatureCardAttribute, card.curAttribute);
   }
 
   public void EndBattle() {
-    PlayerTick = null;
-    EnemyTick = null;
-
-    OnBattleEnd?.Invoke();
+    // Life cycle methods
+    OnTick?.ClearAllHandlers();
+    foreach (var (_, bObjs) in battleObjs) {
+      foreach (var bObj in bObjs) {
+        if (bObj is IBattleObj battleObj) {
+          battleObj.OnBattleEnd();
+        }
+      }
+    }
+    
     rewardPanel.SetActive(value: true);
-    if (enemyCreatures.Count == 0) {
-      Debug.Log("BattleWorldManager: Battle Won!");
+    if (battleObjs.TryGetValue(LineUp.Enemy, out var enemyObjs) && enemyObjs.Count == 0) {
       // gain exp
-      var expGain = currentWaveData.totalExpGain / Math.Min(val1: 1, playerDeployedCreatureIDs.Count);
+      var expGain = currentWaveData.totalExpGain / Math.Max(val1: 1, playerDeployedCreatureIDs.Count);
       foreach (var id in playerDeployedCreatureIDs) {
         CardManager.Instance.GainEXP(id, expGain);
       }
@@ -435,9 +384,7 @@ public class BattleWorldManager : MonoBehaviour {
       CardManager.Instance.battleReward.Clear();
       var enemyTypes = new List<CreatureCardType>();
       enemyTypes.AddRange(currentWaveData.creatureType);
-      // enemyTypes.AddRange(testAddEnemyTypes);
       foreach (var creature in enemyTypes) {
-        // Debug.Log($"BattleWorldManager: Processing drop for creature {creature}");
         var creatureDescription = new Card.CardDescription {
             cardType = CardType.Creatures,
             creatureCardType = creature
@@ -460,14 +407,11 @@ public class BattleWorldManager : MonoBehaviour {
           continue;
         }
 
-        var randomWeight = UnityEngine.Random.Range(minInclusive: 0, totalWeight);
+        var randomWeight = Random.Range(minInclusive: 0, totalWeight);
         var currentWeight = 0;
-        // Debug.Log($"BattleWorldManager: Dropping card for creature {creature}, Total weight {totalWeight}, Random weight {randomWeight}");
         foreach (var dropcard in dropcards) {
           currentWeight += dropcard.dropWeight;
-          // Debug.Log($"BattleWorldManager: Current weight {currentWeight}, Random weight {randomWeight}");
           if (randomWeight < currentWeight) {
-            Debug.Log($"BattleWorldManager: Dropped card {dropcard.cardDescription} from creature {creature}");
             // Create reward card
             for (var i = 0; i < dropcard.dropCount; i++) {
               var rewardCardGO = Instantiate(rewardCardPrefab, rewardCardPanel.transform);
@@ -484,7 +428,6 @@ public class BattleWorldManager : MonoBehaviour {
       CardManager.Instance.currentWave++;
     }
     else {
-      Debug.Log("BattleWorldManager: Battle Lost!");
       FailedText.SetActive(value: true);
     }
 
