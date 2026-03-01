@@ -67,14 +67,6 @@ public class DataBaseManager : MonoBehaviour {
   public T GetCardAttribute<T>(Card.CardDescription cardDescription) where T : class {
     return cardAttributeDB.GetCardAttribute<T>(cardDescription);
   }
-
-  public CardAttributeDB.EquipmentCardAttribute GetEquipmentCardAttribute(ResourceCardType equipmentCardType) {
-    return cardAttributeDB.GetEquipmentCardAttribute(equipmentCardType);
-  }
-
-  public bool IsEquipmentCard(ResourceCardType resourceCardType) {
-    return cardAttributeDB.IsEquipmentCard(resourceCardType);
-  }
   #endregion
 
   #region 事件卡UI管理

@@ -172,58 +172,9 @@ public class CardAttributeDB : ScriptableObject
             };
         }
     }
-
-    [Serializable]
-    public class EquipmentCardAttribute : System.ICloneable
-    {
-        [Serializable]
-        public struct EquipmentBasicAttributesBonus : System.ICloneable
-        {
-            public float health; // 生命值
-            public float attackPower; // 攻击力
-            public float spellPower; // 法术强度
-            public Category.Battle.DamageType normalAttackDamageType; // 普通攻击伤害类型
-            public float armor; // 护甲值
-            public float spellResistance; // 魔法抗性
-            public int moveSpeed; // 移动速度
-            public float dodgeRate; // 闪避率
-            public int attackSpeed; // 攻击速度
-            public int attackRange; // 攻击距离
-
-            public object Clone()
-            {
-                return new EquipmentBasicAttributesBonus
-                {
-                    health = this.health,
-                    attackPower = this.attackPower,
-                    spellPower = this.spellPower,
-                    normalAttackDamageType = this.normalAttackDamageType,
-                    armor = this.armor,
-                    spellResistance = this.spellResistance,
-                    moveSpeed = this.moveSpeed,
-                    dodgeRate = this.dodgeRate,
-                    attackSpeed = this.attackSpeed,
-                    attackRange = this.attackRange
-                };
-            }
-            // public string attackEffect; // 攻击特效
-        }
-        public ResourceCardType equipmentCardType;
-        public EquipmentBasicAttributesBonus basicAttributesBonus;
-        public object Clone()
-        {
-            return new EquipmentCardAttribute
-            {
-                equipmentCardType = this.equipmentCardType,
-                basicAttributesBonus = (EquipmentBasicAttributesBonus)this.basicAttributesBonus.Clone()
-            };
-        }
-    }
-
     #endregion
 
     #region 实际存储数据列表
-
     [Header("不同工作类型的效率值设置")]
     [Header("依次为：None, Frenzy, Fast, Normal, Slow, VerySlow")]
     public List<float> workEfficiencyValues = new List<float>
@@ -234,20 +185,12 @@ public class CardAttributeDB : ScriptableObject
     public List<CreatureCardAttribute> creatureCardAttributes;
     [Header("资源卡属性列表")]
     public List<ResourceCardAttribute> resourceCardAttributes;
-    // [Header("卡牌图标列表")]
-    // public List<Sprite> creatureCardIcons;
-    // public List<Sprite> resourceCardIcons;
-    // public List<Sprite> eventCardIcons;
-    [Header("装备卡属性列表")]
-    public List<EquipmentCardAttribute> equipmentCardAttributes;
     #endregion
 
     # region 辅助字典
     public Dictionary<WorkEfficiencyType, float> workEfficiencyValuesDict = null;
     public Dictionary<CreatureCardType, CreatureCardAttribute> creatureCardAttributesDict = null;
     public Dictionary<ResourceCardType, ResourceCardAttribute> resourceCardAttributesDict = null;
-    public Dictionary<ResourceCardType, EquipmentCardAttribute> equipmentCardAttributesDict = null;
-    public Dictionary<CardType, Dictionary<int, Sprite>> cardIcons = new Dictionary<CardType, Dictionary<int, Sprite>>();
     # endregion
 
     # region 初始化辅助字典方法
@@ -276,66 +219,14 @@ public class CardAttributeDB : ScriptableObject
             resourceCardAttributesDict[attr.resourceCardType] = attr;
         }
     }
-
-    private void InitializeEquipmentCardAttributesDict()
-    {
-        equipmentCardAttributesDict = new Dictionary<ResourceCardType, EquipmentCardAttribute>();
-        foreach (var attr in equipmentCardAttributes)
-        {
-            equipmentCardAttributesDict[attr.equipmentCardType] = attr;
-        }
-    }
-
-    // private void InitializeCardIcons()
-    // {
-    //     // 生物卡图标
-    //     var creatureDict = new Dictionary<int, Sprite>();
-    //     foreach (var type in Enum.GetValues(typeof(CreatureCardType)))
-    //     {
-    //         int index = (int)type;
-    //         if (index >= 0 && index < creatureCardIcons.Count)
-    //         {
-    //             creatureDict[index] = creatureCardIcons[index];
-    //         }
-    //     }
-    //     cardIcons[CardType.Creatures] = creatureDict;
-
-    //     // 资源卡图标
-    //     var resourceDict = new Dictionary<int, Sprite>();
-    //     foreach (var type in Enum.GetValues(typeof(ResourceCardType)))
-    //     {
-    //         int index = (int)type;
-    //         if (index >= 0 && index < resourceCardIcons.Count)
-    //         {
-    //             resourceDict[index] = resourceCardIcons[index];
-    //         }
-    //     }
-    //     cardIcons[CardType.Resources] = resourceDict;
-
-    //     // 事件卡图标
-    //     var eventDict = new Dictionary<int, Sprite>();
-    //     foreach (var type in Enum.GetValues(typeof(EventCardType)))
-    //     {
-    //         int index = (int)type;
-    //         if (index >= 0 && index < eventCardIcons.Count)
-    //         {
-    //             eventDict[index] = eventCardIcons[index];
-    //         }
-    //     }
-    //     cardIcons[CardType.Events] = eventDict;
-    // }
     # endregion
 
     #region APIs
     public void InitializeCardAttributeDict()
     {
-        Debug.Log("Initializing CardAttributeDB...");
         InitializeWorkEfficiencyValues();
         InitializeCreatureCardAttributesDict();
         InitializeResourceCardAttributesDict();
-        // InitializeCardIcons();
-        InitializeEquipmentCardAttributesDict();
-        
     }
     public T GetCardAttribute<T>(Card.CardDescription cardDescription)
     {
@@ -360,26 +251,7 @@ public class CardAttributeDB : ScriptableObject
         }
         return default;
     }
-
-    public bool IsEquipmentCard(ResourceCardType resourceCardType)
-    {
-        return resourceCardAttributesDict.TryGetValue(resourceCardType, out var resourceAttr) &&
-               resourceAttr.resourceClassification == ResourceCardClassification.Equipment;
-    }
-    public EquipmentCardAttribute GetEquipmentCardAttribute(ResourceCardType equipmentCardType)
-    {
-        if (!IsEquipmentCard(equipmentCardType))
-        {
-            Debug.LogWarning($"CardAttributeDB: ResourceCardType {equipmentCardType} is not an equipment card.");
-            return null;
-        }
-        if (equipmentCardAttributesDict.TryGetValue(equipmentCardType, out var equipmentAttr))
-        {
-            return equipmentAttr;
-        }
-        Debug.LogWarning($"CardAttributeDB: No attributes found for EquipmentCardType {equipmentCardType}");
-        return null;
-    }
+  
 
     public float GetWorkEfficiencyValue(WorkEfficiencyType workEfficiencyType)
     {
@@ -387,18 +259,5 @@ public class CardAttributeDB : ScriptableObject
             workEfficiencyValuesDict[workEfficiencyType] :
             0.0f;
     }
-
-    // public bool TryGetCardIcon(Card.CardDescription cardDescription, out Sprite icon)
-    // {
-    //     icon = null;
-    //     return cardIcons.TryGetValue(cardDescription.cardType, out var typeDict) && typeDict.TryGetValue(
-    //         cardDescription.cardType switch
-    //         {
-    //             CardType.Creatures => (int)cardDescription.creatureCardType,
-    //             CardType.Resources => (int)cardDescription.resourceCardType,
-    //             CardType.Events => (int)cardDescription.eventCardType,
-    //             _ => -1,
-    //         }, out icon);
-    // }
     #endregion
 }

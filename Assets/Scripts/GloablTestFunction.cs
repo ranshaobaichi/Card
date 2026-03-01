@@ -27,16 +27,7 @@ public class GlobalTestFunction : MonoBehaviour
     {
         FindAnyObjectByType<BattleWorldManager>().AddObj(lineUp, creatureCardType);
     }
-
-    /// <summary>
-    /// 创建一个战斗装备对象
-    /// </summary>
-    [SerializeField] public ResourceCardType equipmentCardType;
-    public void CreateBattleEquipmentObj()
-    {
-        FindAnyObjectByType<BattleWorldManager>().AddEquipment(equipmentCardType);
-    }
-
+    
     /// <summary>
     /// 创建一个敌人波次
     /// </summary>

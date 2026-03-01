@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Category.BattleWorld;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
@@ -71,8 +72,8 @@ public class HexNode : MonoBehaviour
     public Material enemyMaterial, playerMaterial;
     public Image image;
 
-    private B_Creature _occupant;
-    public B_Creature occupant
+    private B_Obj _occupant;
+    public B_Obj occupant
     {
         get => _occupant;
         set
